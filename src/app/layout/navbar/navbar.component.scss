@@ -52,25 +52,6 @@
   }
 }
 
-.navbar__logo {
-  flex-shrink: 0;
-  transition: $transition-base;
-
-  .navbar__logo-bg     { fill: var(--color-primary); }
-  .navbar__logo-letter { fill: #ffffff; }
-}
-
-.navbar__brand:hover .navbar__logo {
-  transform: rotate(-3deg) scale(1.05);
-}
-
-.navbar__wordmark {
-  font-size: $font-size-lg;
-  font-weight: $font-weight-bold;
-  color: var(--color-text-primary);
-  letter-spacing: -0.025em;
-  white-space: nowrap;
-}
 
 // ── Desktop nav ───────────────────────────────────────────────
 .navbar__nav {
