@@ -1,7 +1,35 @@
 @use 'styles/variables' as *;
 @use 'styles/mixins' as *;
 
-// ── Host ─────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// KEYFRAMES
+// ─────────────────────────────────────────────────────────────────
+
+@keyframes menuEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.375rem) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mobileMenuIn {
+  from { opacity: 0; transform: translateY(-0.5rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes panelOpen {
+  from { opacity: 0; transform: translateY(-0.25rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// HOST
+// ─────────────────────────────────────────────────────────────────
+
 :host {
   display: block;
   position: sticky;
@@ -9,21 +37,27 @@
   z-index: $z-sticky;
 }
 
-// ── Shell ─────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// NAVBAR SHELL
+// ─────────────────────────────────────────────────────────────────
+
 .navbar {
-  background-color: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-glass);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
+  border-bottom: 0.0625rem solid var(--color-border);
   box-shadow: var(--shadow-xs);
   transition: box-shadow $transition-base;
 
-  &--open {
+  &--mobile-open {
     box-shadow: var(--shadow-md);
   }
 }
 
-// ── Main bar ──────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// MAIN BAR
+// ─────────────────────────────────────────────────────────────────
+
 .navbar__bar {
   @include flex-between;
   height: 3.5rem;
@@ -34,26 +68,28 @@
 
   @include lg {
     padding: 0 $space-8;
-    gap: $space-4;
   }
 }
 
-// ── Brand ─────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// BRAND
+// ─────────────────────────────────────────────────────────────────
+
 .navbar__brand {
-  @include flex-start;
-  gap: $space-2;
-  text-decoration: none;
   flex-shrink: 0;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 3px;
-    border-radius: var(--radius-sm);
+    outline: 0.125rem solid var(--color-primary);
+    outline-offset: 0.1875rem;
   }
 }
 
+// ─────────────────────────────────────────────────────────────────
+// DESKTOP NAV
+// ─────────────────────────────────────────────────────────────────
 
-// ── Desktop nav ───────────────────────────────────────────────
 .navbar__nav {
   display: none;
   flex: 1;
@@ -64,27 +100,62 @@
   }
 }
 
-.navbar__nav-list {
+.navbar__list {
   @include flex-start;
   gap: $space-1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar__link {
+// ─────────────────────────────────────────────────────────────────
+// NAV ITEM
+// position: relative anchors the absolute mega menu.
+// display: flex; align-items: stretch makes the <li> as tall as the
+// navbar bar — maximises the hover target and the hover-bridge area.
+// ─────────────────────────────────────────────────────────────────
+
+.navbar__item {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SHARED NAV INTERACTIVE BASE
+// ─────────────────────────────────────────────────────────────────
+
+@mixin nav-base {
   display: inline-flex;
   align-items: center;
+  gap: $space-2;
   padding: $space-2 $space-3;
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
+  font-family: inherit;
   color: var(--color-text-secondary);
   text-decoration: none;
+  border: none;
+  background: none;
   border-radius: var(--radius-md);
-  transition: $transition-fast;
+  cursor: pointer;
   white-space: nowrap;
+  line-height: $line-height-normal;
+  transition: color $transition-fast, background-color $transition-fast;
 
   &:hover {
     color: var(--color-text-primary);
     background-color: var(--color-surface-2);
   }
+
+  &:focus-visible {
+    outline: 0.125rem solid var(--color-primary);
+    outline-offset: 0.125rem;
+  }
+}
+
+.navbar__link {
+  @include nav-base;
 
   &--active {
     color: var(--color-primary);
@@ -93,7 +164,239 @@
   }
 }
 
-// ── Desktop actions ───────────────────────────────────────────
+.navbar__trigger {
+  @include nav-base;
+
+  &--open {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-2);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// CHEVRON
+// ─────────────────────────────────────────────────────────────────
+
+.navbar__chevron {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform $transition-fast, color $transition-fast;
+
+  .navbar__trigger--open & {
+    transform: rotate(180deg);
+    color: var(--color-text-secondary);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// STATUS BADGES
+// ─────────────────────────────────────────────────────────────────
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.015em;
+  line-height: 1.4;
+  pointer-events: none;
+  flex-shrink: 0;
+
+  &--live {
+    background-color: var(--color-success-light);
+    color: var(--color-success);
+  }
+
+  &--soon {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning);
+  }
+}
+
+.badge__dot {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// MEGA MENU — outer wrapper (hover-bridge)
+//
+// padding-top is intentionally on the wrapper, not margin.
+// This keeps the padding inside the <li> subtree so mouseleave on
+// .navbar__item does not fire while the mouse crosses the visual
+// gap between the navbar bar and the dropdown card.
+// ─────────────────────────────────────────────────────────────────
+
+.navbar__mega {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: $space-2;
+  z-index: $z-dropdown;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// MEGA MENU — visible card
+// ─────────────────────────────────────────────────────────────────
+
+.navbar__mega-inner {
+  background: var(--color-surface-glass-strong);
+  backdrop-filter: blur(1.25rem);
+  -webkit-backdrop-filter: blur(1.25rem);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), var(--shadow-glass-inner);
+  overflow: hidden;
+  animation: menuEnter 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// LIVE MEGA MENU
+// ─────────────────────────────────────────────────────────────────
+
+.mega-live {
+  padding: $space-2;
+  min-width: 23rem;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.mega-item {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-surface-2);
+
+    .mega-item__label { color: var(--color-primary); }
+
+    .mega-item__icon {
+      background-color: var(--color-primary);
+      color: var(--color-text-inverse);
+    }
+  }
+
+  &:focus-visible {
+    outline: 0.125rem solid var(--color-primary);
+    outline-offset: 0.125rem;
+    border-radius: var(--radius-lg);
+  }
+}
+
+.mega-item__icon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color $transition-fast, color $transition-fast;
+}
+
+.mega-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-0-5;
+  min-width: 0;
+}
+
+.mega-item__label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text-primary);
+  line-height: $line-height-snug;
+  transition: color $transition-fast;
+}
+
+.mega-item__desc {
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
+  line-height: $line-height-relaxed;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// COMING SOON MEGA MENU
+// ─────────────────────────────────────────────────────────────────
+
+.mega-soon {
+  padding: $space-4;
+  min-width: 19rem;
+}
+
+.mega-soon__header {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding-bottom: $space-3;
+  margin-bottom: $space-2;
+  border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.mega-soon__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+  border-radius: var(--radius-full);
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+}
+
+.mega-soon__hint {
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
+}
+
+.mega-soon__list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mega-soon__item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2;
+  font-size: $font-size-sm;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-md);
+  cursor: not-allowed;
+  user-select: none;
+  opacity: 0.75;
+}
+
+.mega-soon__icon {
+  flex-shrink: 0;
+  opacity: 0.45;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// DESKTOP AUTH ACTIONS
+// ─────────────────────────────────────────────────────────────────
+
 .navbar__actions {
   display: none;
   align-items: center;
@@ -105,16 +408,21 @@
   }
 }
 
-// ── Hamburger (mobile only) ───────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// HAMBURGER (mobile only)
+// ─────────────────────────────────────────────────────────────────
+
 .navbar__hamburger {
   @include flex-center;
+  flex-shrink: 0;
   width: 2.25rem;
   height: 2.25rem;
   border-radius: var(--radius-md);
   color: var(--color-text-secondary);
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: $transition-fast;
-  flex-shrink: 0;
+  transition: background-color $transition-fast, color $transition-fast;
 
   &:hover {
     background-color: var(--color-surface-2);
@@ -122,8 +430,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: 0.125rem solid var(--color-primary);
+    outline-offset: 0.125rem;
   }
 
   @include lg {
@@ -131,57 +439,376 @@
   }
 }
 
-// ── Mobile menu ───────────────────────────────────────────────
-.navbar__mobile-menu {
-  border-top: 1px solid var(--color-border);
+// ─────────────────────────────────────────────────────────────────
+// MOBILE MENU
+// ─────────────────────────────────────────────────────────────────
+
+.mob-menu {
+  border-top: 0.0625rem solid var(--color-border);
   background-color: var(--color-surface);
-  padding: $space-4;
-  animation: fadeInDown 0.2s ease forwards;
+  padding: $space-2 $space-4 $space-6;
+  max-height: calc(100dvh - 3.5rem);
+  overflow-y: auto;
+  animation: mobileMenuIn 0.2s ease both;
+  overscroll-behavior: contain;
 
   @include lg {
     display: none;
   }
 }
 
-.navbar__mobile-nav {
+.mob-menu__list {
   display: flex;
   flex-direction: column;
-  gap: $space-1;
-  margin-bottom: $space-5;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar__mobile-link {
+.mob-item {
+  border-bottom: 0.0625rem solid var(--color-border);
+
+  &:last-child { border-bottom: none; }
+}
+
+.mob-link {
   display: flex;
   align-items: center;
-  padding: $space-3 $space-4;
+  width: 100%;
+  padding: $space-4;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   color: var(--color-text-secondary);
   text-decoration: none;
-  border-radius: var(--radius-lg);
-  transition: $transition-fast;
+  transition: color $transition-fast;
 
-  &:hover {
-    color: var(--color-text-primary);
-    background-color: var(--color-surface-2);
-  }
+  &:hover { color: var(--color-text-primary); }
 
   &--active {
     color: var(--color-primary);
-    background-color: var(--color-primary-light);
     font-weight: $font-weight-semibold;
   }
 }
 
-.navbar__mobile-actions {
+.mob-trigger {
+  @include flex-between;
+  width: 100%;
+  padding: $space-4;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  font-family: inherit;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color $transition-fast;
+
+  &:hover { color: var(--color-text-primary); }
+}
+
+.mob-trigger__label {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.mob-trigger__chevron {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform $transition-base;
+
+  &--open { transform: rotate(180deg); }
+}
+
+.mob-panel {
+  padding: 0 $space-2 $space-3;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  animation: panelOpen 0.18s ease both;
+}
+
+.mob-child {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  padding: $space-3;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: background-color $transition-fast;
+
+  &:hover { background-color: var(--color-surface-2); }
+}
+
+.mob-child__icon {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  color: var(--color-primary);
+}
+
+.mob-child__label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text-primary);
+  margin-bottom: 0.15rem;
+  line-height: $line-height-snug;
+}
+
+.mob-child__desc {
+  display: block;
+  font-size: $font-size-xs;
+  color: var(--color-text-muted);
+  line-height: $line-height-relaxed;
+}
+
+.mob-soon {
+  padding: $space-3 $space-4;
+  background-color: var(--color-surface-2);
+  border-radius: var(--radius-lg);
+  margin: 0 $space-1;
+}
+
+.mob-soon__banner {
+  display: block;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: var(--color-warning);
+  margin-bottom: $space-3;
+  padding-bottom: $space-2;
+  border-bottom: 0.0625rem solid var(--color-border);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mob-soon__list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-0-5;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mob-soon__item {
+  padding: $space-2 $space-1;
+  font-size: $font-size-sm;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  user-select: none;
+
+  &::before {
+    content: '·';
+    margin-right: $space-2;
+    color: var(--color-text-muted);
+    opacity: 0.5;
+  }
+}
+
+.mob-menu__actions {
   display: flex;
   flex-direction: column;
   gap: $space-3;
-  padding-top: $space-4;
-  border-top: 1px solid var(--color-border);
+  padding-top: $space-5;
+  margin-top: $space-2;
+  border-top: 0.0625rem solid var(--color-border);
 }
 
-.navbar__mobile-btn {
+.mob-menu__btn {
   width: 100%;
   justify-content: center;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ADMIN MEGA MENU — DESKTOP
+// ─────────────────────────────────────────────────────────────────
+
+.mega-admin {
+  padding: $space-3;
+  min-width: 28rem;
+  max-width: 34rem;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.mega-admin__sep {
+  height: 0.0625rem;
+  background-color: var(--color-border);
+  margin: $space-1 0;
+}
+
+// ── Phase indicator row ───────────────────────────────────────────
+
+.admin-phase {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  margin-bottom: $space-1;
+}
+
+.admin-phase__dot {
+  display: inline-block;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--active { background-color: var(--color-success); }
+  &--soon   { background-color: var(--color-warning); }
+}
+
+.admin-phase__label {
+  font-size: 0.6875rem;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+
+  &--active { color: var(--color-success); }
+  &--soon   { color: var(--color-warning); }
+}
+
+// ── Section wrapper ───────────────────────────────────────────────
+
+.admin-section {
+  padding: $space-2 $space-2 $space-3;
+  border-radius: var(--radius-lg);
+  border: 0.0625rem solid transparent;
+  transition: background-color $transition-fast, border-color $transition-fast;
+
+  &--soon {
+    opacity: 0.65;
+  }
+
+  &:not(&--soon):hover {
+    background-color: var(--color-surface-2);
+    border-color: var(--color-border);
+  }
+}
+
+// ── Section row (clickable / disabled) ───────────────────────────
+
+.admin-item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-1;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text-primary);
+  transition: color $transition-fast;
+
+  &:not(&--disabled):hover {
+    color: var(--color-primary);
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    user-select: none;
+    color: var(--color-text-muted);
+  }
+}
+
+.admin-item__icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .admin-item:not(.admin-item--disabled):hover & {
+    color: var(--color-primary);
+  }
+}
+
+.admin-item__label {
+  line-height: $line-height-snug;
+}
+
+// ── Sub-items grid ────────────────────────────────────────────────
+
+.admin-subitems {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-0-5 $space-2;
+  padding: $space-2 $space-1 0 calc($space-1 + 1.25rem + $space-2);
+}
+
+.admin-subitem {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: $space-1 $space-2;
+  border-radius: var(--radius-sm);
+  transition: color $transition-fast, background-color $transition-fast;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ADMIN PANEL — MOBILE
+// ─────────────────────────────────────────────────────────────────
+
+.mob-admin {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.mob-admin__sep {
+  height: 0.0625rem;
+  background-color: var(--color-border);
+  margin: $space-1 $space-2;
+}
+
+.mob-admin-row {
+  padding: $space-2 $space-2 $space-2 $space-4;
+  border-radius: var(--radius-md);
+  transition: background-color $transition-fast;
+
+  &--soon {
+    opacity: 0.6;
+  }
+
+  &:not(&--soon):hover {
+    background-color: var(--color-surface-2);
+  }
+}
+
+.mob-admin-phase {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  margin-bottom: $space-1;
+}
+
+.mob-admin-item {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: $space-1 0;
+  transition: color $transition-fast;
+
+  &:not(&--disabled):hover {
+    color: var(--color-primary);
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    user-select: none;
+    color: var(--color-text-muted);
+    font-weight: $font-weight-medium;
+  }
 }

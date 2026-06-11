@@ -1,6 +1,6 @@
 @use 'styles/variables' as *;
 
-// ── Host ────────────────────────────────────────────────────────
+// ── Host ─────────────────────────────────────────────────────────
 :host {
   display: inline-flex;
   align-items: center;
@@ -8,13 +8,18 @@
   user-select: none;
 }
 
-// ── Icon mark ────────────────────────────────────────────────────
+// ── Icon ─────────────────────────────────────────────────────────
 .logo__icon {
   flex-shrink: 0;
   width: 2rem;
   height: 2rem;
   transition: transform $transition-base;
   will-change: transform;
+}
+
+// SVG shapes inside the icon use CSS fill (no hardcoded SVG attributes)
+.logo__mark {
+  fill: var(--color-text-inverse);
 }
 
 // ── Wordmark ─────────────────────────────────────────────────────
@@ -30,11 +35,10 @@
 
 // ── Dark variant ─────────────────────────────────────────────────
 :host(.logo--dark) .logo__wordmark {
-  color: #ffffff;
+  color: var(--color-text-inverse);
 }
 
-// ── Hover: icon tilts when parent link is hovered ─────────────────
-// Works because CSS :hover propagates to all descendants in the DOM tree
+// ── Hover ────────────────────────────────────────────────────────
 :host:hover .logo__icon {
   transform: rotate(-4deg) scale(1.06);
 }

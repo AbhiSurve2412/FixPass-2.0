@@ -79,6 +79,13 @@
   --shadow-inner:   #{$shadow-inner};
   --shadow-primary: #{$shadow-primary};
 
+  // Glassmorphism surfaces — semi-transparent white layers used for
+  // sticky navbar, mega-menu dropdowns, and modal backdrops.
+  // Raw rgba values live here (theme), never in component files.
+  --color-surface-glass:        rgba(255, 255, 255, 0.92);
+  --color-surface-glass-strong: rgba(255, 255, 255, 0.97);
+  --shadow-glass-inner:         inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.6);
+
   // Transitions
   --transition-fast:   #{$transition-fast};
   --transition-base:   #{$transition-base};

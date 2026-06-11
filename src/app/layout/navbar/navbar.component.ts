@@ -1,11 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LogoComponent } from '../../shared/logo/logo.component';
-
-interface NavItem {
-  label: string;
-  route: string;
-}
+import { NAV_ITEMS, NavItem } from './nav.config';
 
 @Component({
   selector: 'app-navbar',
@@ -15,22 +11,51 @@ interface NavItem {
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
-  readonly menuOpen = signal(false);
+  readonly navItems: NavItem[] = NAV_ITEMS;
 
-  readonly navItems: NavItem[] = [
-    { label: 'Study Material',      route: '/study' },
-    { label: 'Placement Material',  route: '/placement' },
-    { label: 'Jobs',                route: '/jobs' },
-    { label: 'Discussion Hub',      route: '/discussion' },
-    { label: 'Tools',               route: '/tools' },
-    { label: 'Pricing',             route: '/pricing' },
-  ];
+  // Desktop mega-menu: tracks which item label has its menu open
+  readonly activeMenu = signal<string | null>(null);
 
-  toggleMenu(): void {
-    this.menuOpen.update(open => !open);
+  // Mobile: overall panel visibility
+  readonly mobileOpen = signal(false);
+
+  // Mobile: which accordion section is expanded
+  readonly expandedMobileItem = signal<string | null>(null);
+
+  // ── Desktop ──────────────────────────────────────────────────
+
+  openDesktopMenu(label: string): void {
+    this.activeMenu.set(label);
   }
 
-  closeMenu(): void {
-    this.menuOpen.set(false);
+  closeDesktopMenu(): void {
+    this.activeMenu.set(null);
+  }
+
+  // ── Mobile ───────────────────────────────────────────────────
+
+  toggleMobileMenu(): void {
+    const next = !this.mobileOpen();
+    this.mobileOpen.set(next);
+    if (!next) this.expandedMobileItem.set(null);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileOpen.set(false);
+    this.expandedMobileItem.set(null);
+  }
+
+  toggleMobileItem(label: string): void {
+    this.expandedMobileItem.update(current =>
+      current === label ? null : label
+    );
+  }
+
+  // ── Global ───────────────────────────────────────────────────
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeDesktopMenu();
+    this.closeMobileMenu();
   }
 }

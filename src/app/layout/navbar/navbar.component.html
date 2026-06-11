@@ -1,90 +1,449 @@
-<header class="navbar" [class.navbar--open]="menuOpen()">
+<header class="navbar" [class.navbar--mobile-open]="mobileOpen()">
 
-  <!-- ── Main bar ───────────────────────────────────────── -->
+  <!-- ══════════════════════════════════════════════════════════
+       MAIN BAR
+  ══════════════════════════════════════════════════════════ -->
   <div class="navbar__bar">
 
     <!-- Brand -->
-    <a class="navbar__brand" routerLink="/" (click)="closeMenu()" aria-label="FixPass home">
+    <a class="navbar__brand"
+       routerLink="/"
+       (click)="closeMobileMenu()"
+       aria-label="FixPass — go to home">
       <app-logo />
     </a>
 
-    <!-- Desktop navigation -->
-    <nav class="navbar__nav" aria-label="Main navigation">
-      <ul class="navbar__nav-list" role="list">
-        @for (item of navItems; track item.route) {
-          <li>
-            <a
-              class="navbar__link"
-              [routerLink]="item.route"
-              routerLinkActive="navbar__link--active"
-            >
-              {{ item.label }}
-            </a>
+    <!-- ── Desktop Navigation ──────────────────────────────── -->
+    <nav class="navbar__nav" aria-label="Primary navigation">
+      <ul class="navbar__list" role="list">
+
+        @for (item of navItems; track item.label) {
+          <li class="navbar__item"
+              (mouseenter)="item.children ? openDesktopMenu(item.label) : null"
+              (mouseleave)="closeDesktopMenu()">
+
+            <!-- Plain link — no dropdown (e.g. Pricing) -->
+            @if (!item.children && item.route) {
+              <a class="navbar__link"
+                 [routerLink]="item.route"
+                 routerLinkActive="navbar__link--active"
+                 [routerLinkActiveOptions]="{ exact: true }">
+                {{ item.label }}
+              </a>
+            }
+
+            <!-- Dropdown trigger -->
+            @if (item.children) {
+              <button class="navbar__trigger"
+                      type="button"
+                      [class.navbar__trigger--open]="activeMenu() === item.label"
+                      [attr.aria-expanded]="activeMenu() === item.label"
+                      [attr.aria-haspopup]="true">
+                <span>{{ item.label }}</span>
+
+                @if (item.status === 'live') {
+                  <span class="badge badge--live" aria-label="Live">
+                    <span class="badge__dot" aria-hidden="true"></span>Live
+                  </span>
+                }
+                @if (item.status === 'coming-soon') {
+                  <span class="badge badge--soon">Soon</span>
+                }
+
+                <svg class="navbar__chevron"
+                     width="12" height="12" viewBox="0 0 12 12"
+                     fill="none" aria-hidden="true">
+                  <path d="M2 4l4 4 4-4"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              <!-- ── Mega Menu ──────────────────────────────── -->
+              @if (activeMenu() === item.label) {
+                <div class="navbar__mega"
+                     role="region"
+                     [attr.aria-label]="item.label + ' menu'">
+                  <div class="navbar__mega-inner">
+
+                    <!-- LIVE: Navigable items with icons + descriptions -->
+                    @if (item.status === 'live') {
+                      <div class="mega-live">
+                        @for (child of item.children; track child.label) {
+                          <a class="mega-item"
+                             [routerLink]="child.route"
+                             (click)="closeDesktopMenu()">
+
+                            <span class="mega-item__icon" aria-hidden="true">
+                              <svg width="18" height="18"
+                                   viewBox="0 0 24 24"
+                                   fill="none"
+                                   stroke="currentColor"
+                                   stroke-width="1.75"
+                                   stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path [attr.d]="child.icon"/>
+                              </svg>
+                            </span>
+
+                            <span class="mega-item__body">
+                              <span class="mega-item__label">{{ child.label }}</span>
+                              <span class="mega-item__desc">{{ child.description }}</span>
+                            </span>
+                          </a>
+                        }
+                      </div>
+                    }
+
+                    <!-- COMING SOON: Preview list, non-navigable -->
+                    @if (item.status === 'coming-soon') {
+                      <div class="mega-soon">
+                        <div class="mega-soon__header">
+                          <span class="mega-soon__badge">Coming Soon</span>
+                          <span class="mega-soon__hint">Under development</span>
+                        </div>
+                        <ul class="mega-soon__list" role="list">
+                          @for (child of item.children; track child.label) {
+                            <li class="mega-soon__item" aria-disabled="true">
+                              <svg class="mega-soon__icon"
+                                   width="14" height="14"
+                                   viewBox="0 0 24 24"
+                                   fill="none"
+                                   stroke="currentColor"
+                                   stroke-width="2"
+                                   stroke-linecap="round"
+                                   stroke-linejoin="round"
+                                   aria-hidden="true">
+                                <path [attr.d]="child.icon"/>
+                              </svg>
+                              {{ child.label }}
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                    }
+
+                    <!-- ACTIVE (Admin): Sectioned dropdown with phase indicators -->
+                    @if (item.status === 'active') {
+                      <div class="mega-admin">
+
+                        <!-- Plain links without childStatus (Dashboard) -->
+                        @for (child of item.children; track child.label) {
+                          @if (!child.childStatus) {
+                            <a class="mega-item"
+                               [routerLink]="child.route"
+                               (click)="closeDesktopMenu()">
+                              <span class="mega-item__icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor"
+                                     stroke-width="1.75" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                  <path [attr.d]="child.icon"/>
+                                </svg>
+                              </span>
+                              <span class="mega-item__body">
+                                <span class="mega-item__label">{{ child.label }}</span>
+                                <span class="mega-item__desc">{{ child.description }}</span>
+                              </span>
+                            </a>
+                          }
+                        }
+
+                        <div class="mega-admin__sep" role="separator"></div>
+
+                        <!-- Management sections (have childStatus) -->
+                        @for (child of item.children; track child.label) {
+                          @if (child.childStatus) {
+                            <div class="admin-section"
+                                 [class.admin-section--soon]="child.childStatus === 'coming-soon'">
+
+                              <!-- Phase indicator -->
+                              <div class="admin-phase">
+                                <span class="admin-phase__dot"
+                                      [class.admin-phase__dot--active]="child.childStatus === 'active'"
+                                      [class.admin-phase__dot--soon]="child.childStatus === 'coming-soon'"
+                                      aria-hidden="true">
+                                </span>
+                                <span class="admin-phase__label"
+                                      [class.admin-phase__label--active]="child.childStatus === 'active'"
+                                      [class.admin-phase__label--soon]="child.childStatus === 'coming-soon'">
+                                  {{ child.childStatus === 'active' ? 'Active' : 'Coming Soon' }}
+                                </span>
+                              </div>
+
+                              <!-- Active section: clickable + sub-items grid -->
+                              @if (child.childStatus === 'active') {
+                                <a class="admin-item"
+                                   [routerLink]="child.route"
+                                   (click)="closeDesktopMenu()">
+                                  <span class="admin-item__icon" aria-hidden="true">
+                                    <svg width="16" height="16" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor"
+                                         stroke-width="1.75" stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                      <path [attr.d]="child.icon"/>
+                                    </svg>
+                                  </span>
+                                  <span class="admin-item__label">{{ child.label }}</span>
+                                </a>
+
+                                @if (child.subItems?.length) {
+                                  <div class="admin-subitems">
+                                    @for (sub of child.subItems; track sub.label) {
+                                      <a class="admin-subitem"
+                                         [routerLink]="sub.route"
+                                         (click)="closeDesktopMenu()">
+                                        {{ sub.label }}
+                                      </a>
+                                    }
+                                  </div>
+                                }
+                              }
+
+                              <!-- Coming-soon section: non-clickable -->
+                              @if (child.childStatus === 'coming-soon') {
+                                <div class="admin-item admin-item--disabled" aria-disabled="true">
+                                  <span class="admin-item__icon" aria-hidden="true">
+                                    <svg width="16" height="16" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor"
+                                         stroke-width="1.75" stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                      <path [attr.d]="child.icon"/>
+                                    </svg>
+                                  </span>
+                                  <span class="admin-item__label">{{ child.label }}</span>
+                                </div>
+                              }
+
+                            </div>
+                          }
+                        }
+
+                      </div>
+                    }
+
+                  </div>
+                </div>
+              }
+
+            }<!-- /if item.children -->
+
           </li>
         }
+
       </ul>
     </nav>
 
-    <!-- Desktop auth actions -->
+    <!-- ── Desktop Auth ─────────────────────────────────────── -->
     <div class="navbar__actions">
       <a class="btn btn--secondary btn--sm" routerLink="/login">Log in</a>
-      <a class="btn btn--primary btn--sm" routerLink="/signup">Sign up free</a>
+      <a class="btn btn--primary btn--sm" routerLink="/signup">Sign up</a>
     </div>
 
-    <!-- Mobile hamburger -->
-    <button
-      class="navbar__hamburger"
-      type="button"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="menuOpen()"
-      aria-label="Toggle navigation menu"
-    >
-      @if (!menuOpen()) {
-        <!-- Hamburger icon -->
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- ── Mobile Hamburger ─────────────────────────────────── -->
+    <button class="navbar__hamburger"
+            type="button"
+            (click)="toggleMobileMenu()"
+            [attr.aria-expanded]="mobileOpen()"
+            aria-label="Toggle navigation menu">
+      @if (!mobileOpen()) {
+        <svg width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round"
+             aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       } @else {
-        <!-- Close icon -->
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <svg width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round"
+             aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
         </svg>
       }
     </button>
 
-  </div>
+  </div><!-- /navbar__bar -->
 
-  <!-- ── Mobile menu ────────────────────────────────────── -->
-  @if (menuOpen()) {
-    <div class="navbar__mobile-menu" role="navigation" aria-label="Mobile navigation">
-      <ul class="navbar__mobile-nav" role="list">
-        @for (item of navItems; track item.route) {
-          <li>
-            <a
-              class="navbar__mobile-link"
-              [routerLink]="item.route"
-              routerLinkActive="navbar__mobile-link--active"
-              (click)="closeMenu()"
-            >
-              {{ item.label }}
-            </a>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MOBILE MENU
+  ══════════════════════════════════════════════════════════ -->
+  @if (mobileOpen()) {
+    <nav class="mob-menu" aria-label="Mobile navigation">
+
+      <ul class="mob-menu__list" role="list">
+        @for (item of navItems; track item.label) {
+          <li class="mob-item">
+
+            <!-- Plain link -->
+            @if (!item.children && item.route) {
+              <a class="mob-link"
+                 [routerLink]="item.route"
+                 routerLinkActive="mob-link--active"
+                 [routerLinkActiveOptions]="{ exact: true }"
+                 (click)="closeMobileMenu()">
+                {{ item.label }}
+              </a>
+            }
+
+            <!-- Accordion -->
+            @if (item.children) {
+              <button class="mob-trigger"
+                      type="button"
+                      (click)="toggleMobileItem(item.label)"
+                      [attr.aria-expanded]="expandedMobileItem() === item.label">
+                <span class="mob-trigger__label">
+                  {{ item.label }}
+                  @if (item.status === 'live') {
+                    <span class="badge badge--live">
+                      <span class="badge__dot" aria-hidden="true"></span>Live
+                    </span>
+                  }
+                  @if (item.status === 'coming-soon') {
+                    <span class="badge badge--soon">Soon</span>
+                  }
+                </span>
+                <svg class="mob-trigger__chevron"
+                     [class.mob-trigger__chevron--open]="expandedMobileItem() === item.label"
+                     width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </button>
+
+              @if (expandedMobileItem() === item.label) {
+                <div class="mob-panel">
+
+                  <!-- Live: navigable children -->
+                  @if (item.status === 'live') {
+                    @for (child of item.children; track child.label) {
+                      <a class="mob-child"
+                         [routerLink]="child.route"
+                         (click)="closeMobileMenu()">
+                        <svg class="mob-child__icon"
+                             width="16" height="16"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.75"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                          <path [attr.d]="child.icon"/>
+                        </svg>
+                        <span>
+                          <span class="mob-child__label">{{ child.label }}</span>
+                          <span class="mob-child__desc">{{ child.description }}</span>
+                        </span>
+                      </a>
+                    }
+                  }
+
+                  <!-- Coming soon: preview only -->
+                  @if (item.status === 'coming-soon') {
+                    <div class="mob-soon">
+                      <span class="mob-soon__banner">Coming Soon — Under Development</span>
+                      <ul class="mob-soon__list" role="list">
+                        @for (child of item.children; track child.label) {
+                          <li class="mob-soon__item" aria-disabled="true">
+                            {{ child.label }}
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  }
+
+                  <!-- Active (Admin): sectioned with phase indicators -->
+                  @if (item.status === 'active') {
+                    <div class="mob-admin">
+
+                      <!-- Plain links (no childStatus) -->
+                      @for (child of item.children; track child.label) {
+                        @if (!child.childStatus) {
+                          <a class="mob-child"
+                             [routerLink]="child.route"
+                             (click)="closeMobileMenu()">
+                            <svg class="mob-child__icon"
+                                 width="16" height="16" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor"
+                                 stroke-width="1.75" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                              <path [attr.d]="child.icon"/>
+                            </svg>
+                            <span>
+                              <span class="mob-child__label">{{ child.label }}</span>
+                              <span class="mob-child__desc">{{ child.description }}</span>
+                            </span>
+                          </a>
+                        }
+                      }
+
+                      <div class="mob-admin__sep" role="separator"></div>
+
+                      <!-- Management sections -->
+                      @for (child of item.children; track child.label) {
+                        @if (child.childStatus) {
+                          <div class="mob-admin-row"
+                               [class.mob-admin-row--soon]="child.childStatus === 'coming-soon'">
+
+                            <div class="mob-admin-phase">
+                              <span class="admin-phase__dot"
+                                    [class.admin-phase__dot--active]="child.childStatus === 'active'"
+                                    [class.admin-phase__dot--soon]="child.childStatus === 'coming-soon'"
+                                    aria-hidden="true">
+                              </span>
+                              <span class="admin-phase__label"
+                                    [class.admin-phase__label--active]="child.childStatus === 'active'"
+                                    [class.admin-phase__label--soon]="child.childStatus === 'coming-soon'">
+                                {{ child.childStatus === 'active' ? 'Active' : 'Coming Soon' }}
+                              </span>
+                            </div>
+
+                            @if (child.childStatus === 'active') {
+                              <a class="mob-admin-item"
+                                 [routerLink]="child.route"
+                                 (click)="closeMobileMenu()">
+                                {{ child.label }}
+                              </a>
+                            }
+                            @if (child.childStatus === 'coming-soon') {
+                              <div class="mob-admin-item mob-admin-item--disabled"
+                                   aria-disabled="true">
+                                {{ child.label }}
+                              </div>
+                            }
+
+                          </div>
+                        }
+                      }
+
+                    </div>
+                  }
+
+                </div>
+              }
+            }
+
           </li>
         }
       </ul>
 
-      <div class="navbar__mobile-actions">
-        <a
-          class="btn btn--secondary btn--lg navbar__mobile-btn"
-          routerLink="/login"
-          (click)="closeMenu()"
-        >Log in</a>
-        <a
-          class="btn btn--primary btn--lg navbar__mobile-btn"
-          routerLink="/signup"
-          (click)="closeMenu()"
-        >Sign up free</a>
+      <!-- Mobile auth -->
+      <div class="mob-menu__actions">
+        <a class="btn btn--secondary btn--lg mob-menu__btn"
+           routerLink="/login"
+           (click)="closeMobileMenu()">Log in</a>
+        <a class="btn btn--primary btn--lg mob-menu__btn"
+           routerLink="/signup"
+           (click)="closeMobileMenu()">Sign up free</a>
       </div>
-    </div>
+
+    </nav>
   }
 
 </header>
