@@ -1,0 +1,69 @@
+<section class="roadmap">
+  <div class="roadmap__container">
+
+    <app-section-header
+      label="Roadmap"
+      title="FixPass Product Roadmap"
+      subtitle="Building the complete student success platform — one phase at a time.">
+    </app-section-header>
+
+    <div class="roadmap__track">
+      @for (phase of phases; track trackByPhase($index, phase)) {
+
+        <div class="roadmap__item"
+             [class.roadmap__item--live]="phase.status === 'live'">
+
+          <!-- Dot + connector line -->
+          <div class="roadmap__spine" aria-hidden="true">
+            <div class="roadmap__dot"
+                 [class.roadmap__dot--live]="phase.status === 'live'">
+              @if (phase.status === 'live') {
+                <span class="roadmap__dot-pulse"></span>
+              }
+            </div>
+            @if ($index < phases.length - 1) {
+              <div class="roadmap__line"></div>
+            }
+          </div>
+
+          <!-- Card -->
+          <article class="roadmap__card"
+                   [class.roadmap__card--live]="phase.status === 'live'">
+
+            <header class="roadmap__card-header">
+              <span class="roadmap__phase-num">Phase {{ phase.phase }}</span>
+              @if (phase.status === 'live') {
+                <span class="roadmap__badge roadmap__badge--live">
+                  <span class="roadmap__badge-dot" aria-hidden="true"></span>
+                  Live
+                </span>
+              } @else {
+                <span class="roadmap__badge roadmap__badge--soon">Soon</span>
+              }
+            </header>
+
+            <h3 class="roadmap__title">{{ phase.title }}</h3>
+
+            <ul class="roadmap__features" role="list">
+              @for (feature of phase.features; track trackByFeature($index)) {
+                <li class="roadmap__feature">
+                  <svg class="roadmap__feature-icon" width="12" height="12"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                       aria-hidden="true">
+                    <path d="M5 13l4 4L19 7"/>
+                  </svg>
+                  {{ feature }}
+                </li>
+              }
+            </ul>
+
+          </article>
+
+        </div>
+
+      }
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,29 @@
+<section class="why">
+  <div class="why__container">
+
+    <app-section-header
+      label="Why FixPass"
+      title="Why Choose FixPass?"
+      subtitle="Designed to simplify university exam preparation through organized and accessible study resources.">
+    </app-section-header>
+
+    <div class="why__grid">
+      @for (benefit of benefits(); track trackByBenefit($index, benefit)) {
+        <div class="why__card">
+          <div class="why__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.75"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path [attr.d]="benefit.icon"/>
+            </svg>
+          </div>
+          <div class="why__text">
+            <h3 class="why__title">{{ benefit.title }}</h3>
+            <p class="why__desc">{{ benefit.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>

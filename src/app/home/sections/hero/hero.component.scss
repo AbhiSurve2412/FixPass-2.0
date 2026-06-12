@@ -1,0 +1,116 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host { display: block; }
+
+// ── Section shell ────────────────────────────────────────────────
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: $space-20 $space-4 $space-16;
+  background-color: var(--color-bg);
+  text-align: center;
+
+  @include md { padding: $space-24 $space-8 $space-20; }
+}
+
+// ── Background layers ────────────────────────────────────────────
+.hero__bg {
+  @include absolute-fill;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero__bg-glow {
+  position: absolute;
+  top: -8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50rem;
+  height: 36rem;
+  background: radial-gradient(ellipse at center, var(--color-primary-light) 0%, transparent 65%);
+  opacity: 0.65;
+}
+
+.hero__bg-grid {
+  @include absolute-fill;
+  @include grid-pattern;
+  opacity: 0.3;
+}
+
+// ── Content container ────────────────────────────────────────────
+.hero__container {
+  position: relative;
+  z-index: $z-10;
+  max-width: 54rem;
+  margin: 0 auto;
+  @include flex-col-center;
+  gap: $space-6;
+}
+
+// ── Live badge ───────────────────────────────────────────────────
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: var(--radius-full);
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 0.02em;
+  border: 0.0625rem solid var(--color-border);
+}
+
+.hero__badge-dot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  background-color: var(--color-success);
+  flex-shrink: 0;
+  animation: hero-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hero-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.8); }
+}
+
+// ── Headline ─────────────────────────────────────────────────────
+.hero__headline {
+  @include heading-style;
+  font-size: $font-size-4xl;
+  margin: 0;
+  letter-spacing: -0.03em;
+
+  @include md { font-size: $font-size-5xl; }
+  @include lg { font-size: $font-size-6xl; }
+}
+
+.hero__headline-accent {
+  @include gradient-text;
+}
+
+// ── Subtext ──────────────────────────────────────────────────────
+.hero__subtext {
+  font-size: $font-size-base;
+  color: var(--color-text-secondary);
+  line-height: $line-height-relaxed;
+  max-width: 40rem;
+  margin: 0;
+
+  @include md { font-size: $font-size-lg; }
+}
+
+// ── CTA area ─────────────────────────────────────────────────────
+.hero__actions {
+  display: flex;
+  justify-content: center;
+  padding-top: $space-2;
+}
+
+.hero__cta {
+  svg { transition: transform $transition-fast; }
+  &:hover svg { transform: translateX(0.25rem); }
+}

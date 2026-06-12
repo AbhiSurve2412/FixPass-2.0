@@ -1,0 +1,47 @@
+<section class="testi">
+  <div class="testi__container">
+
+    <app-section-header
+      label="Student Feedback"
+      title="Loved by Engineering Students"
+      subtitle="Real feedback from students who used FixPass to prepare for their university examinations.">
+    </app-section-header>
+
+    <div class="testi__grid">
+      @for (t of testimonials(); track trackByTestimonial($index, t)) {
+        <article class="testi__card">
+
+          <!-- Decorative quote mark -->
+          <span class="testi__deco" aria-hidden="true">"</span>
+
+          <!-- Stars -->
+          <div class="testi__stars" [attr.aria-label]="t.rating + ' out of 5 stars'">
+            @for (star of stars; track star) {
+              <svg class="testi__star"
+                   [class.testi__star--filled]="star <= t.rating"
+                   width="14" height="14" viewBox="0 0 24 24"
+                   fill="currentColor" aria-hidden="true">
+                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+              </svg>
+            }
+          </div>
+
+          <!-- Quote -->
+          <blockquote class="testi__quote">{{ t.quote }}</blockquote>
+
+          <!-- Author -->
+          <footer class="testi__footer">
+            <div class="testi__avatar" aria-hidden="true">{{ t.initials }}</div>
+            <div class="testi__author">
+              <span class="testi__name">{{ t.name }}</span>
+              <span class="testi__role">{{ t.role }}</span>
+              <span class="testi__university">{{ t.university }}</span>
+            </div>
+          </footer>
+
+        </article>
+      }
+    </div>
+
+  </div>
+</section>

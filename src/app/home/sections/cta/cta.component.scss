@@ -1,0 +1,84 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host { display: block; }
+
+.cta {
+  position: relative;
+  overflow: hidden;
+  padding: $space-20 $space-4;
+  background-color: var(--color-secondary);
+  text-align: center;
+
+  @include md { padding: $space-24 $space-8; }
+}
+
+.cta__bg {
+  @include absolute-fill;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cta__bg-glow {
+  position: absolute;
+  width: 30rem;
+  height: 30rem;
+  border-radius: 50%;
+  opacity: 0.12;
+
+  &--left {
+    top: -10rem;
+    left: -8rem;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+  }
+
+  &--right {
+    bottom: -10rem;
+    right: -8rem;
+    background: radial-gradient(circle, var(--color-accent), transparent 70%);
+  }
+}
+
+.cta__bg-grid {
+  @include absolute-fill;
+  @include grid-pattern;
+  opacity: 0.04;
+}
+
+.cta__container {
+  position: relative;
+  z-index: $z-10;
+  max-width: 38rem;
+  margin: 0 auto;
+  @include flex-col-center;
+  gap: $space-6;
+}
+
+.cta__title {
+  @include heading-style;
+  font-size: $font-size-3xl;
+  color: var(--color-text-inverse);
+  margin: 0;
+  letter-spacing: -0.03em;
+
+  @include md { font-size: $font-size-4xl; }
+}
+
+.cta__title-accent {
+  @include gradient-text(var(--color-primary-light), var(--color-accent));
+}
+
+.cta__desc {
+  font-size: $font-size-base;
+  color: var(--color-text-muted);
+  line-height: $line-height-relaxed;
+  max-width: 32rem;
+  margin: 0;
+
+  @include md { font-size: $font-size-lg; }
+}
+
+.cta__btn {
+  svg { transition: transform $transition-fast; }
+  &:hover svg { transform: translateX(0.25rem); }
+}

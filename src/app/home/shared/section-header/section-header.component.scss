@@ -1,0 +1,44 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host { display: block; }
+
+.sh {
+  text-align: center;
+  max-width: 42rem;
+  margin: 0 auto $space-12;
+
+  &--left {
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.sh__label {
+  display: inline-block;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: var(--color-primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: $space-3;
+}
+
+.sh__title {
+  @include heading-style;
+  font-size: $font-size-2xl;
+  margin: 0 0 $space-4;
+
+  @include md { font-size: $font-size-3xl; }
+  @include lg { font-size: $font-size-4xl; }
+}
+
+.sh__subtitle {
+  font-size: $font-size-base;
+  color: var(--color-text-secondary);
+  line-height: $line-height-relaxed;
+  margin: 0;
+
+  @include md { font-size: $font-size-lg; }
+}

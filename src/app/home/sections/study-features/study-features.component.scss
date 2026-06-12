@@ -1,0 +1,101 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host { display: block; }
+
+// Transparent so the mesh gradient on home.component shows through.
+.features {
+  background-color: transparent;
+  @include section-padding;
+}
+
+.features__container {
+  @include section-container;
+}
+
+// ── 3-column card grid ───────────────────────────────────────────
+.features__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
+
+  @include md { grid-template-columns: repeat(2, 1fr); }
+  @include lg { grid-template-columns: repeat(3, 1fr); }
+}
+
+// ── Feature card ─────────────────────────────────────────────────
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  padding: $space-7;
+  background-color: var(--color-surface);
+  border: $space-px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow $transition-base, border-color $transition-base, transform $transition-base;
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border-strong);
+    transform: translateY(-$space-0-5);
+  }
+
+  &:focus-visible {
+    outline: $space-0-5 solid var(--color-primary);
+    outline-offset: $space-0-5;
+  }
+}
+
+.feature-card__icon {
+  @include flex-center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.feature-card__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: $line-height-snug;
+}
+
+.feature-card__desc {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: $line-height-relaxed;
+  margin: 0;
+  flex: 1;
+}
+
+.feature-card__list {
+  list-style: none;
+  margin: 0;
+  padding: $space-2 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  border-top: $space-px solid var(--color-border);
+}
+
+.feature-card__item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  font-weight: $font-weight-medium;
+}
+
+.feature-card__check {
+  flex-shrink: 0;
+  color: var(--color-success);
+}

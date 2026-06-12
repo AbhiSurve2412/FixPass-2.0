@@ -1,69 +1,40 @@
 @use 'styles/variables' as *;
 @use 'styles/mixins' as *;
 
-.placeholder {
+// Mesh gradient visible behind transparent sections (StudyFeatures, WhyFixpass).
+// Radial gradients use CSS custom properties — raw colours defined in styles.scss :root.
+:host {
+  display: block;
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse 70% 45% at 12% 0%,   var(--color-mesh-primary) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 40% at 88% 100%,  var(--color-mesh-accent)  0%, transparent 65%),
+    radial-gradient(ellipse 45% 55% at 50% 50%,   var(--color-mesh-warm)    0%, transparent 70%);
+}
+
+// ── Loading state ─────────────────────────────────────────────────
+
+.home-loading {
   @include flex-center;
-  min-height: 60vh;
-  padding: $space-12 $space-4;
+  min-height: 100vh;
 }
 
-.placeholder__inner {
-  @include flex-col-center;
-  text-align: center;
-  max-width: 32rem;
-  gap: $space-4;
-}
-
-.placeholder__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  color: var(--color-primary);
-  background-color: var(--color-primary-light);
-  border: 1px solid rgba(37, 99, 235, 0.2);
-  padding: $space-1 + 0.0625rem $space-3;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.placeholder__dot {
-  width: 0.4375rem;
-  height: 0.4375rem;
+.home-loading__spinner {
+  width: $space-10;
+  height: $space-10;
+  border: $space-px * 3 solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
-  background-color: var(--color-primary);
-  animation: pulse 2s ease infinite;
+  animation: spin 0.65s linear infinite;
 }
 
-.placeholder__title {
-  font-size: $font-size-4xl;
-  font-weight: $font-weight-bold;
-  color: var(--color-text-primary);
-  letter-spacing: -0.03em;
-  line-height: $line-height-tight;
+// ── Error state ───────────────────────────────────────────────────
 
-  @include md {
-    font-size: $font-size-5xl;
-  }
-}
-
-.placeholder__description {
-  font-size: $font-size-lg;
-  color: var(--color-text-secondary);
-  line-height: $line-height-relaxed;
-}
-
-.placeholder__divider {
-  width: 3rem;
-  height: 1px;
-  background-color: var(--color-border-strong);
-  margin: $space-2 auto;
-}
-
-.placeholder__hint {
-  font-size: $font-size-sm;
-  color: var(--color-text-muted);
-  line-height: $line-height-relaxed;
+.home-error {
+  @include flex-center;
+  min-height: 30vh;
+  padding: $space-8;
+  color: var(--color-danger);
+  font-size: $font-size-base;
+  text-align: center;
 }

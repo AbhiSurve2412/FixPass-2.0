@@ -1,0 +1,74 @@
+<section class="pricing">
+  <div class="pricing__container">
+
+    <app-section-header
+      label="Pricing Plans"
+      title="Simple, Transparent Pricing"
+      subtitle="Start free. Upgrade when you need more. No hidden fees, no surprises.">
+    </app-section-header>
+
+    <div class="pricing__grid">
+      @for (plan of plans(); track trackByPlan($index, plan)) {
+        <article class="pricing__card"
+                 [class.pricing__card--featured]="plan.featured"
+                 [class.pricing__card--soon]="plan.status === 'coming-soon'">
+
+          @if (plan.badge) {
+            <div class="pricing__badge"
+                 [class.pricing__badge--recommended]="plan.badge.variant === 'recommended'"
+                 [class.pricing__badge--soon]="plan.badge.variant === 'coming-soon'">
+              @if (plan.badge.variant === 'recommended') {
+                <span class="pricing__badge-dot" aria-hidden="true"></span>
+              }
+              {{ plan.badge.label }}
+            </div>
+          }
+
+          <div class="pricing__inner">
+
+            <header class="pricing__header">
+              <h3 class="pricing__name">{{ plan.name }}</h3>
+              <div class="pricing__price-row">
+                <span class="pricing__price">{{ plan.price }}</span>
+                @if (plan.period) {
+                  <span class="pricing__period">/ {{ plan.period }}</span>
+                }
+              </div>
+              <p class="pricing__desc">{{ plan.description }}</p>
+            </header>
+
+            @if (plan.ctaRoute) {
+              <a [routerLink]="plan.ctaRoute"
+                 class="btn pricing__cta"
+                 [class.btn--primary]="plan.featured"
+                 [class.btn--secondary]="!plan.featured && plan.status !== 'coming-soon'"
+                 [class.pricing__cta--muted]="plan.status === 'coming-soon'"
+                 [attr.aria-disabled]="plan.status === 'coming-soon' ? 'true' : null">
+                {{ plan.ctaLabel }}
+              </a>
+            } @else {
+              <button class="btn btn--secondary pricing__cta" disabled>
+                {{ plan.ctaLabel }}
+              </button>
+            }
+
+            <ul class="pricing__features" role="list">
+              @for (feature of plan.features; track trackByFeature($index)) {
+                <li class="pricing__feature">
+                  <svg class="pricing__check" width="14" height="14" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 13l4 4L19 7"/>
+                  </svg>
+                  {{ feature }}
+                </li>
+              }
+            </ul>
+
+          </div>
+        </article>
+      }
+    </div>
+
+  </div>
+</section>

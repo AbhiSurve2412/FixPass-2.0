@@ -122,7 +122,7 @@
 
 @mixin card-base {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: $space-px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   transition: $transition-base;
@@ -132,15 +132,15 @@
   &:hover {
     box-shadow: var(--shadow-lg);
     border-color: var(--color-border-strong);
-    transform: translateY(-1px);
+    transform: translateY(-$space-px);
   }
 }
 
 @mixin glass($opacity: 0.8) {
-  background: rgba(255, 255, 255, $opacity);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
+  border: $space-px solid var(--color-surface-glass-strong);
 }
 
 // ============================================================
@@ -149,8 +149,8 @@
 
 @mixin focus-ring($color: var(--color-primary)) {
   &:focus-visible {
-    outline: 2px solid $color;
-    outline-offset: 2px;
+    outline: $space-0-5 solid $color;
+    outline-offset: $space-0-5;
     border-radius: var(--radius-sm);
   }
 }
@@ -165,7 +165,7 @@
   line-height: $line-height-none;
   text-decoration: none;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: $space-px solid transparent;
   transition: $transition-base;
   white-space: nowrap;
   user-select: none;
@@ -189,7 +189,7 @@
   font-weight: $font-weight-regular;
   color: var(--color-text-primary);
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: $space-px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: $space-3 $space-4;
   transition: $transition-base;
@@ -206,7 +206,7 @@
 
   &:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 $space-1-5 var(--color-focus-ring);
   }
 
   &:disabled {
@@ -214,6 +214,20 @@
     color: var(--color-text-muted);
     cursor: not-allowed;
   }
+}
+
+// ============================================================
+// LAYOUT HELPERS — shared across all page sections
+// ============================================================
+
+@mixin section-container {
+  max-width: $bp-xl;
+  margin: 0 auto;
+}
+
+@mixin section-padding {
+  padding: $space-16 $space-4;
+  @include md { padding: $space-20 $space-8; }
 }
 
 // ============================================================

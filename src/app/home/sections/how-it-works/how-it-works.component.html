@@ -1,0 +1,62 @@
+<section class="hiw">
+
+  <!-- Decorative background glows -->
+  <div class="hiw__bg" aria-hidden="true">
+    <div class="hiw__bg-glow hiw__bg-glow--1"></div>
+    <div class="hiw__bg-glow hiw__bg-glow--2"></div>
+  </div>
+
+  <div class="hiw__container">
+
+    <app-section-header
+      label="How It Works"
+      title="Up and Running in Minutes"
+      subtitle="Your study material is personalised automatically — just set your branch and year once.">
+    </app-section-header>
+
+    <ol class="hiw__steps" aria-label="Steps to get started with FixPass">
+      @for (step of steps(); track trackByStep($index, step); let last = $last) {
+
+        <li class="hiw__step">
+
+          <!-- Icon circle + horizontal connector on desktop -->
+          <div class="hiw__flow" aria-hidden="true">
+            <div class="hiw__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.75"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="step.icon"/>
+              </svg>
+            </div>
+            @if (!last) {
+              <div class="hiw__connector">
+                <div class="hiw__connector-line"></div>
+                <svg class="hiw__connector-arrow" width="12" height="12"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+            }
+          </div>
+
+          <!-- Step card -->
+          <div class="hiw__card">
+
+            <!-- Watermark step number -->
+            <span class="hiw__watermark" aria-hidden="true">
+              {{ step.number < 10 ? '0' + step.number : step.number }}
+            </span>
+
+            <h3 class="hiw__title">{{ step.title }}</h3>
+            <p class="hiw__desc">{{ step.description }}</p>
+
+          </div>
+
+        </li>
+
+      }
+    </ol>
+
+  </div>
+</section>

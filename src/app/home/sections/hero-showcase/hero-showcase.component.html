@@ -1,0 +1,195 @@
+<section class="hs">
+
+  <div class="hs__bg" aria-hidden="true">
+    <div class="hs__bg-glow hs__bg-glow--tl"></div>
+    <div class="hs__bg-glow hs__bg-glow--br"></div>
+    <div class="hs__bg-grid"></div>
+  </div>
+
+  <div class="hs__container">
+
+    <!-- ── LEFT: Hero ─────────────────────────────────────────── -->
+    <div class="hs__hero">
+
+      @if (hero(); as h) {
+        <span class="hs__badge" role="status">
+          <span class="hs__badge-dot" aria-hidden="true"></span>
+          {{ h.badgeText }}
+        </span>
+
+        <h1 class="hs__headline">
+          {{ h.headline }}<br>
+          <span class="hs__headline-accent">{{ h.headlineAccent }}</span>
+        </h1>
+
+        <p class="hs__sub">{{ h.subText }}</p>
+
+        <div class="hs__actions">
+          <a [routerLink]="h.ctaRoute" class="btn btn--primary btn--lg hs__cta">
+            {{ h.ctaText }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <span class="hs__note">{{ h.ctaNote }}</span>
+        </div>
+
+        <div class="hs__stats" role="list" aria-label="Key stats">
+          @for (stat of h.stats; track trackByStat($index, stat); let last = $last) {
+            <div class="hs__stat" role="listitem">
+              <span class="hs__stat-val">{{ stat.value }}</span>
+              <span class="hs__stat-label">{{ stat.label }}</span>
+            </div>
+            @if (!last) {
+              <div class="hs__stat-sep" aria-hidden="true"></div>
+            }
+          }
+        </div>
+      }
+
+    </div>
+
+    <!-- ── RIGHT: Product ─────────────────────────────────────── -->
+    <div class="hs__product" role="region" aria-label="FixPass product preview">
+
+      <!-- Browser chrome -->
+      <div class="hs__chrome" aria-hidden="true">
+        <div class="hs__chrome-dots">
+          <span class="hs__chrome-dot hs__chrome-dot--close"></span>
+          <span class="hs__chrome-dot hs__chrome-dot--min"></span>
+          <span class="hs__chrome-dot hs__chrome-dot--max"></span>
+        </div>
+        <span class="hs__chrome-path">app.fixpass.in / study-material</span>
+      </div>
+
+      <!-- Product body -->
+      <div class="hs__body">
+
+        @if (activeBranch(); as branch) {
+
+          <!-- Branch selector -->
+          <div class="hs__row">
+            <span class="hs__row-label">Branch</span>
+            <div class="hs__tabs" role="tablist" aria-label="Select branch">
+              @for (b of branches(); track trackByBranch($index, b)) {
+                <button class="hs__tab"
+                        [class.hs__tab--active]="branch.id === b.id"
+                        (click)="selectBranch(b)"
+                        role="tab"
+                        [attr.aria-selected]="branch.id === b.id">
+                  {{ b.shortName }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Year selector -->
+          @if (activeYear(); as year) {
+            <div class="hs__row">
+              <span class="hs__row-label">Year</span>
+              <div class="hs__tabs" role="tablist" aria-label="Select year">
+                @for (y of branch.years; track trackByYear($index, y)) {
+                  <button class="hs__tab"
+                          [class.hs__tab--active]="year.id === y.id"
+                          (click)="selectYear(y)"
+                          role="tab"
+                          [attr.aria-selected]="year.id === y.id">
+                    {{ y.label }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="hs__divider" aria-hidden="true"></div>
+
+            <!-- Subjects + preview -->
+            <div class="hs__content">
+
+              <!-- Subjects list -->
+              <div class="hs__subjects-col">
+                <p class="hs__col-title">Subjects</p>
+                <ul class="hs__subjects" role="list">
+                  @for (s of year.subjects; track trackBySubject($index, s)) {
+                    <li>
+                      <button class="hs__subject"
+                              [class.hs__subject--active]="activeSubject()?.id === s.id"
+                              (click)="selectSubject(s)"
+                              [attr.aria-current]="activeSubject()?.id === s.id ? 'true' : null">
+                        <span class="hs__subject-dot" aria-hidden="true"></span>
+                        <span class="hs__subject-name">{{ s.name }}</span>
+                        @if (getTotalQuestions(s) > 0) {
+                          <span class="hs__subject-count">{{ getTotalQuestions(s) }}Q</span>
+                        }
+                      </button>
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <!-- Preview panel -->
+              <div class="hs__preview-col" aria-live="polite" aria-atomic="true">
+                @if (activeSubject(); as subject) {
+                  @if (subject.units.length > 0) {
+                    <div class="hs__preview">
+                      <div class="hs__preview-top">
+                        <p class="hs__col-title">{{ subject.name }}</p>
+                        <span class="hs__preview-total">{{ getTotalQuestions(subject) }} total</span>
+                      </div>
+                      <ul class="hs__units" role="list">
+                        @for (unit of subject.units; track trackByUnit($index)) {
+                          <li class="hs__unit">
+                            <div class="hs__unit-row">
+                              <span class="hs__unit-label">Unit {{ unit.unit }}</span>
+                              <span class="hs__unit-meta">
+                                <span class="hs__unit-total">{{ unit.totalQuestions }}</span>
+                                <span class="hs__unit-sep" aria-hidden="true">·</span>
+                                <span class="hs__unit-imp">{{ unit.importantQuestions }} imp</span>
+                              </span>
+                            </div>
+                            <div class="hs__unit-bar"
+                                 role="progressbar"
+                                 [attr.aria-valuenow]="unit.importantQuestions"
+                                 [attr.aria-valuemax]="unit.totalQuestions"
+                                 [attr.aria-label]="'Unit ' + unit.unit + ': ' + unit.importantQuestions + ' important of ' + unit.totalQuestions">
+                              <div class="hs__unit-fill"
+                                   [style.width.%]="unit.importantQuestions / unit.totalQuestions * 100">
+                              </div>
+                            </div>
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  } @else {
+                    <div class="hs__preview hs__preview--empty">
+                      <svg class="hs__preview-empty-icon" width="28" height="28"
+                           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                           aria-hidden="true">
+                        <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        <circle cx="12" cy="12" r="9"/>
+                      </svg>
+                      <p class="hs__preview-empty-text">Content coming soon for this subject</p>
+                    </div>
+                  }
+                }
+              </div>
+
+            </div>
+          }
+
+        } @else {
+          <!-- Skeleton placeholder while branches load -->
+          <div class="hs__skeleton" aria-hidden="true">
+            <div class="hs__skeleton-row"></div>
+            <div class="hs__skeleton-row hs__skeleton-row--short"></div>
+          </div>
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+</section>

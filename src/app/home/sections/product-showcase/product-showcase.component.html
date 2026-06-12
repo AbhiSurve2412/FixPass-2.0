@@ -1,0 +1,100 @@
+<section class="showcase">
+  <div class="showcase__container">
+
+    <app-section-header
+      label="Product Preview"
+      title="See FixPass in Action"
+      subtitle="Navigate from branch to subject and instantly see available questions, important topics, and unit-wise breakdowns.">
+    </app-section-header>
+
+    <!-- ── Product UI frame ──────────────────────────────────── -->
+    <div class="showcase__frame" role="region" aria-label="FixPass product preview">
+
+      <!-- Left panel — branch + subjects list -->
+      <div class="showcase__nav">
+
+        <div class="showcase__branch">
+          <div class="showcase__branch-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.75"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+              <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="showcase__branch-name">Computer Engineering</div>
+            <div class="showcase__branch-year">Third Year · Sem 5 &amp; 6</div>
+          </div>
+        </div>
+
+        <div class="showcase__nav-divider" aria-hidden="true"></div>
+
+        <p class="showcase__subjects-label">Subjects</p>
+        <ul class="showcase__subjects" role="list">
+          @for (subject of subjects; track subject.id) {
+            <li>
+              <button
+                class="showcase__subject"
+                [class.showcase__subject--active]="activeSubject().id === subject.id"
+                type="button"
+                (click)="setActive(subject)"
+                [attr.aria-pressed]="activeSubject().id === subject.id">
+                <span class="showcase__subject-dot" aria-hidden="true"></span>
+                <span class="showcase__subject-name">{{ subject.name }}</span>
+                <svg class="showcase__subject-chevron" width="14" height="14"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Right panel — selected subject detail -->
+      <div class="showcase__detail">
+
+        <div class="showcase__detail-header">
+          <h3 class="showcase__detail-title">{{ activeSubject().name }}</h3>
+          <div class="showcase__detail-chips">
+            <span class="showcase__chip">{{ activeSubject().units.length }} Units</span>
+            <span class="showcase__chip showcase__chip--primary">
+              {{ getTotalQuestions(activeSubject()) }} Questions
+            </span>
+            <span class="showcase__chip showcase__chip--success">
+              {{ getImportantQuestions(activeSubject()) }} Important
+            </span>
+          </div>
+        </div>
+
+        <div class="showcase__units" role="list">
+          @for (unit of activeSubject().units; track trackByUnit($index)) {
+            <div class="showcase__unit" role="listitem">
+              <div class="showcase__unit-header">
+                <span class="showcase__unit-label">Unit {{ unit.unit }}</span>
+                <span class="showcase__unit-total">{{ unit.totalQuestions }} questions</span>
+              </div>
+              <div class="showcase__unit-bar" aria-hidden="true">
+                <div class="showcase__unit-bar-track">
+                  <div class="showcase__unit-bar-fill"
+                       [style.width]="(unit.importantQuestions / unit.totalQuestions * 100) + '%'">
+                  </div>
+                </div>
+              </div>
+              <div class="showcase__unit-footer">
+                <span class="showcase__unit-imp">
+                  {{ unit.importantQuestions }} important
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,205 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host { display: block; }
+
+// ── Section ───────────────────────────────────────────────────────
+// Distinct from the flat bg/surface sections — subtle branded gradient
+// gives the "process" section its own identity in the page rhythm.
+.hiw {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    165deg,
+    var(--color-primary-light) 0%,
+    var(--color-surface)       55%,
+    var(--color-surface-2)     100%
+  );
+  @include section-padding;
+}
+
+// ── Background glows ──────────────────────────────────────────────
+.hiw__bg { @include absolute-fill; pointer-events: none; overflow: hidden; }
+
+.hiw__bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(5rem);
+  pointer-events: none;
+
+  &--1 {
+    width: 32rem;
+    height: 32rem;
+    top: -14rem;
+    left: -10rem;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.06;
+  }
+
+  &--2 {
+    width: 24rem;
+    height: 24rem;
+    bottom: -10rem;
+    right: -8rem;
+    background: radial-gradient(circle, var(--color-accent), transparent 70%);
+    opacity: 0.05;
+  }
+}
+
+// ── Container ─────────────────────────────────────────────────────
+.hiw__container {
+  @include section-container;
+  position: relative;
+  z-index: $z-10;
+}
+
+// ── Steps list ────────────────────────────────────────────────────
+.hiw__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+
+  @include lg {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+  }
+}
+
+// ── Individual step ───────────────────────────────────────────────
+.hiw__step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-5;
+  text-align: center;
+}
+
+// ── Flow row: icon circle + connecting arrow ──────────────────────
+.hiw__flow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+// Icon circle — gradient pill with halo ring
+.hiw__icon {
+  @include flex-center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: var(--color-text-inverse);
+  box-shadow:
+    0 0 0 $space-2 var(--color-primary-light),
+    var(--shadow-primary);
+  flex-shrink: 0;
+  position: relative;
+  z-index: $z-10;
+  transition: transform $transition-base, box-shadow $transition-base;
+
+  .hiw__step:hover & {
+    transform: scale(1.1);
+    box-shadow:
+      0 0 0 $space-3 var(--color-primary-light),
+      var(--shadow-primary);
+  }
+}
+
+// Connector: dashed line + arrow between icons on desktop
+.hiw__connector {
+  display: none;
+  flex: 1;
+  align-items: center;
+  gap: $space-1;
+  padding: 0 $space-2;
+  opacity: 0.45;
+
+  @include lg { display: flex; }
+}
+
+.hiw__connector-line {
+  flex: 1;
+  height: $space-px;
+  // Dashed appearance via repeating gradient
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-primary)  0,
+    var(--color-primary)  $space-2,
+    transparent           $space-2,
+    transparent           $space-5
+  );
+}
+
+.hiw__connector-arrow {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+// ── Step card ─────────────────────────────────────────────────────
+.hiw__card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: $space-6;
+  background-color: var(--color-surface);
+  border: $space-px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow $transition-base,
+    border-color $transition-base,
+    transform $transition-base;
+
+  @include lg { max-width: 20rem; }
+
+  .hiw__step:hover & {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+    transform: translateY(-$space-1);
+  }
+}
+
+// Large gradient number watermark — decorative background element
+.hiw__watermark {
+  position: absolute;
+  top: -$space-3;
+  right: $space-3;
+  font-size: 5.5rem;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  @include gradient-text(var(--color-primary), var(--color-accent));
+  opacity: 0.07;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity $transition-base;
+  font-variant-numeric: tabular-nums;
+
+  .hiw__step:hover & { opacity: 0.14; }
+}
+
+.hiw__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: var(--color-text-primary);
+  margin: 0 0 $space-2;
+  letter-spacing: -0.02em;
+  line-height: $line-height-snug;
+  position: relative;
+
+  @include md { font-size: $font-size-xl; }
+}
+
+.hiw__desc {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: $line-height-relaxed;
+  margin: 0;
+  position: relative;
+}

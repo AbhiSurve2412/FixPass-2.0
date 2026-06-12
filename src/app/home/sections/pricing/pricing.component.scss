@@ -1,0 +1,195 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host { display: block; }
+
+.pricing {
+  background-color: var(--color-surface);
+  @include section-padding;
+}
+
+.pricing__container {
+  @include section-container;
+}
+
+.pricing__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+  align-items: start;
+
+  @include md { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+}
+
+// ── Card ──────────────────────────────────────────────────────────
+.pricing__card {
+  position: relative;
+  border-radius: var(--radius-2xl);
+  border: $space-px solid var(--color-border);
+  background-color: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow $transition-base, transform $transition-base, border-color $transition-base;
+
+  &:hover:not(.pricing__card--soon) {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-$space-1);
+  }
+
+  &--featured {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-primary), var(--shadow-md);
+
+    &:hover {
+      box-shadow: var(--shadow-primary), var(--shadow-lg);
+      transform: translateY(-$space-2);
+    }
+  }
+
+  &--soon {
+    opacity: 0.7;
+    background-color: var(--color-surface-2);
+  }
+}
+
+// ── Badge ─────────────────────────────────────────────────────────
+// top offset is half the badge height — no SCSS token maps to this
+// visual geometry; keep as a calculated rem value.
+.pricing__badge {
+  position: absolute;
+  top: -0.8125rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-1 $space-4;
+  border-radius: var(--radius-full);
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+  z-index: $z-10;
+
+  &--recommended {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-primary);
+  }
+
+  &--soon {
+    background-color: var(--color-warning-light);
+    color: var(--color-warning-hover);
+    border: $space-px solid var(--color-warning);
+  }
+}
+
+.pricing__badge-dot {
+  width: $space-1-5;
+  height: $space-1-5;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+  opacity: 0.8;
+  animation: pricing-pulse 2s ease-in-out infinite;
+}
+
+@keyframes pricing-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.75); }
+}
+
+// ── Inner ─────────────────────────────────────────────────────────
+.pricing__inner {
+  padding: $space-7 $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+// ── Header ────────────────────────────────────────────────────────
+.pricing__header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.pricing__name {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: var(--color-text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.pricing__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: $space-2;
+}
+
+.pricing__price {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+
+  .pricing__card--featured & {
+    @include gradient-text(var(--color-primary), var(--color-accent));
+  }
+}
+
+.pricing__period {
+  font-size: $font-size-sm;
+  color: var(--color-text-muted);
+  font-weight: $font-weight-medium;
+}
+
+.pricing__desc {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: $line-height-relaxed;
+  margin: 0;
+}
+
+// ── CTA ───────────────────────────────────────────────────────────
+.pricing__cta {
+  width: 100%;
+  justify-content: center;
+
+  &--muted {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+// ── Features ──────────────────────────────────────────────────────
+.pricing__features {
+  list-style: none;
+  margin: 0;
+  padding: $space-4 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  border-top: $space-px solid var(--color-border);
+  flex: 1;
+}
+
+.pricing__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: $line-height-normal;
+}
+
+.pricing__check {
+  flex-shrink: 0;
+  margin-top: $space-px;
+  color: var(--color-success);
+
+  .pricing__card--featured & { color: var(--color-primary); }
+  .pricing__card--soon & { color: var(--color-text-muted); }
+}

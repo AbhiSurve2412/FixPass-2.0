@@ -1,16 +1,20 @@
-<div class="placeholder">
-  <div class="placeholder__inner">
-    <div class="placeholder__badge">
-      <span class="placeholder__dot"></span>
-      In Development
-    </div>
-    <h1 class="placeholder__title">FixPass Application</h1>
-    <p class="placeholder__description">
-      Landing page content will be added in the next step.
-    </p>
-    <div class="placeholder__divider"></div>
-    <p class="placeholder__hint">
-      The application shell is ready — navbar, routing, and footer are all wired up.
-    </p>
+@if (loading()) {
+  <div class="home-loading" role="status" aria-label="Loading home page content">
+    <span class="home-loading__spinner" aria-hidden="true"></span>
   </div>
-</div>
+}
+
+@if (error()) {
+  <div class="home-error" role="alert">
+    <p>{{ error() }}</p>
+  </div>
+}
+
+@if (!loading() && !error()) {
+  <app-hero-showcase [hero]="hero()" [branches]="branches()" />
+  <app-study-features [features]="features()" />
+  <app-testimonials [testimonials]="testimonials()" />
+  <app-how-it-works [steps]="steps()" />
+  <app-why-fixpass [benefits]="benefits()" />
+  <app-pricing [plans]="plans()" />
+}
