@@ -1,0 +1,588 @@
+@if (visible()) {
+  <div class="wizard__overlay" role="dialog" aria-modal="true" aria-label="Import Question Paper">
+    <div class="wizard" [class.wizard--workspace]="currentStep() === 3">
+
+      <!-- ════════════════════ HEADER ════════════════════ -->
+      <div class="wizard__header">
+        <div class="wizard__header-top">
+          <div class="wizard__header-left">
+            <div class="wizard__header-icon-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="wizard__title">Question Paper Extraction</h2>
+              <p class="wizard__subtitle">Upload SPPU question papers · AI extracts &amp; structures questions</p>
+            </div>
+          </div>
+          <button class="wizard__close" type="button" (click)="onClose()" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Step indicator -->
+        <div class="wizard__steps" aria-label="Progress">
+          <div class="wizard__step" [class.wizard__step--active]="currentStep() >= 1" [class.wizard__step--done]="currentStep() > 1">
+            <span class="wizard__step-num">
+              @if (currentStep() > 1) {
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              } @else { 1 }
+            </span>
+            <span class="wizard__step-label">Upload</span>
+          </div>
+          <div class="wizard__step-line" [class.wizard__step-line--done]="currentStep() > 1"></div>
+          <div class="wizard__step" [class.wizard__step--active]="currentStep() >= 2" [class.wizard__step--done]="currentStep() > 2">
+            <span class="wizard__step-num">
+              @if (currentStep() > 2) {
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              } @else { 2 }
+            </span>
+            <span class="wizard__step-label">Processing</span>
+          </div>
+          <div class="wizard__step-line" [class.wizard__step-line--done]="currentStep() > 2"></div>
+          <div class="wizard__step" [class.wizard__step--active]="currentStep() >= 3">
+            <span class="wizard__step-num">3</span>
+            <span class="wizard__step-label">Review &amp; Import</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ STEP 1 — UPLOAD ════════════════════ -->
+      @if (currentStep() === 1) {
+        <div class="wizard__body">
+
+          <!-- Subject -->
+          <div class="wizard__field">
+            <label class="wizard__label" for="w-subject">
+              Subject <span class="wizard__required" aria-hidden="true">*</span>
+            </label>
+            <p class="wizard__field-hint">Extracted questions will be imported under this subject</p>
+            <select
+              id="w-subject"
+              class="wizard__input wizard__input--select"
+              [value]="selectedSubjectId()"
+              (change)="onSubjectChange($any($event.target).value)"
+            >
+              <option value="">— Select a subject —</option>
+              @for (s of subjects(); track s.id) {
+                <option [value]="s.id">{{ s.name }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- File upload -->
+          <div class="wizard__field">
+            <label class="wizard__label">
+              PDF / DOCX Question Papers <span class="wizard__required" aria-hidden="true">*</span>
+            </label>
+            <p class="wizard__field-hint">Upload one or more SPPU-format question papers · MCQs, descriptive, images &amp; tables all supported</p>
+
+            <label class="wizard__dropzone" for="w-file">
+              <div class="wizard__dropzone-icon-wrap">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="12" x2="12" y2="18"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <span class="wizard__dropzone-text">
+                @if (selectedFiles().length > 0) { Add more papers } @else { Click to upload question papers }
+              </span>
+              <span class="wizard__dropzone-hint">.pdf, .docx — multiple files supported · SPPU 2024 Pattern</span>
+              <input id="w-file" type="file" accept=".pdf,.docx" multiple class="wizard__file-input" (change)="onFileChange($event)"/>
+            </label>
+
+            @if (selectedFiles().length > 0) {
+              <ul class="wizard__file-list" aria-label="Selected files">
+                @for (f of selectedFiles(); track f.name) {
+                  <li class="wizard__file-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <span class="wizard__file-name">{{ f.name }}</span>
+                    <span class="wizard__file-size">{{ (f.size / 1024).toFixed(0) }} KB</span>
+                    <button class="wizard__file-remove" type="button" [attr.aria-label]="'Remove ' + f.name" (click)="removeFile(f.name)">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          <!-- What will be extracted -->
+          <div class="wizard__extract-preview">
+            <p class="wizard__extract-preview-title">What gets extracted automatically</p>
+            <div class="wizard__extract-features">
+              <span class="wizard__extract-feat">✦ MCQs with options</span>
+              <span class="wizard__extract-feat">✦ Long &amp; short answer questions</span>
+              <span class="wizard__extract-feat">✦ Marks per question</span>
+              <span class="wizard__extract-feat">✦ Question numbers &amp; types</span>
+              <span class="wizard__extract-feat">✦ Unit detection</span>
+              <span class="wizard__extract-feat">✦ Difficulty suggestion</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="wizard__footer">
+          <span></span>
+          <div class="wizard__footer-actions">
+            <button class="wizard__btn wizard__btn--cancel" type="button" (click)="onClose()">Cancel</button>
+            <button
+              class="wizard__btn wizard__btn--primary"
+              type="button"
+              [disabled]="!canExtract()"
+              (click)="onExtract()"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              Extract from {{ selectedFiles().length || 0 }} File{{ selectedFiles().length !== 1 ? 's' : '' }}
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- ════════════════════ STEP 2 — PROCESSING ════════════════════ -->
+      @if (currentStep() === 2) {
+        <div class="wizard__body wizard__body--center">
+          <div class="wizard__processing">
+
+            <div class="wizard__processing-orb" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+
+            <div class="wizard__processing-text">
+              <h3 class="wizard__processing-title">Analyzing Question Paper</h3>
+              <p class="wizard__processing-sub">Extracting questions, detecting types, mapping units…</p>
+            </div>
+
+            <div class="wizard__processing-steps" aria-live="polite">
+              <div class="wizard__proc-step wizard__proc-step--done">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                PDF parsed successfully
+              </div>
+              <div class="wizard__proc-step wizard__proc-step--active">
+                <span class="wizard__spinner" aria-hidden="true"></span>
+                Extracting questions &amp; detecting numbers…
+              </div>
+              <div class="wizard__proc-step wizard__proc-step--pending">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                Detecting types, marks &amp; difficulty
+              </div>
+              <div class="wizard__proc-step wizard__proc-step--pending">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                Mapping questions to units
+              </div>
+            </div>
+
+            <div class="wizard__processing-files">
+              @for (f of selectedFiles(); track f.name) {
+                <span class="wizard__proc-file">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  {{ f.name }}
+                </span>
+              }
+            </div>
+
+          </div>
+        </div>
+
+        <div class="wizard__footer">
+          <span></span>
+          <div class="wizard__footer-actions">
+            <button class="wizard__btn wizard__btn--cancel" type="button" (click)="goBack()">← Cancel</button>
+          </div>
+        </div>
+      }
+
+      <!-- ════════════════════ STEP 3 — REVIEW WORKSPACE ════════════════════ -->
+      @if (currentStep() === 3) {
+        <div class="wizard__workspace">
+
+          <!-- ── Left Navigation ── -->
+          <aside class="wizard__sidenav">
+
+            <div class="wizard__sidenav-hdr">
+              <span class="wizard__sidenav-label">Question Navigator</span>
+              <span class="wizard__sidenav-total">{{ importStats().total }} total</span>
+            </div>
+
+            <nav class="wizard__sidenav-nav" aria-label="Jump to section">
+
+              <button
+                class="wizard__navitem"
+                [class.wizard__navitem--active]="activeSection() === 'all'"
+                type="button"
+                (click)="scrollToSection('all')"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <span>All Questions</span>
+                <span class="wizard__navitem-count">{{ importStats().total }}</span>
+              </button>
+
+              @for (group of groupedQuestions(); track group.pairIndex) {
+                <button
+                  class="wizard__navitem"
+                  [class.wizard__navitem--active]="activeSection() === (group.pairIndex < 0 ? 'mcq' : 'unit-' + group.pairIndex)"
+                  [class.wizard__navitem--mcq]="group.pairIndex < 0"
+                  type="button"
+                  (click)="scrollToSection(group.pairIndex < 0 ? 'mcq' : 'unit-' + group.pairIndex)"
+                >
+                  <span class="wizard__navitem-dot" [class.wizard__navitem-dot--mcq]="group.pairIndex < 0"></span>
+                  <span>{{ group.unitLabel }}</span>
+                  <span class="wizard__navitem-count">{{ group.allQuestions.length }}</span>
+                </button>
+              }
+
+            </nav>
+
+            <!-- Bulk operations -->
+            <div class="wizard__sidenav-bulk">
+              <label class="wizard__bulk-all">
+                <input
+                  type="checkbox"
+                  [checked]="allSelected()"
+                  (change)="toggleSelectAll()"
+                />
+                <span>{{ allSelected() ? 'Deselect All' : 'Select All' }}</span>
+              </label>
+
+              @if (someSelected()) {
+                <div class="wizard__bulk-panel">
+                  <span class="wizard__bulk-count">{{ selectedIds().size }} selected</span>
+                  <button class="wizard__bulk-btn" type="button" (click)="bulkMarkImportant()">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Mark Important
+                  </button>
+                  <select class="wizard__bulk-select" (change)="bulkAssignUnit($any($event.target).value)">
+                    <option value="">Assign to unit…</option>
+                    @for (u of filteredUnits(); track u.id) {
+                      <option [value]="u.id">{{ u.name }}</option>
+                    }
+                  </select>
+                  <button class="wizard__bulk-btn wizard__bulk-btn--danger" type="button" (click)="bulkDelete()">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                    Delete
+                  </button>
+                </div>
+              }
+            </div>
+
+          </aside>
+
+          <!-- ── Right Review Panel ── -->
+          <main class="wizard__reviewpanel">
+
+            <!-- Summary bar -->
+            <div class="wizard__summary" id="ws-all">
+              <div class="wizard__stat">
+                <span class="wizard__stat-value">{{ importStats().total }}</span>
+                <span class="wizard__stat-label">Questions Found</span>
+              </div>
+              <div class="wizard__stat wizard__stat--accent">
+                <span class="wizard__stat-value">{{ importStats().mcqCount }}</span>
+                <span class="wizard__stat-label">MCQs</span>
+              </div>
+              <div class="wizard__stat">
+                <span class="wizard__stat-value">{{ importStats().descriptiveCount }}</span>
+                <span class="wizard__stat-label">Descriptive</span>
+              </div>
+              @if (importStats().flaggedCount > 0) {
+                <div class="wizard__stat wizard__stat--warn">
+                  <span class="wizard__stat-value">{{ importStats().flaggedCount }}</span>
+                  <span class="wizard__stat-label">Needs Review</span>
+                </div>
+              }
+              <div class="wizard__stat wizard__stat--success">
+                <span class="wizard__stat-value">{{ confidencePercent(importStats().avgConfidence) }}</span>
+                <span class="wizard__stat-label">Avg Confidence</span>
+              </div>
+            </div>
+
+            <!-- ── Question Sections ── -->
+            @for (group of groupedQuestions(); track group.pairIndex) {
+              <section
+                class="wizard__section"
+                [id]="group.pairIndex < 0 ? 'ws-mcq' : 'ws-unit-' + group.pairIndex"
+              >
+
+                <!-- Section Header -->
+                <div class="wizard__section-hdr">
+                  <div class="wizard__section-hdr-left">
+                    @if (group.pairIndex < 0) {
+                      <span class="wizard__section-pill wizard__section-pill--mcq">MCQ</span>
+                    } @else {
+                      <span class="wizard__section-pill">Unit {{ group.pairIndex + 1 }}</span>
+                    }
+                    <h3 class="wizard__section-title">{{ group.unitLabel }}</h3>
+                    <span class="wizard__section-meta">
+                      {{ group.allQuestions.length }} question{{ group.allQuestions.length !== 1 ? 's' : '' }}
+                      @if (group.pairIndex >= 0) {
+                        · Q{{ group.pairIndex * 2 + 2 }} &amp; Q{{ group.pairIndex * 2 + 3 }}
+                      }
+                    </span>
+                  </div>
+                  <div class="wizard__section-assign">
+                    <label class="wizard__section-assign-label" [for]="'grp-' + group.pairIndex">Assign all to:</label>
+                    <select
+                      [id]="'grp-' + group.pairIndex"
+                      class="wizard__section-assign-select"
+                      [value]="group.assignedUnitId"
+                      (change)="onGroupUnitChange(group.pairIndex, $any($event.target).value)"
+                    >
+                      <option value="">Select unit…</option>
+                      @for (u of filteredUnits(); track u.id) {
+                        <option [value]="u.id">{{ u.name }}</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Question Cards -->
+                <div class="wizard__cards">
+                  @for (eq of group.allQuestions; track eq.id) {
+                    <div
+                      class="wizard__qcard"
+                      [class.wizard__qcard--selected]="isSelected(eq.id)"
+                      [class.wizard__qcard--flagged]="eq.needsReview"
+                      [class.wizard__qcard--important]="eq.isImportant"
+                    >
+
+                      <!-- ▸ Card top bar -->
+                      <div class="wizard__qcard-top">
+                        <label class="wizard__qcard-check" [attr.aria-label]="'Select ' + eq.questionNumber">
+                          <input type="checkbox" [checked]="isSelected(eq.id)" (change)="toggleSelect(eq.id)"/>
+                        </label>
+
+                        <code class="wizard__qcard-num">{{ eq.questionNumber }}</code>
+
+                        <span class="wizard__qcard-typebadge wizard__qcard-typebadge--{{ eq.type }}">
+                          {{ typeLabel(eq.type) }}
+                        </span>
+
+                        <span class="wizard__qcard-marks">{{ eq.estimatedMarks }} marks</span>
+
+                        <span
+                          class="wizard__qcard-conf"
+                          [class.wizard__qcard-conf--low]="eq.confidence < 0.7"
+                          [class.wizard__qcard-conf--mid]="eq.confidence >= 0.7 && eq.confidence < 0.85"
+                        >
+                          {{ confidencePercent(eq.confidence) }}
+                        </span>
+
+                        <div class="wizard__qcard-actions">
+                          <button
+                            class="wizard__qcard-act"
+                            type="button"
+                            [class.wizard__qcard-act--star]="eq.isImportant"
+                            (click)="onQuestionImportantChange(eq.id, !eq.isImportant)"
+                            [attr.title]="eq.isImportant ? 'Remove important mark' : 'Mark as important'"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                          </button>
+                          <button
+                            class="wizard__qcard-act"
+                            type="button"
+                            [class.wizard__qcard-act--flag]="eq.needsReview"
+                            (click)="toggleQuestionReview(eq.id)"
+                            [attr.title]="eq.needsReview ? 'Mark as OK' : 'Flag for review'"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                              <line x1="4" y1="22" x2="4" y2="15"/>
+                            </svg>
+                          </button>
+                          <button
+                            class="wizard__qcard-act wizard__qcard-act--delete"
+                            type="button"
+                            (click)="deleteQuestion(eq.id)"
+                            title="Remove question"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14H6L5 6"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- ▸ Meta row -->
+                      <div class="wizard__qcard-meta">
+                        <div class="wizard__qcard-mfield">
+                          <label class="wizard__qcard-mlabel" [for]="'m-unit-' + eq.id">Unit</label>
+                          <select
+                            [id]="'m-unit-' + eq.id"
+                            class="wizard__qcard-mselect"
+                            [value]="eq.unitId"
+                            (change)="onQuestionUnitChange(eq.id, $any($event.target).value)"
+                          >
+                            <option value="">Assign unit…</option>
+                            @for (u of filteredUnits(); track u.id) {
+                              <option [value]="u.id">{{ u.name }}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div class="wizard__qcard-mfield">
+                          <label class="wizard__qcard-mlabel" [for]="'m-diff-' + eq.id">Difficulty</label>
+                          <select
+                            [id]="'m-diff-' + eq.id"
+                            class="wizard__qcard-mselect"
+                            [value]="eq.difficulty"
+                            (change)="onQuestionDifficultyChange(eq.id, $any($event.target).value)"
+                          >
+                            @for (d of difficultyOptions; track d) {
+                              <option [value]="d">{{ d }}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div class="wizard__qcard-mfield">
+                          <label class="wizard__qcard-mlabel" [for]="'m-type-' + eq.id">Type</label>
+                          <select
+                            [id]="'m-type-' + eq.id"
+                            class="wizard__qcard-mselect"
+                            [value]="eq.type"
+                            (change)="onQuestionTypeChange(eq.id, $any($event.target).value)"
+                          >
+                            @for (t of typeOptions; track t.value) {
+                              <option [value]="t.value">{{ t.label }}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div class="wizard__qcard-mfield wizard__qcard-mfield--sm">
+                          <label class="wizard__qcard-mlabel" [for]="'m-marks-' + eq.id">Marks</label>
+                          <input
+                            [id]="'m-marks-' + eq.id"
+                            type="number"
+                            class="wizard__qcard-minput"
+                            min="1"
+                            max="20"
+                            [value]="eq.estimatedMarks"
+                            (input)="onQuestionMarksChange(eq.id, $any($event.target).value)"
+                          />
+                        </div>
+
+                        <label class="wizard__qcard-imp" [for]="'m-imp-' + eq.id" [class.wizard__qcard-imp--on]="eq.isImportant">
+                          <input
+                            [id]="'m-imp-' + eq.id"
+                            type="checkbox"
+                            [checked]="eq.isImportant"
+                            (change)="onQuestionImportantChange(eq.id, $any($event.target).checked)"
+                          />
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                          </svg>
+                          Important
+                        </label>
+                      </div>
+
+                      <!-- ▸ Question text -->
+                      <div class="wizard__qcard-body">
+                        <textarea
+                          class="wizard__qcard-textarea"
+                          rows="3"
+                          [value]="eq.text"
+                          (input)="onQuestionTextChange(eq.id, $any($event.target).value)"
+                          placeholder="Question text…"
+                        ></textarea>
+                      </div>
+
+                      <!-- ▸ MCQ options -->
+                      @if (eq.type === 'mcq') {
+                        <div class="wizard__qcard-options">
+                          <p class="wizard__qcard-options-title">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            Answer Options — select correct answer
+                          </p>
+                          @for (opt of eq.options; track opt.id) {
+                            <div class="wizard__qcard-opt" [class.wizard__qcard-opt--correct]="eq.correctOptionId === opt.id">
+                              <input
+                                type="radio"
+                                class="wizard__qcard-radio"
+                                [id]="'r-' + eq.id + '-' + opt.id"
+                                [name]="'mcq-' + eq.id"
+                                [value]="opt.id"
+                                [checked]="eq.correctOptionId === opt.id"
+                                (change)="onCorrectOptionChange(eq.id, opt.id)"
+                              />
+                              <label class="wizard__qcard-optbadge" [for]="'r-' + eq.id + '-' + opt.id">{{ opt.id }}</label>
+                              <input
+                                type="text"
+                                class="wizard__qcard-optinput"
+                                [placeholder]="'Option ' + opt.id"
+                                [value]="opt.text"
+                                (input)="onOptionTextChange(eq.id, opt.id, $any($event.target).value)"
+                              />
+                              @if (eq.correctOptionId === opt.id) {
+                                <span class="wizard__qcard-correct">✓ Correct</span>
+                              }
+                            </div>
+                          }
+                        </div>
+                      }
+
+                    </div>
+                  }
+                </div>
+              </section>
+            }
+
+          </main>
+        </div>
+
+        <!-- Workspace Footer -->
+        <div class="wizard__footer wizard__footer--workspace">
+          <div class="wizard__footer-info">
+            <span>{{ importStats().total }} questions ready</span>
+            @if (importStats().flaggedCount > 0) {
+              <span class="wizard__footer-warn">{{ importStats().flaggedCount }} flagged</span>
+            }
+          </div>
+          <div class="wizard__footer-actions">
+            <button class="wizard__btn wizard__btn--cancel" type="button" (click)="goBack()">← Back</button>
+            @if (someSelected()) {
+              <button
+                class="wizard__btn wizard__btn--secondary"
+                type="button"
+                (click)="onImportSelected()"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Import Selected ({{ selectedIds().size }})
+              </button>
+            }
+            <button
+              class="wizard__btn wizard__btn--primary"
+              type="button"
+              [disabled]="editedQuestions().length === 0"
+              (click)="onImportAll()"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              Import All ({{ importStats().total }})
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+}

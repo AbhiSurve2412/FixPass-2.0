@@ -1,0 +1,142 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.qs {
+  display: grid;
+  grid-template-columns: 17rem 1fr;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+
+  // ── Left explorer panel ──────────────────────────────────────────────────────
+  &__explorer {
+    border-right: $space-px solid var(--color-border);
+    background-color: var(--color-surface);
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  // ── Main content ─────────────────────────────────────────────────────────────
+  &__main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+    background-color: var(--color-surface-2);
+  }
+
+  // ── Sticky header ────────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: $space-3;
+    padding: $space-5 $space-6;
+    background-color: var(--color-surface);
+    border-bottom: $space-px solid var(--color-border);
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: baseline;
+    gap: $space-2;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: var(--color-text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+    @include text-truncate(1);
+  }
+
+  &__count {
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-inverse);
+    background-color: var(--color-secondary);
+    padding: $space-0-5 $space-2;
+    border-radius: $radius-full;
+    line-height: 1;
+  }
+
+  &__header-actions {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+  }
+
+  // ── Toolbar (search) ──────────────────────────────────────────────────────────
+  &__toolbar {
+    padding: $space-3 $space-6;
+    flex-shrink: 0;
+    background-color: var(--color-surface);
+    border-bottom: $space-px solid var(--color-border);
+  }
+
+  // ── Error banner ──────────────────────────────────────────────────────────────
+  &__error {
+    flex-shrink: 0;
+    margin: $space-4 $space-6 0;
+    padding: $space-3 $space-4;
+    background-color: var(--color-danger-light);
+    color: var(--color-danger);
+    border-radius: $radius-lg;
+    border: $space-px solid var(--color-danger);
+    font-size: $font-size-sm;
+  }
+
+  // ── Cards area ────────────────────────────────────────────────────────────────
+  &__cards {
+    flex: 1;
+    overflow-y: auto;
+    padding: $space-5 $space-6;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
+    gap: $space-3;
+    align-content: start;
+    min-height: 0;
+  }
+
+  // ── Full-width wrappers inside the grid ──────────────────────────────────────
+  &__loading,
+  &__empty-wrap {
+    grid-column: 1 / -1;
+  }
+
+  // ── Loading state ─────────────────────────────────────────────────────────────
+  &__loading {
+    @include flex-col-center;
+    gap: $space-4;
+    padding: $space-16 0;
+    color: var(--color-text-muted);
+    font-size: $font-size-sm;
+  }
+
+  &__spinner {
+    width: $space-10;
+    height: $space-10;
+    border: $space-1 solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: $radius-full;
+    animation: qs-spin 0.8s linear infinite;
+  }
+}
+
+@keyframes qs-spin {
+  to { transform: rotate(360deg); }
+}

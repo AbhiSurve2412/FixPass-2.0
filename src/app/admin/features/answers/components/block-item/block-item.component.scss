@@ -1,0 +1,169 @@
+@use 'styles/variables' as *;
+
+:host {
+  display: block;
+}
+
+.bi {
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: $space-2 $space-3;
+    border: $space-px solid var(--color-border);
+    border-radius: $radius-sm;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    font-size: $font-size-sm;
+    font-family: inherit;
+    transition: $transition-fast;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 $space-0-5 var(--color-primary-light);
+    }
+  }
+
+  &__input--sub {
+    font-weight: $font-weight-semibold;
+  }
+
+  &__input--cell {
+    padding: $space-1 $space-2;
+  }
+
+  &__textarea {
+    resize: vertical;
+    line-height: $line-height-normal;
+  }
+
+  &__textarea--code {
+    font-family: var(--font-family-mono);
+    background-color: var(--color-surface-3);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__list-item {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    padding: $space-2;
+    border: $space-px dashed var(--color-border);
+    border-radius: $radius-sm;
+  }
+
+  &__list-row {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+
+    &--sub {
+      padding-left: $space-6;
+    }
+  }
+
+  &__bullet {
+    flex: 0 0 auto;
+    min-width: $space-5;
+    color: var(--color-text-muted);
+    font-size: $font-size-sm;
+  }
+
+  &__icon-btn {
+    flex: 0 0 auto;
+    padding: $space-1 $space-2;
+    border: $space-px solid var(--color-border);
+    border-radius: $radius-sm;
+    background-color: var(--color-surface-2);
+    color: var(--color-text-secondary);
+    font-size: $font-size-xs;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-3);
+    }
+
+    &--danger {
+      color: var(--color-danger);
+
+      &:hover {
+        background-color: var(--color-danger-light);
+      }
+    }
+  }
+
+  &__add-btn {
+    align-self: flex-start;
+    padding: $space-1 $space-3;
+    border: $space-px dashed var(--color-border-strong);
+    border-radius: $radius-sm;
+    background-color: transparent;
+    color: var(--color-primary);
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: var(--color-primary-light);
+    }
+  }
+
+  &__table-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    overflow-x: auto;
+  }
+
+  &__table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th,
+    td {
+      border: $space-px solid var(--color-border);
+      padding: $space-1;
+    }
+
+    th {
+      background-color: var(--color-surface-2);
+    }
+  }
+
+  &__row-actions {
+    border: none !important;
+    text-align: center;
+  }
+
+  &__table-actions {
+    display: flex;
+    gap: $space-2;
+  }
+
+  &__diagram {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__file {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary);
+  }
+
+  &__preview-img {
+    max-width: 100%;
+    border: $space-px solid var(--color-border);
+    border-radius: $radius-md;
+  }
+}

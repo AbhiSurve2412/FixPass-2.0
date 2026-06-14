@@ -1,0 +1,122 @@
+<div class="ap">
+
+  <!-- ── Fixed: tabs ──────────────────────────────────────────────────────── -->
+  <nav class="ap__tabs">
+    <button type="button" class="ap__tab" [class.ap__tab--active]="activeTab() === 'generation'" (click)="setTab('generation')">
+      Answer Generation
+    </button>
+    <button type="button" class="ap__tab" [class.ap__tab--active]="activeTab() === 'saved'" (click)="setTab('saved')">
+      Saved Answers
+    </button>
+  </nav>
+
+  <!-- ══ Generation tab ════════════════════════════════════════════════════ -->
+  @if (activeTab() === 'generation') {
+
+    <!-- Fixed: filters + generate buttons -->
+    <div class="ap__topbar">
+      <div class="ap__filters">
+        <label class="ap__filter">
+          <span class="ap__filter-label">Subject</span>
+          <select class="ap__select" [value]="selectedSubjectId() ?? ''" (change)="onSubjectChange($any($event.target).value)">
+            <option value="">Select subject…</option>
+            @for (s of subjects(); track s.id) {
+              <option [value]="s.id">{{ s.name }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="ap__filter">
+          <span class="ap__filter-label">Unit</span>
+          <select class="ap__select" [value]="selectedUnitId() ?? ''" [disabled]="!selectedSubjectId()" (change)="onUnitChange($any($event.target).value)">
+            <option value="">Select unit…</option>
+            @for (u of filteredUnits(); track u.id) {
+              <option [value]="u.id">{{ u.name }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="ap__filter">
+          <span class="ap__filter-label">Question</span>
+          <select class="ap__select" [value]="selectedQuestionId() ?? ''" [disabled]="!selectedUnitId()" (change)="onQuestionChange($any($event.target).value)">
+            <option value="">Select question…</option>
+            @for (q of filteredQuestions(); track q.id) {
+              <option [value]="q.id">{{ q.text }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="ap__actions">
+        <button type="button" class="ap__btn ap__btn--primary" [disabled]="!selectedQuestion() || generating()" (click)="onGenerateDetailed()">
+          @if (generating()) { Generating… } @else { Generate Detailed Answer }
+        </button>
+        <button type="button" class="ap__btn ap__btn--primary" [disabled]="!selectedQuestion() || generating()" (click)="onGenerateSimple()">
+          @if (generating()) { Generating… } @else { Generate Simple Answer }
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrollable: workspace or empty state -->
+    <div class="ap__body">
+      @if (showWorkspace()) {
+        <app-answer-workspace
+          [question]="selectedQuestion()"
+          [detailedAnswer]="detailedAnswer()"
+          [simpleAnswer]="simpleAnswer()"
+          [generating]="generating()"
+          [saving]="saving()"
+          (regenerate)="onRegenerate($event)"
+          (saveAnswer)="onSaveAnswer($event)"
+        ></app-answer-workspace>
+      } @else {
+        <div class="ap__empty">
+          <p>Select a Subject → Unit → Question above, then click Generate to create an answer.</p>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ══ Saved answers tab ═════════════════════════════════════════════════ -->
+  @if (activeTab() === 'saved') {
+    <div class="ap__body ap__body--saved">
+      <app-answer-grid
+        [answers]="answers()"
+        [loading]="loading()"
+        (view)="onViewAnswer($event)"
+        (remove)="onDeleteAnswer($event)"
+      ></app-answer-grid>
+    </div>
+  }
+
+</div>
+
+<!-- ══ Preview modal ═════════════════════════════════════════════════════ -->
+@if (previewAnswer()) {
+  <div class="ap-modal" (click)="closePreview()">
+    <div class="ap-modal__panel" (click)="$event.stopPropagation()">
+
+      <div class="ap-modal__header">
+        <div class="ap-modal__meta">
+          <span class="ap-modal__badge ap-modal__badge--type">{{ previewAnswer()!.answerType }}</span>
+          <span class="ap-modal__badge" [class.ap-modal__badge--draft]="previewAnswer()!.status === 'Draft'" [class.ap-modal__badge--published]="previewAnswer()!.status === 'Published'">
+            {{ previewAnswer()!.status }}
+          </span>
+          <span class="ap-modal__subject">{{ previewAnswer()!.subjectName }} / {{ previewAnswer()!.unitName }}</span>
+        </div>
+        <button type="button" class="ap-modal__close" (click)="closePreview()" aria-label="Close preview">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="ap-modal__question">{{ previewAnswer()!.questionText }}</p>
+
+      <div class="ap-modal__body">
+        <app-answer-preview [content]="previewAnswer()!.answer" [generating]="false"></app-answer-preview>
+      </div>
+
+    </div>
+  </div>
+}

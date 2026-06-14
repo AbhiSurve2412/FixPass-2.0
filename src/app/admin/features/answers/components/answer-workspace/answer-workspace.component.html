@@ -1,0 +1,79 @@
+<div class="ws">
+
+  <!-- ── Fixed: AI control panel ────────────────────────────────────────── -->
+  <aside class="ws__panel">
+    <h3 class="ws__panel-title">AI Control Panel</h3>
+
+    <!-- Answer type toggle -->
+    <div class="ws__type-toggle">
+      <button type="button" class="ws__type-btn" [class.ws__type-btn--active]="activeAnswerType() === 'Detailed'" (click)="setAnswerType('Detailed')">Detailed</button>
+      <button type="button" class="ws__type-btn" [class.ws__type-btn--active]="activeAnswerType() === 'Simple'" (click)="setAnswerType('Simple')">Simple</button>
+    </div>
+
+    <!-- Instruction textareas -->
+    <label class="ws__field">
+      <span class="ws__label">Content Instruction</span>
+      <textarea class="ws__textarea" rows="3" placeholder="e.g. Add more detail about advantages…" [ngModel]="contentInstruction()" (ngModelChange)="contentInstruction.set($event)"></textarea>
+    </label>
+
+    <label class="ws__field">
+      <span class="ws__label">Structure Instruction</span>
+      <textarea class="ws__textarea" rows="3" placeholder="e.g. Convert paragraph into bullet points…" [ngModel]="structureInstruction()" (ngModelChange)="structureInstruction.set($event)"></textarea>
+    </label>
+
+    <!-- Action buttons -->
+    <div class="ws__actions">
+      <button type="button" class="ws__btn ws__btn--primary" [disabled]="generating()" (click)="onRegenerate()">
+        @if (generating()) {
+          <span class="ws__spinner"></span> Generating…
+        } @else {
+          Regenerate Answer
+        }
+      </button>
+      <button type="button" class="ws__btn ws__btn--success" [disabled]="saving() || currentContent().content.length === 0" (click)="onSave()">
+        @if (saving()) { Saving… } @else { Save / Update Answer }
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="ws__divider"></div>
+
+    <!-- Image upload section -->
+    <div class="ws__image-section">
+      <h4 class="ws__section-title">Insert Diagram / Image</h4>
+
+      @if (!imagePreview()) {
+        <label class="ws__upload-zone">
+          <input type="file" accept="image/*" class="ws__file-input" (change)="onImagePicked($event)" />
+          <div class="ws__upload-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 16l4-4 4 4 4-6 4 6M3 20h18M3 4h18"/>
+            </svg>
+          </div>
+          <span class="ws__upload-hint">Click to pick an image</span>
+        </label>
+      } @else {
+        <div class="ws__image-preview">
+          <img [src]="imagePreview()!" alt="preview" class="ws__preview-img" />
+          <input
+            type="text"
+            class="ws__caption-input"
+            placeholder="Caption (optional)"
+            [ngModel]="imageCaption()"
+            (ngModelChange)="imageCaption.set($event)"
+          />
+          <div class="ws__image-actions">
+            <button type="button" class="ws__btn ws__btn--primary ws__btn--sm" (click)="insertImage()">Insert into Answer</button>
+            <button type="button" class="ws__btn ws__btn--sm" (click)="clearImage()">Remove</button>
+          </div>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <!-- ── Scrollable: preview ─────────────────────────────────────────────── -->
+  <section class="ws__preview">
+    <app-answer-preview [content]="currentContent()" [generating]="generating()"></app-answer-preview>
+  </section>
+
+</div>

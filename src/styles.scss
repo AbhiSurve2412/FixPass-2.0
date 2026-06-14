@@ -8,6 +8,7 @@
 
 // Partials (all @use first — SCSS module system requirement)
 @use 'styles/variables' as *;
+@use 'styles/theme' as *;
 @use 'styles/reset';
 @use 'styles/typography';
 @use 'styles/animations';
@@ -100,6 +101,18 @@
   --transition-base:   #{$transition-base};
   --transition-slow:   #{$transition-slow};
   --transition-bounce: #{$transition-bounce};
+
+  // FixPass student-renderer tokens (used by answer-preview component)
+  --fixpass-white:        #ffffff;
+  --fixpass-black:        #0f172a;
+  --fixpass-text-primary: #0f172a;
+  --fixpass-text-muted:   #94a3b8;
+  --fixpass-neutral-50:   #f8fafc;
+  --fixpass-neutral-100:  #f1f5f9;
+  --fixpass-neutral-700:  #374151;
+  --fixpass-neutral-800:  #1e293b;
+  --fixpass-gray-100:     #f3f4f6;
+  --fixpass-gray-300:     #d1d5db;
 }
 
 // ============================================================

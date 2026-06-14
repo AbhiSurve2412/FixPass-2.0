@@ -1,0 +1,870 @@
+{
+  "mcqs": [
+    {
+      "questionNumber": "Q1a",
+      "text": "Temporary hardness is also known as _______.",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1b",
+      "text": "Non Carbonate hardness b) Carbonate hardness",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1c",
+      "text": "Total hardness d) None alkaline hardness",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1d",
+      "text": "EDTA method is used to determine hardness of water by _______ titration.",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1e",
+      "text": "Precipitation b) Redox",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1f",
+      "text": "Acid base d) Complexometric",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1g",
+      "text": "The rate in decrease of intensity of radiation is directly proportional the concentration of fixed path length of solution is the statement of _______. ",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1h",
+      "text": "Beer's Law b) Lamberts Law",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1i",
+      "text": "Beer-Lamberts Law d) None of these",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1j",
+      "text": "When absorption maxima shifts towards longer wavelength, known as _________ shift.",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1k",
+      "text": "Hypsochromic b) Hyperchromic",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1l",
+      "text": "Hypochromic d) Bathochromic",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1m",
+      "text": "T.O.",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1n",
+      "text": "Which among the following is an example of Quantum dots?",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1o",
+      "text": "K b) Cdse",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1p",
+      "text": "A F d) Se 5 5",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1q",
+      "text": "The oxidising reagent for P-doping is __________",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1r",
+      "text": "Iodine vapours b) FeCl",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1s",
+      "text": "Lithium metal d) Sodium napthalide",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1t",
+      "text": "Boys gas calorimeter is used for determination of GCV of ______.",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1u",
+      "text": "Solid fuel b) Non volatile liquid",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1v",
+      "text": "Gaseous fuel d) None of above",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1w",
+      "text": "Reaction taking place on the anodic areas is _______",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1x",
+      "text": "Oxidation b) Reduction",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1y",
+      "text": "Neutralisation d) Addition",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1z",
+      "text": "Kjeldahls method is used for determination of _________ from coal.",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1{",
+      "text": "Hydrogen b) Nitrogen",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1|",
+      "text": "Sulphur d) Carbon",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1}",
+      "text": "Which of the film is protective?",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1~",
+      "text": "Non porous b) Porous",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "questionNumber": "Q1",
+      "text": "Volatile d) None of the above",
+      "marks": 1,
+      "type": "mcq",
+      "options": [
+        {
+          "id": "A",
+          "text": ""
+        },
+        {
+          "id": "B",
+          "text": ""
+        },
+        {
+          "id": "C",
+          "text": ""
+        },
+        {
+          "id": "D",
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "descriptive": [
+    {
+      "questionNumber": "Q2b",
+      "text": "Define reverse Osmosis. Give its two advantages & two limitations.",
+      "marks": 3,
+      "type": "definition"
+    },
+    {
+      "questionNumber": "Q2c",
+      "text": "25 ml of hard water sample required 11.2 ml 0.01 MEDIA to reach the end point. 25 ml of the same water sample after boiling and filteration required 7.9 ml of the same EDTA to reach the end point. Calculate total, temporary and permanent hardness of water.",
+      "marks": 3,
+      "type": "numerical"
+    },
+    {
+      "questionNumber": "Q3b",
+      "text": "State the causes of foaming when it takes place in boiler and give remedial measures for its prevention.",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q3c",
+      "text": "25 ml water sample requires 3.7ml of 0.01 NHCl up to phenolphthalein end point and 7.4 ml upto methyl arange end point during the titration. Calculate types and amount of alkalinity present in water. [6401]-2403 2",
+      "marks": 3,
+      "type": "numerical"
+    },
+    {
+      "questionNumber": "Q4b",
+      "text": "Explain any three applications of UV-visible spectroscopy.",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q4c",
+      "text": "Give the composition of the membrane of the ion selective electrode used to detect",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q4i",
+      "text": "H+ ii) F iii) Cl",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q5b",
+      "text": "Give the construction with neat, labeled diagram and representation of calomel electrode.",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q5c",
+      "text": "Define :",
+      "marks": 3,
+      "type": "definition"
+    },
+    {
+      "questionNumber": "Q5i",
+      "text": "Cell constant ii) Specific conductance iii) Equivalent conductance",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q6b",
+      "text": "What are quantum dots? Give any two types of quantum dots and it's two applications.",
+      "marks": 3,
+      "type": "short-note"
+    },
+    {
+      "questionNumber": "Q6c",
+      "text": "What are carbon nanotubes? Give their types and two applications.",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q7b",
+      "text": "Define Biodegradable polymer. Discuss any two factors responsible for biodegradation of polymer.",
+      "marks": 3,
+      "type": "definition"
+    },
+    {
+      "questionNumber": "Q7c",
+      "text": "Give the structure of polycarbonate. Mention its two properties and two applications. [6401]-2403 3",
+      "marks": 3,
+      "type": "short-note"
+    },
+    {
+      "questionNumber": "Q8b",
+      "text": "Give any three characteristics of an ideal fuel.",
+      "marks": 3,
+      "type": "short-note"
+    },
+    {
+      "questionNumber": "Q8c",
+      "text": "1.2 gm of coal sample was heated in silica crucible in an electric oven at 110°C for 1 hr. The residue weighed 1.16 gm. The crucible was ignited to a constant weight of 0.09 gm. In another experiment 1.2 gm of sample was heated in a silica crucible covered with vented lid of 950°C for 7 min. After cooling the residue weighted 0.80 gm. Calculate % m, % VM and % Ash content.",
+      "marks": 3,
+      "type": "numerical"
+    },
+    {
+      "questionNumber": "Q9b",
+      "text": "Explain the production of hydrogen by steam reforming of hydrocarbon (methane) with reaction conditions.",
+      "marks": 3,
+      "type": "long-answer"
+    },
+    {
+      "questionNumber": "Q9c",
+      "text": "0.24 gm of coal sample on complete combustion gave 0.792 gm of CO and 0.0216 gm of H O. Calculate carbon and hydrogen percentage.",
+      "marks": 3,
+      "type": "numerical"
+    },
+    {
+      "questionNumber": "Q10b",
+      "text": "i) Define Electroplating. Give its two application and two disadvantages. ii) Explain the cathodic protection by sacrificial anode for corrosion control and prevention.",
+      "marks": 3,
+      "type": "definition"
+    },
+    {
+      "questionNumber": "Q11b",
+      "text": "i) Discuss any three factors affecting rate of corrosion. ii) What are anodic and cathodic coatings? Which is more protective? [6401]-2403 4",
+      "marks": 3,
+      "type": "long-answer"
+    }
+  ]
+}

@@ -1,0 +1,297 @@
+@use 'styles/variables' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.ap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  gap: 0;
+
+  // ── Fixed tabs bar ──────────────────────────────────────────────────────────
+  &__tabs {
+    flex-shrink: 0;
+    display: flex;
+    gap: 0;
+    border-bottom: 0.0625rem solid var(--color-border);
+    background: var(--color-bg);
+    padding: 0 $space-1;
+  }
+
+  &__tab {
+    padding: $space-3 $space-5;
+    border: none;
+    border-bottom: 0.175rem solid transparent;
+    background: none;
+    color: var(--color-text-secondary);
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: $transition-fast;
+    margin-bottom: -0.0625rem;
+
+    &:hover { color: var(--color-primary); }
+
+    &--active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  // ── Fixed top bar (filters + buttons, generation tab only) ─────────────────
+  &__topbar {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: $space-4 $space-1 $space-3;
+    border-bottom: 0.0625rem solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  &__filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $space-3;
+
+    @media (max-width: $bp-md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__filter {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+
+  &__filter-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__select {
+    padding: $space-2 $space-3;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: $radius-sm;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 $space-0-5 var(--color-primary-light);
+    }
+
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+
+  &__btn {
+    padding: $space-2 $space-4;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: $radius-sm;
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: $transition-fast;
+
+    &:hover:not(:disabled) { background: var(--color-surface-2); }
+    &:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    &--primary {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+
+      &:hover:not(:disabled) { background: var(--color-primary-hover); }
+    }
+  }
+
+  // ── Body: overflow:hidden so children can use height:100% reliably
+  //    Each child (workspace / grid) manages its own internal scroll
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    padding: $space-4 $space-1;
+  }
+
+  // Saved-answers tab — grid fills the body without extra padding
+  &__body--saved {
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow-y: auto; // grid is a normal table, can scroll here
+  }
+
+  // ── Empty state ─────────────────────────────────────────────────────────────
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 16rem;
+    border: 0.0625rem dashed var(--color-border);
+    border-radius: $radius-lg;
+    background: var(--color-surface-2);
+    color: var(--color-text-muted);
+    text-align: center;
+    gap: $space-2;
+
+    p { margin: 0; font-size: $font-size-sm; }
+  }
+}
+
+// ── Preview modal (outside .ap so it can be fixed/full-screen) ──────────────
+.ap-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(0.1875rem);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+  animation: fadeIn 0.15s ease;
+
+  &__panel {
+    background: var(--color-bg);
+    border-radius: $radius-lg;
+    border: 0.0625rem solid var(--color-border);
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 75rem;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.2s ease;
+    overflow: hidden;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-4 $space-5;
+    border-bottom: 0.0625rem solid var(--color-border);
+    background: var(--color-surface);
+    flex-shrink: 0;
+    gap: $space-3;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1875rem 0.625rem;
+    border-radius: 99rem;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.03em;
+    background: var(--color-surface-2);
+    color: var(--color-text-secondary);
+    border: 0.0625rem solid var(--color-border);
+
+    &--type {
+      background: #eff6ff;
+      color: #2563eb;
+      border-color: #bfdbfe;
+    }
+
+    &--published {
+      background: #f0fdf4;
+      color: #16a34a;
+      border-color: #bbf7d0;
+    }
+
+    &--draft {
+      background: #fffbeb;
+      color: #d97706;
+      border-color: #fde68a;
+    }
+  }
+
+  &__subject {
+    font-size: $font-size-xs;
+    color: var(--color-text-muted);
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: $radius-sm;
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: $transition-fast;
+
+    &:hover {
+      background: var(--color-surface-2);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &__question {
+    margin: 0;
+    padding: $space-3 $space-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-primary);
+    border-bottom: 0.0625rem solid var(--color-border);
+    background: var(--color-surface-2);
+    flex-shrink: 0;
+    line-height: 1.5;
+  }
+
+  &__body {
+    padding: $space-5;
+    overflow-y: auto;
+    max-height: calc(100vh - 16rem);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(1rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,73 @@
+﻿<div class="page">
+
+  <!-- Header -->
+  <div class="page__header">
+    <div class="page__header-left">
+      <h1 class="page__title">Universities</h1>
+      <p class="page__subtitle">Manage universities in the academic hierarchy</p>
+    </div>
+    <button class="btn btn--primary" (click)="openCreate()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Add University
+    </button>
+  </div>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="page__error" role="alert">{{ error() }}</div>
+  }
+
+  <!-- Toolbar -->
+  <div class="page__toolbar">
+    <app-search-bar
+      [placeholder]="'Search universities...'"
+      [value]="searchTerm()"
+      (valueChange)="onSearch($event)"
+    />
+    <span class="page__count">
+      {{ filtered().length }} {{ filtered().length === 1 ? 'result' : 'results' }}
+    </span>
+  </div>
+
+  <!-- Flat grid — no grouping for universities -->
+  <app-management-grid
+    [columns]="columns"
+    [rows]="paginated()"
+    [loading]="loading()"
+    [emptyTitle]="'No universities found'"
+    [emptySubtitle]="'Add your first university to get started.'"
+    (action)="onGridAction($event)"
+  />
+
+  <!-- Pagination -->
+  @if (filtered().length > pageSize()) {
+    <app-pagination
+      [page]="currentPage()"
+      [pageSize]="pageSize()"
+      [total]="filtered().length"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+
+  <!-- Modal -->
+  <app-management-modal
+    [visible]="modalVisible()"
+    [mode]="modalMode()"
+    [title]="modalTitle()"
+    [fields]="fields"
+    [initialValues]="modalInitialValues()"
+    (save)="onModalSave($event)"
+    (cancel)="onModalCancel()"
+  />
+
+  <!-- Confirm delete -->
+  <app-confirm-dialog
+    [visible]="confirmVisible()"
+    [itemName]="deleteTargetName() ?? undefined"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  />
+
+</div>

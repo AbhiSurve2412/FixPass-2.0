@@ -1,0 +1,93 @@
+@if (visible()) {
+  <div
+    class="modal__overlay"
+    (click)="onOverlayClick($event)"
+    role="dialog"
+    [attr.aria-label]="title()"
+    aria-modal="true"
+  >
+    <div class="modal">
+      <!-- Header -->
+      <div class="modal__header">
+        <h2 class="modal__title">{{ title() }}</h2>
+        <button class="modal__close" type="button" (click)="onCancel()" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal__body">
+        @for (field of fields(); track trackByField($index, field)) {
+          <div class="modal__field">
+            <label class="modal__label" [for]="field.key">
+              {{ field.label }}
+              @if (field.required) {
+                <span class="modal__required" aria-hidden="true">*</span>
+              }
+            </label>
+
+            @if (field.type === 'textarea') {
+              <textarea
+                class="modal__input modal__input--textarea"
+                [id]="field.key"
+                [name]="field.key"
+                [placeholder]="field.placeholder ?? ''"
+                [rows]="field.rows ?? 3"
+                [readOnly]="isReadOnly()"
+                [value]="getValue(field.key)"
+                (input)="setValue(field.key, $any($event.target).value)"
+              ></textarea>
+            } @else if (field.type === 'select') {
+              <select
+                class="modal__input modal__input--select"
+                [id]="field.key"
+                [name]="field.key"
+                [disabled]="isReadOnly()"
+                [value]="getValue(field.key)"
+                (change)="setValue(field.key, $any($event.target).value)"
+              >
+                <option value="">Select {{ field.label }}...</option>
+                @for (opt of field.options ?? []; track trackByOption($index, opt)) {
+                  <option
+                    [value]="opt.value"
+                    [selected]="getValue(field.key) === opt.value.toString()"
+                  >{{ opt.label }}</option>
+                }
+              </select>
+            } @else {
+              <input
+                class="modal__input"
+                [id]="field.key"
+                [name]="field.key"
+                [type]="field.type"
+                [placeholder]="field.placeholder ?? ''"
+                [readOnly]="isReadOnly()"
+                [value]="getValue(field.key)"
+                (input)="setValue(field.key, $any($event.target).value)"
+              />
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="modal__footer">
+        <button class="btn modal__btn modal__btn--cancel" type="button" (click)="onCancel()">
+          @if (isReadOnly()) { Close } @else { Cancel }
+        </button>
+        @if (!isReadOnly()) {
+          <button
+            class="btn btn--primary modal__btn modal__btn--save"
+            type="button"
+            [disabled]="!isValid()"
+            (click)="onSave()"
+          >
+            @if (mode() === 'create') { Save } @else { Update }
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

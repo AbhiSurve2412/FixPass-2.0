@@ -1,0 +1,154 @@
+@if (block(); as b) {
+  <!-- Header / SubHeader -->
+  @if (b.type === 'header') {
+    <input
+      class="bi__input"
+      type="text"
+      placeholder="Header text"
+      [ngModel]="asHeader(b).data"
+      (ngModelChange)="onDataChange($event)"
+    />
+  }
+  @if (b.type === 'subHeader') {
+    <input
+      class="bi__input bi__input--sub"
+      type="text"
+      placeholder="Sub header text"
+      [ngModel]="asSubHeader(b).data"
+      (ngModelChange)="onDataChange($event)"
+    />
+  }
+
+  <!-- Text / Content -->
+  @if (b.type === 'text' || b.type === 'content') {
+    <textarea
+      class="bi__textarea"
+      rows="3"
+      placeholder="Paragraph text"
+      [ngModel]="asText(b).data"
+      (ngModelChange)="onDataChange($event)"
+    ></textarea>
+  }
+
+  <!-- SQL / ASCII Code -->
+  @if (b.type === 'sqlCode') {
+    <textarea
+      class="bi__textarea bi__textarea--code"
+      rows="6"
+      placeholder="SQL query or ASCII diagram"
+      [ngModel]="asSqlCode(b).data"
+      (ngModelChange)="onDataChange($event)"
+    ></textarea>
+  }
+
+  <!-- Lists -->
+  @if (b.type === 'Olist' || b.type === 'Ulist') {
+    <div class="bi__list">
+      @for (item of asList(b).dataObject.items; track $index; let i = $index) {
+        <div class="bi__list-item">
+          <div class="bi__list-row">
+            <span class="bi__bullet">{{ b.type === 'Olist' ? i + 1 + '.' : '•' }}</span>
+            <input
+              class="bi__input"
+              type="text"
+              placeholder="Main point"
+              [ngModel]="item.text"
+              (ngModelChange)="onItemTextChange(item, $event)"
+            />
+            <button type="button" class="bi__icon-btn" title="Add subpoint" (click)="addSubpoint(item)">+ sub</button>
+            <button type="button" class="bi__icon-btn bi__icon-btn--danger" title="Remove" (click)="removeItem(i)">✕</button>
+          </div>
+          @if (item.subpointsObject) {
+            @for (sub of item.subpointsObject.subpoints; track $index; let si = $index) {
+              <div class="bi__list-row bi__list-row--sub">
+                <span class="bi__bullet">◦</span>
+                <input
+                  class="bi__input"
+                  type="text"
+                  placeholder="Subpoint explanation"
+                  [ngModel]="sub.text"
+                  (ngModelChange)="onSubpointTextChange(sub, $event)"
+                />
+                <button type="button" class="bi__icon-btn bi__icon-btn--danger" (click)="removeSubpoint(item, si)">✕</button>
+              </div>
+            }
+          }
+        </div>
+      }
+      <button type="button" class="bi__add-btn" (click)="addItem()">+ Add Item</button>
+    </div>
+  }
+
+  <!-- Table -->
+  @if (b.type === 'table') {
+    <div class="bi__table-wrap">
+      <table class="bi__table">
+        <thead>
+          <tr>
+            @for (h of asTable(b).dataObject.headers; track $index; let hi = $index) {
+              <th>
+                <input
+                  class="bi__input bi__input--cell"
+                  type="text"
+                  [ngModel]="h"
+                  (ngModelChange)="onHeaderChange(asTable(b), hi, $event)"
+                />
+                <button type="button" class="bi__icon-btn bi__icon-btn--danger" (click)="removeColumn(hi)">✕</button>
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of asTable(b).dataObject.rows; track $index; let ri = $index) {
+            <tr>
+              @for (h of asTable(b).dataObject.headers; track $index) {
+                <td>
+                  <input
+                    class="bi__input bi__input--cell"
+                    type="text"
+                    [ngModel]="cell(row, h)"
+                    (ngModelChange)="onCellChange(row, h, $event)"
+                  />
+                </td>
+              }
+              <td class="bi__row-actions">
+                <button type="button" class="bi__icon-btn bi__icon-btn--danger" (click)="removeRow(ri)">✕</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <div class="bi__table-actions">
+        <button type="button" class="bi__add-btn" (click)="addColumn()">+ Column</button>
+        <button type="button" class="bi__add-btn" (click)="addRow()">+ Row</button>
+      </div>
+    </div>
+  }
+
+  <!-- Diagram -->
+  @if (b.type === 'diagram') {
+    <div class="bi__diagram">
+      <input
+        class="bi__input"
+        type="text"
+        placeholder="Image URL"
+        [ngModel]="asDiagram(b).data.url"
+        (ngModelChange)="onDiagramUrlChange($event)"
+      />
+      <textarea
+        class="bi__textarea"
+        rows="2"
+        placeholder="Diagram description"
+        [ngModel]="asDiagram(b).data.description"
+        (ngModelChange)="onDiagramDescChange($event)"
+      ></textarea>
+      <label class="bi__file">
+        <span>Upload image</span>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      </label>
+      @if (asDiagram(b).data.url) {
+        <img class="bi__preview-img" [src]="asDiagram(b).data.url" [alt]="asDiagram(b).data.description" />
+      }
+    </div>
+  }
+}

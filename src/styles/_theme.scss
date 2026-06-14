@@ -1,0 +1,11 @@
+// FixPass Theme — maps student-app design tokens to admin design system
+// Used by the answer preview component to match the student renderer exactly
+
+@use 'styles/variables' as v;
+
+// SCSS variables (compile-time)
+$fixpass-accent: v.$color-accent;
+
+// CSS custom properties (runtime) — defined on :root via styles.scss injection
+// Components that @use this file get $fixpass-accent for SCSS, and all
+// --fixpass-* vars come from the :root block below (included via styles.scss).

@@ -10,4 +10,14 @@
   flex: 1;
   width: 100%;
   background-color: var(--color-bg);
+
+  // Admin occupies a fixed viewport-height minus the navbar so the page
+  // never scrolls — only the grid body scrolls internally.
+  &--admin {
+    flex: none;
+    height: calc(100vh - #{$space-14}); // $space-14 = 3.5rem = navbar height
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
 }

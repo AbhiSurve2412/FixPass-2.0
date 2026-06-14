@@ -1,0 +1,62 @@
+<div class="be">
+  <!-- Add at top -->
+  <div class="be__inserter">
+    <button type="button" class="be__add" (click)="togglePicker(0)">+ Add Block</button>
+    @if (pickerIndex() === 0) {
+      <div class="be__picker">
+        @for (opt of blockTypes; track opt.type) {
+          <button type="button" class="be__picker-opt" (click)="addBlock(opt.type, 0)">
+            {{ opt.label }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  @for (block of blocks(); track trackByBlock($index, block); let i = $index) {
+    <div class="be__block">
+      <div class="be__block-head">
+        <span class="be__block-type">{{ blockLabel(block.type) }}</span>
+        <div class="be__controls">
+          <button type="button" class="be__ctrl" title="Collapse" (click)="toggleCollapse(block)">
+            {{ block._collapsed ? '▸' : '▾' }}
+          </button>
+          <button type="button" class="be__ctrl" title="Move up" [disabled]="i === 0" (click)="moveUp(i)">↑</button>
+          <button
+            type="button"
+            class="be__ctrl"
+            title="Move down"
+            [disabled]="i === blocks().length - 1"
+            (click)="moveDown(i)"
+          >↓</button>
+          <button type="button" class="be__ctrl" title="Duplicate" (click)="duplicate(i)">⧉</button>
+          <button type="button" class="be__ctrl be__ctrl--danger" title="Delete" (click)="remove(i)">✕</button>
+        </div>
+      </div>
+
+      @if (!block._collapsed) {
+        <div class="be__block-body">
+          <app-block-item [block]="block" (blockChange)="onBlockChange($event)"></app-block-item>
+        </div>
+      }
+    </div>
+
+    <!-- Inserter between blocks -->
+    <div class="be__inserter">
+      <button type="button" class="be__add be__add--inline" (click)="togglePicker(i + 1)">+ Add Block</button>
+      @if (pickerIndex() === i + 1) {
+        <div class="be__picker">
+          @for (opt of blockTypes; track opt.type) {
+            <button type="button" class="be__picker-opt" (click)="addBlock(opt.type, i + 1)">
+              {{ opt.label }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (!blocks().length) {
+    <p class="be__empty">No blocks yet. Use "+ Add Block" to start building the answer.</p>
+  }
+</div>

@@ -1,0 +1,209 @@
+<div class="answer">
+
+  <!-- Typing loader -->
+  @if (generating()) {
+    <div class="answer__loader">
+      <span class="answer__dot"></span>
+      <span class="answer__dot"></span>
+      <span class="answer__dot"></span>
+      <span class="answer__loader-text">Generating answer…</span>
+    </div>
+  }
+
+  @if (!generating()) {
+    @if ((content()?.content?.length ?? 0) > 0) {
+      @for (row of content()!.content; track $index) {
+
+        @if (row.type === 'header') {
+          <h4>{{ $any(row).data }}</h4>
+        }
+        @if (row.type === 'subHeader') {
+          <h6>{{ $any(row).data }}</h6>
+        }
+        @if ($any(row).type === 'boldText') {
+          <strong>{{ $any(row).data }}</strong>
+        }
+
+        @if (row.type === 'text' || row.type === 'content') {
+          @if (hasMathInText($any(row).data)) {
+            <p [innerHTML]="renderText($any(row).data)"></p>
+          } @else {
+            <p>{{ $any(row).data }}</p>
+          }
+        }
+
+        @if (row.type === 'diagram') {
+          <div class="diagram">
+            <img [src]="$any(row).data.url" [alt]="$any(row).data.description" />
+            <p>{{ $any(row).data.description }}</p>
+          </div>
+        }
+
+        @if (row.type === 'sqlCode') {
+          @if (isMath($any(row).data)) {
+            <div class="math-block">
+              <div class="math-block__label">
+                <span class="math-block__label-icon">∑</span> Formula
+              </div>
+              <div class="math-block__content" [innerHTML]="renderMath($any(row).data)"></div>
+            </div>
+          } @else {
+            <div class="sql-code-block">
+              <div class="sql-code-block__header">
+                <span class="sql-code-block__dots">
+                  <span></span><span></span><span></span>
+                </span>
+                <span class="sql-code-block__lang">CODE</span>
+              </div>
+              <pre><code>{{ $any(row).data }}</code></pre>
+            </div>
+          }
+        }
+
+        @if (row.type === 'table' && ($any(row).data || $any(row).dataObject)) {
+          <div class="table-wrapper">
+            <table class="content-table">
+              <thead>
+                <tr>
+                  @for (header of ($any(row).data?.headers || $any(row).dataObject?.headers) || []; track header) {
+                    <th>
+                      @if (hasMathInText(header)) {
+                        <span [innerHTML]="renderText(header)"></span>
+                      } @else {
+                        {{ header }}
+                      }
+                    </th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of ($any(row).data?.rowsObject?.rows || $any(row).dataObject?.rows) || []; track $index) {
+                  <tr>
+                    @for (header of ($any(row).data?.headers || $any(row).dataObject?.headers) || []; track header) {
+                      <td>
+                        @if (hasMathInText(r[header])) {
+                          <span [innerHTML]="renderText(r[header])"></span>
+                        } @else {
+                          {{ r[header] }}
+                        }
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (row.type === 'Olist' || row.type === 'Ulist') {
+          <ng-container
+            *ngTemplateOutlet="renderList; context: { list: $any(row).dataObject.items, isOrdered: row.type === 'Olist' }"
+          ></ng-container>
+        }
+
+      }
+    } @else {
+      <div class="no-answer">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <p>No answer generated yet.</p>
+        <p class="no-answer__hint">Select a question and click Generate above.</p>
+      </div>
+    }
+  }
+
+</div>
+
+<!-- Recursive list renderer -->
+<ng-template #renderList let-list="list" let-isOrdered="isOrdered">
+  @if (isOrdered) {
+    <ol>
+      @for (item of list; track $index) {
+        <li>
+          @if (item.type === 'text' || !item.type) {
+            @if (hasMathInText(item.text)) {
+              <span [innerHTML]="renderText(item.text)"></span>
+            } @else {
+              {{ item.text }}
+            }
+          } @else {
+            <ng-container *ngTemplateOutlet="renderRow; context: { row: item }"></ng-container>
+          }
+          @if (item.subpointsObject?.subpoints?.length) {
+            <ng-container *ngTemplateOutlet="renderList; context: { list: item.subpointsObject.subpoints, isOrdered: false }"></ng-container>
+          }
+        </li>
+      }
+    </ol>
+  } @else {
+    <ul>
+      @for (item of list; track $index) {
+        <li>
+          @if (item.type === 'text' || !item.type) {
+            @if (hasMathInText(item.text)) {
+              <span [innerHTML]="renderText(item.text)"></span>
+            } @else {
+              {{ item.text }}
+            }
+          } @else {
+            <ng-container *ngTemplateOutlet="renderRow; context: { row: item }"></ng-container>
+          }
+          @if (item.subpointsObject?.subpoints?.length) {
+            <ng-container *ngTemplateOutlet="renderList; context: { list: item.subpointsObject.subpoints, isOrdered: false }"></ng-container>
+          }
+        </li>
+      }
+    </ul>
+  }
+</ng-template>
+
+<!-- Reusable row renderer for nested blocks inside lists -->
+<ng-template #renderRow let-row="row">
+  @if (row.type === 'sqlCode') {
+    @if (isMath(row.data)) {
+      <div class="math-block">
+        <div class="math-block__label"><span class="math-block__label-icon">∑</span> Formula</div>
+        <div class="math-block__content" [innerHTML]="renderMath(row.data)"></div>
+      </div>
+    } @else {
+      <div class="sql-code-block">
+        <pre><code>{{ row.data }}</code></pre>
+      </div>
+    }
+  }
+  @if (row.type === 'table' && (row.data || row.dataObject)) {
+    <div class="table-wrapper">
+      <table class="content-table">
+        <thead>
+          <tr>
+            @for (header of (row.data?.headers || row.dataObject?.headers) || []; track header) {
+              <th>
+                @if (hasMathInText(header)) {
+                  <span [innerHTML]="renderText(header)"></span>
+                } @else {
+                  {{ header }}
+                }
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of (row.data?.rowsObject?.rows || row.dataObject?.rows) || []; track $index) {
+            <tr>
+              @for (header of (row.data?.headers || row.dataObject?.headers) || []; track header) {
+                <td>
+                  @if (hasMathInText(r[header])) {
+                    <span [innerHTML]="renderText(r[header])"></span>
+                  } @else {
+                    {{ r[header] }}
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</ng-template>
