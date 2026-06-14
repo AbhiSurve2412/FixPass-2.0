@@ -1,0 +1,170 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.qcard {
+  background-color: var(--color-surface);
+  border: $space-px solid var(--color-border);
+  border-left: 3px solid transparent;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, border-left-color 0.15s ease, transform 0.1s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-$space-px);
+  }
+
+  &--important {
+    border-left-color: var(--color-warning);
+  }
+
+  // ── Card body ─────────────────────────────────────────────────────────────────
+  &__body {
+    padding: $space-4 $space-5;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  // ── Top bar: breadcrumb + important badge + actions ───────────────────────────
+  &__topbar {
+    @include flex-between;
+    gap: $space-2;
+    align-items: center;
+  }
+
+  &__breadcrumb {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__unit-label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-muted);
+    @include text-truncate(1);
+  }
+
+  &__star {
+    @include flex-start;
+    gap: $space-1;
+    flex-shrink: 0;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-warning);
+  }
+
+  // ── Actions (inline, always visible) ─────────────────────────────────────────
+  &__actions {
+    @include flex-start;
+    gap: $space-1;
+    flex-shrink: 0;
+  }
+
+  &__action-btn {
+    @include flex-center;
+    @include btn-base;
+    width: $space-7;
+    height: $space-7;
+    border-radius: $radius-md;
+    background: none;
+    border: $space-px solid transparent;
+    color: var(--color-text-muted);
+    transition: $transition-base;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      border-color: var(--color-border);
+      color: var(--color-text-primary);
+    }
+
+    &--danger:hover {
+      background-color: var(--color-danger-light);
+      border-color: var(--color-danger);
+      color: var(--color-danger);
+    }
+  }
+
+  // ── Question text ─────────────────────────────────────────────────────────────
+  &__text {
+    margin: 0;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-primary);
+    line-height: $line-height-relaxed;
+    @include text-truncate(3);
+  }
+
+  // ── Chips row ─────────────────────────────────────────────────────────────────
+  &__chips {
+    @include flex-start;
+    flex-wrap: wrap;
+    gap: $space-1-5;
+  }
+
+  // ── Difficulty badge ──────────────────────────────────────────────────────────
+  &__difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    padding: $space-0-5 $space-2;
+    border-radius: $radius-full;
+    white-space: nowrap;
+
+    &--easy {
+      background-color: var(--color-success-light);
+      color: var(--color-success);
+    }
+
+    &--medium {
+      background-color: var(--color-warning-light);
+      color: var(--color-warning);
+    }
+
+    &--hard {
+      background-color: var(--color-danger-light);
+      color: var(--color-danger);
+    }
+  }
+
+  // ── Generic chip ──────────────────────────────────────────────────────────────
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary);
+    background-color: var(--color-surface-2);
+    padding: $space-0-5 $space-2;
+    border-radius: $radius-full;
+    white-space: nowrap;
+
+    &--outline {
+      background: none;
+      border: $space-px solid var(--color-border);
+      color: var(--color-text-muted);
+    }
+  }
+
+  // ── Year chips ────────────────────────────────────────────────────────────────
+  &__year-chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+    padding: $space-0-5 $space-2;
+    border-radius: $radius-full;
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  // ── Tags ──────────────────────────────────────────────────────────────────────
+  &__tag {
+    font-size: $font-size-xs;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+}

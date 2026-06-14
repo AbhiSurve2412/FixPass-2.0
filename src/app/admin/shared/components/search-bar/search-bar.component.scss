@@ -1,0 +1,51 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  &__icon {
+    position: absolute;
+    left: $space-3;
+    color: var(--color-text-muted);
+    pointer-events: none;
+    @include flex-center;
+  }
+
+  &__input {
+    @include input-base;
+    padding-left: $space-9;
+    padding-right: $space-9;
+
+    // Remove browser default search styling
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+      display: none;
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    right: $space-3;
+    @include flex-center;
+    background: none;
+    border: none;
+    padding: $space-1;
+    border-radius: $radius-full;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: $transition-fast;
+
+    &:hover {
+      color: var(--color-text-secondary);
+      background-color: var(--color-surface-2);
+    }
+
+    @include focus-ring;
+  }
+}

@@ -1,0 +1,69 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.action-menu {
+  position: relative;
+  display: inline-block;
+
+  &__trigger {
+    @include btn-base;
+    @include flex-center;
+    width: $space-8;
+    height: $space-8;
+    border-radius: $radius-md;
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--color-text-muted);
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + #{$space-1});
+    z-index: $z-dropdown;
+    min-width: $space-32;
+    background-color: var(--color-surface);
+    border: $space-px solid var(--color-border);
+    border-radius: $radius-lg;
+    box-shadow: $shadow-lg;
+    padding: $space-1 0;
+    overflow: hidden;
+  }
+
+  &__item {
+    @include flex-start;
+    gap: $space-2;
+    width: 100%;
+    padding: $space-2 $space-4;
+    font-size: $font-size-sm;
+    font-family: var(--font-family-base);
+    font-weight: $font-weight-regular;
+    color: var(--color-text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-primary);
+    }
+
+    @include focus-ring;
+
+    &--danger {
+      color: var(--color-danger);
+
+      &:hover {
+        background-color: var(--color-danger-light);
+        color: var(--color-danger);
+      }
+    }
+  }
+}

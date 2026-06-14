@@ -1,0 +1,76 @@
+<nav class="explorer" aria-label="Question bank explorer">
+
+  <!-- Panel title -->
+  <div class="explorer__header">
+    <span class="explorer__title">Question Bank</span>
+    <span class="explorer__total">{{ totalCount() }}</span>
+  </div>
+
+  <!-- "All Questions" shortcut -->
+  <div class="explorer__all-wrap">
+    <button
+      class="explorer__all-btn"
+      type="button"
+      [class.explorer__all-btn--active]="selectedUnitId() === null"
+      (click)="onAllClick()"
+    >
+      <svg class="explorer__all-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      All Questions
+      <span class="explorer__unit-count">{{ totalCount() }}</span>
+    </button>
+  </div>
+
+  <!-- Subject / Unit tree -->
+  <div class="explorer__tree">
+    @for (node of nodes(); track trackByNode($index, node)) {
+      <div class="explorer__subject">
+
+        <!-- Subject header (collapsible) -->
+        <button
+          class="explorer__subject-btn"
+          type="button"
+          (click)="toggleSubject(node.subjectId)"
+          [attr.aria-expanded]="isExpanded(node.subjectId)"
+        >
+          <svg
+            class="explorer__chevron"
+            [class.explorer__chevron--open]="isExpanded(node.subjectId)"
+            width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"
+          >
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="explorer__book-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+          </svg>
+          <span class="explorer__subject-name">{{ node.subjectName }}</span>
+          <span class="explorer__subject-count">{{ getSubjectTotal(node.subjectId) }}</span>
+        </button>
+
+        <!-- Units list -->
+        @if (isExpanded(node.subjectId)) {
+          <ul class="explorer__units" role="list">
+            @for (unit of node.units; track trackByUnit($index, unit)) {
+              <li>
+                <button
+                  class="explorer__unit-btn"
+                  type="button"
+                  [class.explorer__unit-btn--active]="selectedUnitId() === unit.unitId"
+                  (click)="onUnitClick(unit.unitId, node.subjectId)"
+                >
+                  <span class="explorer__unit-name">{{ unit.unitName }}</span>
+                  <span class="explorer__unit-count">{{ unit.questionCount }}</span>
+                </button>
+              </li>
+            }
+          </ul>
+        }
+
+      </div>
+    }
+  </div>
+
+</nav>

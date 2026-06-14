@@ -1,0 +1,46 @@
+@if (visible()) {
+  <div
+    class="confirm-dialog__overlay"
+    (click)="onOverlayClick($event)"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="confirm-dialog-title"
+    aria-describedby="confirm-dialog-desc"
+  >
+    <div class="confirm-dialog">
+      <!-- Warning Icon -->
+      <div class="confirm-dialog__icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+
+      <!-- Title -->
+      <h2 class="confirm-dialog__title" id="confirm-dialog-title">Delete Item?</h2>
+
+      <!-- Message -->
+      <p class="confirm-dialog__message" id="confirm-dialog-desc">
+        Are you sure you want to delete{{ itemName() ? ' "' + itemName() + '"' : ' this item' }}?
+        This action cannot be undone.
+      </p>
+
+      <!-- Actions -->
+      <div class="confirm-dialog__actions">
+        <button class="confirm-dialog__btn confirm-dialog__btn--cancel" type="button" (click)="cancel.emit()">
+          Cancel
+        </button>
+        <button class="confirm-dialog__btn confirm-dialog__btn--delete" type="button" (click)="confirm.emit()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+}

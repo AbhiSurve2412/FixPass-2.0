@@ -1,0 +1,87 @@
+<div class="ggrid">
+  @if (loading()) {
+    <div class="ggrid__loading">
+      <div class="ggrid__spinner"></div>
+      <p class="ggrid__loading-text">Loading...</p>
+    </div>
+  } @else if (groups().length === 0) {
+    <app-empty-state [title]="emptyTitle()" />
+  } @else {
+    <div class="ggrid__wrap">
+      <table class="ggrid__table" role="grid" aria-label="Grouped data grid">
+        <thead class="ggrid__head">
+          <tr>
+            <!-- Toggle column — no header text, fixed narrow width -->
+            <th class="ggrid__th ggrid__th--toggle" aria-label="Expand/collapse"></th>
+            @for (col of columns(); track trackByColumn($index, col)) {
+              <th class="ggrid__th">{{ col.header }}</th>
+            }
+            <th class="ggrid__th ggrid__th--actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (group of groups(); track trackByGroup($index, group)) {
+            <!-- ── Group header row ────────────────────────────── -->
+            <tr
+              class="ggrid__group-row"
+              role="row"
+              [attr.aria-expanded]="isExpanded(group.id)"
+              (click)="toggleGroup(group.id)"
+              (keydown.enter)="toggleGroup(group.id)"
+              (keydown.space)="$event.preventDefault(); toggleGroup(group.id)"
+              tabindex="0"
+            >
+              <td class="ggrid__group-cell" [attr.colspan]="columns().length + 2">
+                <span class="ggrid__group-inner">
+                  <svg
+                    class="ggrid__chevron"
+                    [class.ggrid__chevron--open]="isExpanded(group.id)"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M3 5l4 4 4-4"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="ggrid__group-label">{{ group.label }}</span>
+                  @if (group.subtitle) {
+                    <span class="ggrid__group-sub">{{ group.subtitle }}</span>
+                  }
+                  <span class="ggrid__group-badge">{{ group.rows.length }}</span>
+                </span>
+              </td>
+            </tr>
+            <!-- ── Data rows (visible when group is expanded) ─── -->
+            @if (isExpanded(group.id)) {
+              @for (row of group.rows; track trackByRow($index, row)) {
+                <tr class="ggrid__row" role="row">
+                  <!-- Indent cell aligns with the chevron above -->
+                  <td class="ggrid__td ggrid__td--indent" aria-hidden="true"></td>
+                  @for (col of columns(); track trackByColumn($index, col)) {
+                    <td
+                      class="ggrid__td"
+                      [class.ggrid__td--truncate]="col.truncate"
+                    >{{ row[col.key] }}</td>
+                  }
+                  <td class="ggrid__td ggrid__td--actions">
+                    <app-action-menu
+                      [itemId]="$any(row['id'])"
+                      (action)="action.emit($event)"
+                    />
+                  </td>
+                </tr>
+              }
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

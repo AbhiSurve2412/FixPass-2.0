@@ -1,0 +1,84 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $space-4 0;
+
+  &__brand {
+    padding: $space-2 $space-5 $space-5;
+    border-bottom: $space-px solid var(--color-border);
+    margin-bottom: $space-4;
+  }
+
+  &__brand-text {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+  }
+
+  &__section {
+    padding: 0 $space-3;
+    margin-bottom: $space-6;
+  }
+
+  &__section-title {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    padding: 0 $space-2;
+    margin: 0 0 $space-2;
+  }
+
+  &__nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-0-5;
+  }
+
+  &__link {
+    @include flex-start;
+    gap: $space-3;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: $transition-fast;
+    border-left: $space-1 solid transparent;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-primary);
+    }
+
+    @include focus-ring;
+
+    &--active {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+      border-left-color: var(--color-primary);
+      font-weight: $font-weight-semibold;
+
+      .sidebar__icon {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    transition: $transition-fast;
+  }
+}

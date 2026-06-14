@@ -1,0 +1,381 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.qeditor {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 48rem;
+  background-color: var(--color-surface);
+  border: $space-px solid var(--color-border);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-xl;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - #{$space-8});
+  overflow: hidden;
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: $z-modal;
+    @include flex-center;
+    padding: $space-4;
+
+    &::before {
+      content: '';
+      @include absolute-fill;
+      background-color: var(--color-secondary);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__header {
+    @include flex-between;
+    padding: $space-5 $space-6;
+    border-bottom: $space-px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__close {
+    @include flex-center;
+    @include btn-base;
+    width: $space-8;
+    height: $space-8;
+    border-radius: $radius-md;
+    background: none;
+    border-color: transparent;
+    color: var(--color-text-muted);
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__body {
+    padding: $space-6;
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+
+    @media (max-width: #{$bp-sm}) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1-5;
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+
+    &--checkbox {
+      justify-content: flex-end;
+    }
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary);
+  }
+
+  &__label-hint {
+    font-weight: $font-weight-regular;
+    color: var(--color-text-muted);
+    margin-left: $space-1;
+  }
+
+  &__required {
+    color: var(--color-danger);
+    margin-left: $space-0-5;
+  }
+
+  &__input {
+    @include input-base;
+
+    &--textarea {
+      resize: vertical;
+      min-height: $space-20;
+      line-height: $line-height-relaxed;
+    }
+
+    &--tall {
+      min-height: $space-32;
+    }
+
+    &--select {
+      cursor: pointer;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__checkbox-label {
+    @include flex-start;
+    gap: $space-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: $space-3 0;
+
+    &:hover {
+      color: var(--color-text-primary);
+    }
+  }
+
+  &__checkbox {
+    width: $space-4;
+    height: $space-4;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &__footer {
+    @include flex-between;
+    justify-content: flex-end;
+    gap: $space-3;
+    padding: $space-4 $space-6;
+    border-top: $space-px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__btn {
+    @include btn-base;
+    padding: $space-2 $space-5;
+    border-radius: $radius-lg;
+    font-size: $font-size-sm;
+
+    &--sm {
+      padding: $space-1 $space-3;
+      font-size: $font-size-xs;
+    }
+
+    &--cancel {
+      background-color: var(--color-surface);
+      border: $space-px solid var(--color-border);
+      color: var(--color-text-secondary);
+
+      &:hover {
+        background-color: var(--color-surface-2);
+        border-color: var(--color-border-strong);
+        color: var(--color-text-primary);
+      }
+    }
+
+    &--save {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--color-text-inverse);
+      font-weight: $font-weight-medium;
+
+      &:hover:not(:disabled) {
+        background-color: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+    }
+  }
+
+  // ── Rich media toolbar ─────────────────────────────────────────────────────
+  &__media-toolbar {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+    margin-top: -$space-1;
+  }
+
+  &__media-btn {
+    @include flex-center;
+    @include btn-base;
+    position: relative;
+    overflow: hidden;
+    gap: $space-1-5;
+    padding: $space-1-5 $space-3;
+    border-radius: $radius-md;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    background-color: var(--color-surface-2);
+    border: $space-px solid var(--color-border);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-surface-3);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-primary);
+    }
+
+  }
+
+  &__file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  // ── Image thumbnails ───────────────────────────────────────────────────────
+  &__images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+
+  &__image-item {
+    position: relative;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    border: $space-px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__image-thumb {
+    display: block;
+    width: $space-24;
+    height: $space-24;
+    object-fit: cover;
+  }
+
+  &__image-remove {
+    @include flex-center;
+    @include btn-base;
+    position: absolute;
+    top: $space-1;
+    right: $space-1;
+    width: $space-5;
+    height: $space-5;
+    border-radius: $radius-full;
+    background-color: var(--color-danger);
+    border-color: transparent;
+    color: var(--color-text-inverse);
+
+    &:hover { opacity: 0.8; }
+  }
+
+  // ── MCQ options ────────────────────────────────────────────────────────────
+  &__mcq {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: $space-4;
+    background-color: var(--color-surface-2);
+    border: $space-px solid var(--color-border);
+    border-radius: $radius-xl;
+  }
+
+  &__mcq-heading {
+    display: flex;
+    align-items: center;
+    gap: $space-1-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  &__mcq-options {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+  }
+
+  &__mcq-option {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    border-radius: $radius-lg;
+    border: $space-px solid var(--color-border);
+    background-color: var(--color-surface);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+
+    &--correct {
+      border-color: var(--color-success);
+      background-color: var(--color-success-light);
+    }
+  }
+
+  &__mcq-radio {
+    width: $space-4;
+    height: $space-4;
+    accent-color: var(--color-success);
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &:disabled { cursor: not-allowed; }
+  }
+
+  &__mcq-option-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $space-6;
+    height: $space-6;
+    border-radius: $radius-md;
+    background-color: var(--color-surface-3);
+    border: $space-px solid var(--color-border-strong);
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__mcq-option-input {
+    flex: 1;
+    min-width: 0;
+    font-size: $font-size-sm;
+  }
+
+  &__mcq-option-text {
+    flex: 1;
+    font-size: $font-size-sm;
+    color: var(--color-text-primary);
+    line-height: $line-height-normal;
+  }
+
+  &__mcq-correct-badge {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-success);
+    padding: $space-0-5 $space-2;
+    border-radius: $radius-full;
+    background-color: var(--color-success-light);
+    border: $space-px solid var(--color-success);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

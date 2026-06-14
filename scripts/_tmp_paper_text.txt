@@ -1,0 +1,135 @@
+Total No. of Questions : 11]
+SEAT No. :
+[Total No. of Pages : 4
+PD-4036
+[6401]-2403
+F.E.
+BSC-103-BES : ENGINEERING CHEMISTRY
+(2024 Pattern) (Semester - I)
+Time : 2½ Hours] [Max. Marks : 70
+Instructions to the candidates:
+1) Q.1 is compulsory.
+2) Solve Q.No.2 or Q.No.3, Q.No.4 or Q.No.5, Q.No.6 or Q.No.7, Q.No.8 or Q.No.9,
+Q.No.10 or Q.No.11.
+3) Neat diagrams must be drawn wherever necessary.
+4) Figures to the right indicate full marks.
+5) Use of logarithmic tables slide rule, Mollier charts, electronic pocket
+calculator and steam tables is allowed.
+6) Assume suitable data, if necessary.
+Q1) Multiple Choice Questions :
+i) Temporary hardness is also known as _______. [1]
+a) Non Carbonate hardness b) Carbonate hardness
+c) Total hardness d) None alkaline hardness
+ii) EDTA method is used to determine hardness of water by _______
+titration. [1]
+a) Precipitation b) Redox
+c) Acid base d) Complexometric
+iii) The rate in decrease of intensity of radiation is directly proportional the
+concentration of fixed path length of solution is the statement of _______.
+[1]
+a) Beer's Law b) Lamberts Law
+c) Beer-Lamberts Law d) None of these
+iv) When absorption maxima shifts towards longer wavelength, known as
+_________ shift. [1]
+a) Hypsochromic b) Hyperchromic
+c) Hypochromic d) Bathochromic
+P.T.O.
+
+v) Which among the following is an example of Quantum dots? [1]
+a) K b) Cdse
+c) A F d) Se
+5 5
+vi) The oxidising reagent for P-doping is __________ [1]
+a) Iodine vapours b) FeCl
+c) Lithium metal d) Sodium napthalide
+vii) Boys gas calorimeter is used for determination of GCV of ______. [1]
+a) Solid fuel b) Non volatile liquid
+c) Gaseous fuel d) None of above
+viii) Reaction taking place on the anodic areas is _______ [1]
+a) Oxidation b) Reduction
+c) Neutralisation d) Addition
+ix) Kjeldahls method is used for determination of _________ from coal. [1]
+a) Hydrogen b) Nitrogen
+c) Sulphur d) Carbon
+x) Which of the film is protective? [1]
+a) Non porous b) Porous
+c) Volatile d) None of the above
+Q2) a) Explain the causes of scales in boiler. Give two disadvantages and two
+methods of prevention. [6]
+b) Define reverse Osmosis. Give its two advantages & two limitations. [3]
+c) 25 ml of hard water sample required 11.2 ml 0.01 MEDIA to reach the
+end point. 25 ml of the same water sample after boiling and filteration
+required 7.9 ml of the same EDTA to reach the end point. Calculate total,
+temporary and permanent hardness of water. [3]
+OR
+Q3) a) Explain Zeolite process for softening of water with figure, process, ion
+exchange and regeneration reaction, two advantages. [6]
+b) State the causes of foaming when it takes place in boiler and give remedial
+measures for its prevention. [3]
+c) 25 ml water sample requires 3.7ml of 0.01 NHCl up to phenolphthalein
+end point and 7.4 ml upto methyl arange end point during the titration.
+Calculate types and amount of alkalinity present in water. [3]
+[6401]-2403 2
+
+Q4) a) Explain pH metric titration curve between strong acid and strong base.
+Give the reaction, titration curve and calculations. [6]
+b) Explain any three applications of UV-visible spectroscopy. [3]
+c) Give the composition of the membrane of the ion selective electrode
+used to detect [3]
+i) H+
+ii) F
+iii) Cl
+OR
+Q5) a) Draw block diagram of Double beam UV-visible spectrophotometer.
+Explain its any four components and give their function. [6]
+b) Give the construction with neat, labeled diagram and representation of
+calomel electrode. [3]
+c) Define : [3]
+i) Cell constant
+ii) Specific conductance
+iii) Equivalent conductance
+Q6) a) What is conducting polymer? Give structural requirement for conducting
+polymer. Explain doping reactions and given two applications. [6]
+b) What are quantum dots? Give any two types of quantum dots and it's
+two applications. [3]
+c) What are carbon nanotubes? Give their types and two applications.
+[3]
+OR
+Q7) a) Explain the structure of Graphene with diagram and mention it's four
+properties and two applications. [6]
+b) Define Biodegradable polymer. Discuss any two factors responsible for
+biodegradation of polymer. [3]
+c) Give the structure of polycarbonate. Mention its two properties and two
+applications. [3]
+[6401]-2403 3
+
+Q8) a) What is power alcohol? Give the procedure and reaction for preparation
+of ethanol. Give its two advantages and two disadvantages. [6]
+b) Give any three characteristics of an ideal fuel. [3]
+c) 1.2 gm of coal sample was heated in silica crucible in an electric oven at
+110°C for 1 hr. The residue weighed 1.16 gm. The crucible was ignited
+to a constant weight of 0.09 gm. In another experiment 1.2 gm of sample
+was heated in a silica crucible covered with vented lid of 950°C for 7
+min. After cooling the residue weighted 0.80 gm. Calculate % m, % VM
+and % Ash content. [3]
+OR
+Q9) a) Describe the construction and working of Bomb calorimeter with diagram
+for determination of GCV of fuel. State the formula to calculate GCV. [6]
+b) Explain the production of hydrogen by steam reforming of hydrocarbon
+(methane) with reaction conditions. [3]
+c) 0.24 gm of coal sample on complete combustion gave 0.792 gm of CO
+and 0.0216 gm of H O. Calculate carbon and hydrogen percentage. [3]
+Q10) a) Explain the mechanism of Dry corrosion with figure give the reaction
+and types of oxide film formed in Mg, Cr. [6]
+b) i) Define Electroplating. Give its two application and two
+disadvantages. [3]
+ii) Explain the cathodic protection by sacrificial anode for corrosion
+control and prevention. [3]
+OR
+Q11) a) Define wet corrosion. Give conditions for wet corrosion. Explain
+hydrogen evolution mechanism of wet corrosion with suitable example. [6]
+b) i) Discuss any three factors affecting rate of corrosion. [3]
+ii) What are anodic and cathodic coatings? Which is more protective?
+[3]
+[6401]-2403 4
+

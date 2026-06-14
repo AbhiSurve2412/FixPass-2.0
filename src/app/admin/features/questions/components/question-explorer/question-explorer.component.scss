@@ -1,0 +1,225 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+
+  // ── Panel header ─────────────────────────────────────────────────────────────
+  &__header {
+    @include flex-between;
+    padding: $space-4 $space-4 $space-3;
+    border-bottom: $space-px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__total {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: $space-5;
+    height: $space-5;
+    padding: 0 $space-1-5;
+    background-color: var(--color-surface-3);
+    color: var(--color-text-muted);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+  }
+
+  // ── "All Questions" button ───────────────────────────────────────────────────
+  &__all-wrap {
+    padding: $space-2 $space-2 $space-1;
+    border-bottom: $space-px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  &__all-btn {
+    @include flex-between;
+    @include btn-base;
+    width: 100%;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    background: none;
+    border: $space-px solid transparent;
+    border-radius: $radius-lg;
+    color: var(--color-text-secondary);
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    text-align: left;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-primary);
+    }
+
+    &--active {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+      border-color: var(--color-primary-light);
+      font-weight: $font-weight-semibold;
+
+      .explorer__unit-count {
+        background-color: var(--color-primary);
+        color: var(--color-text-inverse);
+      }
+    }
+  }
+
+  &__all-icon {
+    flex-shrink: 0;
+    color: inherit;
+    opacity: 0.7;
+  }
+
+  // ── Tree scrollable area ─────────────────────────────────────────────────────
+  &__tree {
+    flex: 1;
+    overflow-y: auto;
+    padding: $space-2 0 $space-4;
+  }
+
+  &__subject {
+    margin-bottom: $space-1;
+  }
+
+  // ── Subject header button ────────────────────────────────────────────────────
+  &__subject-btn {
+    @include flex-start;
+    @include btn-base;
+    width: 100%;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: none;
+    border: none;
+    border-radius: 0;
+    color: var(--color-text-primary);
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+    }
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    transform: rotate(-90deg);
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: rotate(0deg);
+    }
+  }
+
+  &__book-icon {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  &__subject-name {
+    flex: 1;
+    @include text-truncate(2);
+    line-height: $line-height-snug;
+  }
+
+  &__subject-count {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: $space-5;
+    height: $space-5;
+    padding: 0 $space-1-5;
+    background-color: var(--color-surface-3);
+    color: var(--color-text-muted);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+  }
+
+  // ── Units list ───────────────────────────────────────────────────────────────
+  &__units {
+    list-style: none;
+    margin: 0;
+    padding: $space-1 0 $space-1 $space-4;
+  }
+
+  &__unit-btn {
+    @include flex-between;
+    @include btn-base;
+    width: 100%;
+    gap: $space-2;
+    padding: $space-1-5 $space-3 $space-1-5 $space-4;
+    background: none;
+    border: none;
+    border-left: 2px solid transparent;
+    border-radius: 0 $radius-md $radius-md 0;
+    color: var(--color-text-secondary);
+    font-size: $font-size-sm;
+    font-weight: $font-weight-regular;
+    text-align: left;
+    transition: $transition-base;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+      color: var(--color-text-primary);
+      border-left-color: var(--color-border-strong);
+    }
+
+    &--active {
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+      border-left-color: var(--color-primary);
+      font-weight: $font-weight-medium;
+
+      &:hover {
+        background-color: var(--color-primary-light);
+        color: var(--color-primary);
+        border-left-color: var(--color-primary);
+      }
+
+      .explorer__unit-count {
+        background-color: var(--color-primary);
+        color: var(--color-text-inverse);
+      }
+    }
+  }
+
+  &__unit-name {
+    flex: 1;
+    @include text-truncate(2);
+    line-height: $line-height-snug;
+    text-align: left;
+  }
+
+  &__unit-count {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: $space-5;
+    height: $space-5;
+    padding: 0 $space-1-5;
+    background-color: var(--color-surface-3);
+    color: var(--color-text-muted);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    line-height: 1;
+  }
+}

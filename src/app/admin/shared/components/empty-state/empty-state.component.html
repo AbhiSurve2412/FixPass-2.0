@@ -1,0 +1,11 @@
+<div class="empty-state">
+  <div class="empty-state__icon">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path [attr.d]="icon()"/>
+    </svg>
+  </div>
+  <h3 class="empty-state__title">{{ title() }}</h3>
+  @if (subtitle()) {
+    <p class="empty-state__subtitle">{{ subtitle() }}</p>
+  }
+</div>

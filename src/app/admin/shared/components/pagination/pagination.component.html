@@ -1,0 +1,34 @@
+<div class="pagination">
+  <span class="pagination__info">{{ showing() }}</span>
+  <div class="pagination__controls">
+    <button
+      class="pagination__btn"
+      [disabled]="page() === 1"
+      (click)="pageChange.emit(page() - 1)"
+      aria-label="Previous page"
+    >
+      ← Prev
+    </button>
+
+    @for (p of pageNumbers(); track trackByPage($index, p)) {
+      <button
+        class="pagination__btn"
+        [class.pagination__btn--active]="p === page()"
+        (click)="pageChange.emit(p)"
+        [attr.aria-current]="p === page() ? 'page' : null"
+        [attr.aria-label]="'Page ' + p"
+      >
+        {{ p }}
+      </button>
+    }
+
+    <button
+      class="pagination__btn"
+      [disabled]="page() === totalPages()"
+      (click)="pageChange.emit(page() + 1)"
+      aria-label="Next page"
+    >
+      Next →
+    </button>
+  </div>
+</div>

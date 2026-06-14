@@ -1,0 +1,37 @@
+<div class="mgrid">
+  @if (loading()) {
+    <div class="mgrid__loading">
+      <div class="mgrid__spinner"></div>
+      <p class="mgrid__loading-text">Loading...</p>
+    </div>
+  } @else if (rows().length === 0) {
+    <app-empty-state [title]="emptyTitle()" [subtitle]="emptySubtitle()" />
+  } @else {
+    <div class="mgrid__wrap">
+      <table class="mgrid__table" role="grid">
+        <thead class="mgrid__head">
+          <tr>
+            @for (col of columns(); track trackByColumn($index, col)) {
+              <th class="mgrid__th">{{ col.header }}</th>
+            }
+            <th class="mgrid__th mgrid__th--actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track trackByRow($index, row)) {
+            <tr class="mgrid__row">
+              @for (col of columns(); track trackByColumn($index, col)) {
+                <td class="mgrid__td" [class.mgrid__td--truncate]="col.truncate">
+                  {{ row[col.key] }}
+                </td>
+              }
+              <td class="mgrid__td mgrid__td--actions">
+                <app-action-menu [itemId]="row.id" (action)="action.emit($event)" />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

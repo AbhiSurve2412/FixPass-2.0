@@ -1,0 +1,166 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.accordion {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  &__loading {
+    @include flex-col-center;
+    padding: $space-16;
+    gap: $space-4;
+    color: var(--color-text-muted);
+  }
+
+  &__spinner {
+    width: $space-10;
+    height: $space-10;
+    border: $space-1 solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: $radius-full;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__loading-text {
+    font-size: $font-size-sm;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  &__group {
+    border: $space-px solid var(--color-border);
+    border-radius: $radius-lg;
+    background-color: var(--color-surface);
+    overflow: hidden;
+  }
+
+  &__header {
+    @include flex-between;
+    width: 100%;
+    padding: $space-4 $space-5;
+    background-color: var(--color-surface-2);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-family-base);
+    text-align: left;
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-3);
+    }
+
+    @include focus-ring;
+  }
+
+  &__header-left {
+    @include flex-start;
+    gap: $space-2;
+    min-width: 0;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+    transform: rotate(0deg);
+
+    &--open {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__group-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-primary);
+  }
+
+  &__group-sub {
+    font-size: $font-size-xs;
+    color: var(--color-text-muted);
+    margin-left: $space-1;
+  }
+
+  &__count {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: var(--color-text-secondary);
+    background-color: var(--color-surface-3);
+    padding: $space-0-5 $space-2;
+    border-radius: $radius-full;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    border-top: $space-px solid var(--color-border);
+    border-left: $space-1 solid var(--color-primary);
+    overflow-x: auto;
+  }
+
+  &__empty {
+    padding: $space-5 $space-5;
+    font-size: $font-size-sm;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $font-size-sm;
+  }
+
+  &__th {
+    padding: $space-3 $space-4;
+    text-align: left;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: $space-px solid var(--color-border);
+    background-color: var(--color-surface-2);
+    white-space: nowrap;
+
+    &--actions {
+      text-align: right;
+      width: $space-12;
+    }
+  }
+
+  &__row {
+    transition: $transition-fast;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+    }
+
+    & + & {
+      border-top: $space-px solid var(--color-border);
+    }
+  }
+
+  &__td {
+    padding: $space-3 $space-4;
+    color: var(--color-text-primary);
+    vertical-align: middle;
+    max-width: 0;
+
+    &--truncate {
+      @include text-truncate(1);
+      max-width: $space-32;
+    }
+
+    &--actions {
+      text-align: right;
+      width: $space-12;
+      max-width: unset;
+    }
+  }
+}

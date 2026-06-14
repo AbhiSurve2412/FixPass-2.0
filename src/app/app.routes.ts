@@ -29,31 +29,11 @@ export const routes: Routes = [
   { path: 'signup',  component: HomeComponent }, // TBD
 
   // ── Admin (Phase 1 — Active) ──────────────────────────────────
-  { path: 'admin',           redirectTo: 'admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/dashboard', component: HomeComponent }, // TBD
-
-  // ── Admin: Study Material sub-routes ─────────────────────────
   {
-    path: 'admin/study-material',
-    redirectTo: 'admin/study-material/universities',
-    pathMatch: 'full',
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin.routes').then(m => m.adminRoutes),
   },
-  { path: 'admin/study-material/universities',         component: HomeComponent }, // TBD
-  { path: 'admin/study-material/colleges',             component: HomeComponent }, // TBD
-  { path: 'admin/study-material/branches',             component: HomeComponent }, // TBD
-  { path: 'admin/study-material/subjects',             component: HomeComponent }, // TBD
-  { path: 'admin/study-material/units',                component: HomeComponent }, // TBD
-  { path: 'admin/study-material/questions',            component: HomeComponent }, // TBD
-  { path: 'admin/study-material/answers',              component: HomeComponent }, // TBD
-  { path: 'admin/study-material/previous-year-papers', component: HomeComponent }, // TBD
-  { path: 'admin/study-material/resources',            component: HomeComponent }, // TBD
-
-  // ── Admin: Coming Soon sections — redirect to dashboard ───────
-  { path: 'admin/placement-material', redirectTo: 'admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/discussion-hub',     redirectTo: 'admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/jobs',               redirectTo: 'admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/tools',              redirectTo: 'admin/dashboard', pathMatch: 'full' },
-  { path: 'admin/analytics',          redirectTo: 'admin/dashboard', pathMatch: 'full' },
 
   // ── Coming Soon — route stubs (not navigable from UI) ─────────
   // Nav items with status:'coming-soon' are disabled in the navbar.

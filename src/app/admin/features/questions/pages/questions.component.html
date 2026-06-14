@@ -1,0 +1,110 @@
+<div class="qs">
+  <!-- Left Explorer Panel -->
+  <div class="qs__explorer">
+    <app-question-explorer
+      [nodes]="explorerNodes()"
+      [selectedUnitId]="selectedUnitId()"
+      (unitSelected)="onUnitSelected($event.unitId, $event.subjectId)"
+      (allClicked)="onAllSelected()"
+    />
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="qs__main">
+    <!-- Sticky header -->
+    <div class="qs__header">
+      <div class="qs__header-left">
+        <h1 class="qs__title">{{ pageTitle() }}</h1>
+        <span class="qs__count">{{ filteredQuestions().length }} questions</span>
+      </div>
+      <div class="qs__header-actions">
+        <button class="btn" type="button" (click)="openImportWizard()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Import PYQ Paper
+        </button>
+        <button class="btn btn--primary" type="button" (click)="openCreate()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Question
+        </button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="qs__toolbar">
+      <app-search-bar
+        [placeholder]="'Search questions or tags...'"
+        [value]="searchTerm()"
+        (valueChange)="onSearch($event)"
+      />
+    </div>
+
+    <!-- Error -->
+    @if (error()) {
+      <div class="qs__error" role="alert">{{ error() }}</div>
+    }
+
+    <!-- Question Cards -->
+    <div class="qs__cards">
+      @if (loading()) {
+        <div class="qs__loading">
+          <div class="qs__spinner"></div>
+          <p>Loading questions...</p>
+        </div>
+      } @else if (filteredQuestions().length === 0) {
+        <div class="qs__empty-wrap">
+          <app-empty-state
+            title="No questions found"
+            [subtitle]="selectedUnitId() ? 'Add the first question for this unit.' : 'Select a unit from the left panel or add questions.'"
+          />
+        </div>
+      } @else {
+        @for (q of filteredQuestions(); track trackByQuestion($index, q)) {
+          <app-question-card
+            [question]="q"
+            (view)="onViewQuestion($event)"
+            (edit)="onEditQuestion($event)"
+            (delete)="onDeleteQuestion($event)"
+          />
+        }
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Editor Modal -->
+<app-question-editor
+  [visible]="showEditor()"
+  [mode]="editorMode()"
+  [question]="selectedQuestion()"
+  [subjects]="subjects()"
+  [units]="units()"
+  (save)="onEditorSave($event)"
+  (cancel)="onEditorCancel()"
+/>
+
+<!-- PDF Import Wizard -->
+<app-pdf-import-wizard
+  [visible]="showImportWizard()"
+  [subjects]="subjects()"
+  [units]="units()"
+  [extracting]="extracting()"
+  [extractedQuestions]="extractedQuestions()"
+  (extract)="onExtractPdf($event)"
+  (importQuestions)="onImportPdf($event)"
+  (close)="onCloseImportWizard()"
+/>
+
+<!-- Confirm Delete -->
+<app-confirm-dialog
+  [visible]="showConfirmDelete()"
+  [itemName]="deleteTargetName() ?? undefined"
+  (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()"
+/>
