@@ -16,8 +16,10 @@ import {
 import { Branch, BranchForm } from '../interfaces/branch.interfaces';
 
 import {
+  GRID_ACTION,
   GridActionEvent,
   GridColumn,
+  MODAL_MODE,
   ModalField,
   ModalMode,
 } from '../../../shared/interfaces/admin-shared.interfaces';
@@ -55,7 +57,7 @@ export class BranchesPageComponent {
   readonly currentPage      = signal(1);
   readonly pageSize         = signal(10);
   readonly modalVisible     = signal(false);
-  readonly modalMode        = signal<ModalMode>('create');
+  readonly modalMode        = signal<ModalMode>(MODAL_MODE.CREATE);
   readonly selectedId       = signal<string | null>(null);
   readonly confirmVisible   = signal(false);
   readonly deleteTargetId   = signal<string | null>(null);
@@ -113,7 +115,7 @@ export class BranchesPageComponent {
 
   readonly modalInitialValues = computed<Record<string, string>>(() => {
     const id = this.selectedId();
-    if (!id || this.modalMode() === 'create') return {} as Record<string, string>;
+    if (!id || this.modalMode() === MODAL_MODE.CREATE) return {} as Record<string, string>;
     const item = this.branches().find(b => b.id === id);
     if (!item) return {} as Record<string, string>;
     return {
@@ -125,8 +127,8 @@ export class BranchesPageComponent {
 
   readonly modalTitle = computed(() => {
     const mode = this.modalMode();
-    if (mode === 'create') return 'Add Branch';
-    if (mode === 'edit')   return 'Edit Branch';
+    if (mode === MODAL_MODE.CREATE) return 'Add Branch';
+    if (mode === MODAL_MODE.EDIT)   return 'Edit Branch';
     return 'View Branch';
   });
 
@@ -147,17 +149,17 @@ export class BranchesPageComponent {
 
   openCreate(): void {
     this.selectedId.set(null);
-    this.modalMode.set('create');
+    this.modalMode.set(MODAL_MODE.CREATE);
     this.modalVisible.set(true);
   }
 
   onGridAction(event: GridActionEvent): void {
     this.selectedId.set(event.id);
-    if (event.type === 'view') {
-      this.modalMode.set('view');
+    if (event.type === GRID_ACTION.VIEW) {
+      this.modalMode.set(MODAL_MODE.VIEW);
       this.modalVisible.set(true);
-    } else if (event.type === 'edit') {
-      this.modalMode.set('edit');
+    } else if (event.type === GRID_ACTION.EDIT) {
+      this.modalMode.set(MODAL_MODE.EDIT);
       this.modalVisible.set(true);
     } else {
       const item = this.branches().find(b => b.id === event.id);
@@ -171,14 +173,14 @@ export class BranchesPageComponent {
     const mode = this.modalMode();
     const id   = this.selectedId();
 
-    if (mode === 'create') {
+    if (mode === MODAL_MODE.CREATE) {
       const form: BranchForm = {
         name:        formData['name'],
         shortName:   formData['shortName'],
         description: formData['description'] ?? '',
       };
       this.store.dispatch(BranchApiActions.createBranch({ form }));
-    } else if (mode === 'edit' && id) {
+    } else if (mode === MODAL_MODE.EDIT && id) {
       const existing = this.branches().find(b => b.id === id)!;
       this.store.dispatch(
         BranchApiActions.updateBranch({

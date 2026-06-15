@@ -19,9 +19,11 @@ import { Subject, SubjectForm } from '../interfaces/subject.interfaces';
 
 import {
   AcademicYear,
+  GRID_ACTION,
   GridActionEvent,
   GridColumn,
   GridGroup,
+  MODAL_MODE,
   ModalField,
   ModalMode,
   SelectOption,
@@ -85,7 +87,7 @@ export class SubjectsPageComponent {
   // ── Local UI state ────────────────────────────────────────────────────────
   readonly searchTerm       = signal('');
   readonly modalVisible     = signal(false);
-  readonly modalMode        = signal<ModalMode>('create');
+  readonly modalMode        = signal<ModalMode>(MODAL_MODE.CREATE);
   readonly selectedId       = signal<string | null>(null);
   readonly confirmVisible   = signal(false);
   readonly deleteTargetId   = signal<string | null>(null);
@@ -192,7 +194,7 @@ export class SubjectsPageComponent {
 
   readonly modalInitialValues = computed<Record<string, string>>(() => {
     const id = this.selectedId();
-    if (!id || this.modalMode() === 'create') return {} as Record<string, string>;
+    if (!id || this.modalMode() === MODAL_MODE.CREATE) return {} as Record<string, string>;
     const item = this.subjects().find(s => s.id === id);
     if (!item) return {} as Record<string, string>;
     return {
@@ -207,8 +209,8 @@ export class SubjectsPageComponent {
 
   readonly modalTitle = computed(() => {
     const mode = this.modalMode();
-    if (mode === 'create') return 'Add Subject';
-    if (mode === 'edit')   return 'Edit Subject';
+    if (mode === MODAL_MODE.CREATE) return 'Add Subject';
+    if (mode === MODAL_MODE.EDIT)   return 'Edit Subject';
     return 'View Subject';
   });
 
@@ -225,7 +227,7 @@ export class SubjectsPageComponent {
 
   openCreate(): void {
     this.selectedId.set(null);
-    this.modalMode.set('create');
+    this.modalMode.set(MODAL_MODE.CREATE);
     this.modalActiveYear.set('');
     this.modalVisible.set(true);
   }
@@ -234,12 +236,12 @@ export class SubjectsPageComponent {
     this.selectedId.set(event.id);
     const item = this.subjects().find(s => s.id === event.id);
 
-    if (event.type === 'view') {
-      this.modalMode.set('view');
+    if (event.type === GRID_ACTION.VIEW) {
+      this.modalMode.set(MODAL_MODE.VIEW);
       this.modalActiveYear.set(item?.year ?? '');
       this.modalVisible.set(true);
-    } else if (event.type === 'edit') {
-      this.modalMode.set('edit');
+    } else if (event.type === GRID_ACTION.EDIT) {
+      this.modalMode.set(MODAL_MODE.EDIT);
       this.modalActiveYear.set(item?.year ?? '');
       this.modalVisible.set(true);
     } else {
@@ -272,7 +274,7 @@ export class SubjectsPageComponent {
       ? rawSem
       : (validSemesters[0] ?? rawSem);
 
-    if (mode === 'create') {
+    if (mode === MODAL_MODE.CREATE) {
       const form: SubjectForm = {
         name:        formData['name'],
         code:        formData['code'],
@@ -282,7 +284,7 @@ export class SubjectsPageComponent {
         description: formData['description'] ?? '',
       };
       this.store.dispatch(SubjectApiActions.createSubject({ form }));
-    } else if (mode === 'edit' && id) {
+    } else if (mode === MODAL_MODE.EDIT && id) {
       const existing = this.subjects().find(s => s.id === id)!;
       const branch   = this.branches().find(b => b.id === formData['branchId']);
       this.store.dispatch(

@@ -22,7 +22,7 @@ import { QuestionApiActions } from '../../questions/store/actions/question.actio
 import { getQuestions } from '../../questions/store/selectors/question.selectors';
 
 import { Question } from '../../questions/interfaces/question.interfaces';
-import { Answer, AnswerContent, AnswerType } from '../interfaces/answer.interfaces';
+import { ANSWER_TYPE, Answer, AnswerContent, AnswerType } from '../interfaces/answer.interfaces';
 import { SelectOption } from '../../../shared/interfaces/admin-shared.interfaces';
 import { AnswerWorkspaceComponent, RegenerateEvent } from '../components/answer-workspace/answer-workspace.component';
 import { AnswerGridComponent } from '../components/answer-grid/answer-grid.component';
@@ -93,7 +93,7 @@ export class AnswersPageComponent {
   readonly previewAnswer = signal<Answer | null>(null);
   readonly pendingDeleteAnswer = signal<Answer | null>(null);
 
-  private activeAnswerType: AnswerType = 'Detailed';
+  private activeAnswerType: AnswerType = ANSWER_TYPE.DETAILED;
 
   setTab(tab: 'generation' | 'saved'): void {
     this.activeTab.set(tab);
@@ -155,7 +155,7 @@ export class AnswersPageComponent {
         }),
       );
     } else {
-      if (this.activeAnswerType === 'Detailed') {
+      if (this.activeAnswerType === ANSWER_TYPE.DETAILED) {
         this.store.dispatch(AnswerApiActions.generateDetailedAnswer({ questionText: q.text }));
       } else {
         this.store.dispatch(AnswerApiActions.generateSimpleAnswer({ questionText: q.text }));
@@ -177,7 +177,6 @@ export class AnswersPageComponent {
       unitId: q.unitId,
       unitName: q.unitName,
       answerType: type,
-      status: 'Published',
       answer: content,
       createdAt: existing?.createdAt ?? new Date().toISOString(),
       updatedAt: new Date().toISOString(),

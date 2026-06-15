@@ -15,7 +15,7 @@ import {
   QuestionOption,
   QuestionType,
 } from '../../interfaces/question.interfaces';
-import { Difficulty } from '../../../../shared/interfaces/admin-shared.interfaces';
+import { Difficulty, MODAL_MODE, ModalMode } from '../../../../shared/interfaces/admin-shared.interfaces';
 
 const DEFAULT_OPTIONS = (): QuestionOption[] => [
   { id: 'A', text: '' },
@@ -34,7 +34,7 @@ const DEFAULT_OPTIONS = (): QuestionOption[] => [
 })
 export class QuestionEditorComponent {
   visible = input(false);
-  mode = input<'create' | 'edit' | 'view'>('create');
+  mode = input<ModalMode>(MODAL_MODE.CREATE);
   question = input<Question | null>(null);
   subjects = input<{ id: string; name: string }[]>([]);
   units = input<{ id: string; name: string; subjectId: string }[]>([]);
@@ -56,7 +56,7 @@ export class QuestionEditorComponent {
   readonly imageUrls = signal<string[]>([]);
 
   // ── Computed ───────────────────────────────────────────────────────────────
-  readonly isReadOnly = computed(() => this.mode() === 'view');
+  readonly isReadOnly = computed(() => this.mode() === MODAL_MODE.VIEW);
   readonly isMcq = computed(() => this.formData().type === 'mcq');
 
   readonly filteredUnits = computed(() =>
@@ -74,8 +74,8 @@ export class QuestionEditorComponent {
 
   readonly modalTitle = computed(() => {
     const m = this.mode();
-    if (m === 'create') return 'Add Question';
-    if (m === 'edit')   return 'Edit Question';
+    if (m === MODAL_MODE.CREATE) return 'Add Question';
+    if (m === MODAL_MODE.EDIT)   return 'Edit Question';
     return 'View Question';
   });
 

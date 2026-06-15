@@ -1,5 +1,9 @@
 export type FieldType = 'text' | 'textarea' | 'select' | 'number';
-export type ModalMode = 'create' | 'edit' | 'view';
+
+export const MODAL_MODE = { CREATE: 'create', EDIT: 'edit', VIEW: 'view' } as const;
+export type ModalMode = typeof MODAL_MODE[keyof typeof MODAL_MODE];
+
+export const GRID_ACTION = { VIEW: 'view', EDIT: 'edit', DELETE: 'delete' } as const;
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 export type Semester = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type AcademicYear = 'FE' | 'SE' | 'TE' | 'BE';

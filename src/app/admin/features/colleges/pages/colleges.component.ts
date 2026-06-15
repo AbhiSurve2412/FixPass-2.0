@@ -18,9 +18,11 @@ import { getUniversities } from '../../universities/store/selectors/university.s
 import { College, CollegeForm } from '../interfaces/college.interfaces';
 
 import {
+  GRID_ACTION,
   GridActionEvent,
   GridColumn,
   GridGroup,
+  MODAL_MODE,
   ModalField,
   ModalMode,
 } from '../../../shared/interfaces/admin-shared.interfaces';
@@ -55,7 +57,7 @@ export class CollegesPageComponent {
   // ── Local UI state ───────────────────────────────────────────────────────
   readonly searchTerm       = signal('');
   readonly modalVisible     = signal(false);
-  readonly modalMode        = signal<ModalMode>('create');
+  readonly modalMode        = signal<ModalMode>(MODAL_MODE.CREATE);
   readonly selectedId       = signal<string | null>(null);
   readonly confirmVisible   = signal(false);
   readonly deleteTargetId   = signal<string | null>(null);
@@ -118,7 +120,7 @@ export class CollegesPageComponent {
 
   readonly modalInitialValues = computed<Record<string, string>>(() => {
     const id = this.selectedId();
-    if (!id || this.modalMode() === 'create') return {} as Record<string, string>;
+    if (!id || this.modalMode() === MODAL_MODE.CREATE) return {} as Record<string, string>;
     const item = this.colleges().find(c => c.id === id);
     if (!item) return {} as Record<string, string>;
     return {
@@ -130,8 +132,8 @@ export class CollegesPageComponent {
 
   readonly modalTitle = computed(() => {
     const mode = this.modalMode();
-    if (mode === 'create') return 'Add College';
-    if (mode === 'edit')   return 'Edit College';
+    if (mode === MODAL_MODE.CREATE) return 'Add College';
+    if (mode === MODAL_MODE.EDIT)   return 'Edit College';
     return 'View College';
   });
 
@@ -148,17 +150,17 @@ export class CollegesPageComponent {
 
   openCreate(): void {
     this.selectedId.set(null);
-    this.modalMode.set('create');
+    this.modalMode.set(MODAL_MODE.CREATE);
     this.modalVisible.set(true);
   }
 
   onGridAction(event: GridActionEvent): void {
     this.selectedId.set(event.id);
-    if (event.type === 'view') {
-      this.modalMode.set('view');
+    if (event.type === GRID_ACTION.VIEW) {
+      this.modalMode.set(MODAL_MODE.VIEW);
       this.modalVisible.set(true);
-    } else if (event.type === 'edit') {
-      this.modalMode.set('edit');
+    } else if (event.type === GRID_ACTION.EDIT) {
+      this.modalMode.set(MODAL_MODE.EDIT);
       this.modalVisible.set(true);
     } else {
       const item = this.colleges().find(c => c.id === event.id);
@@ -172,14 +174,14 @@ export class CollegesPageComponent {
     const mode = this.modalMode();
     const id   = this.selectedId();
 
-    if (mode === 'create') {
+    if (mode === MODAL_MODE.CREATE) {
       const form: CollegeForm = {
         name:         formData['name'],
         universityId: formData['universityId'],
         description:  formData['description'] ?? '',
       };
       this.store.dispatch(CollegeApiActions.createCollege({ form }));
-    } else if (mode === 'edit' && id) {
+    } else if (mode === MODAL_MODE.EDIT && id) {
       const existing = this.colleges().find(c => c.id === id)!;
       const uni      = this.universities().find(u => u.id === formData['universityId']);
       this.store.dispatch(

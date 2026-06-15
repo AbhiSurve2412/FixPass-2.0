@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
+import { ANSWER_TYPE } from '../../interfaces/answer.interfaces';
 import { AnswerApiActions } from '../actions/answer.actions';
 import { AnswerState, initialAnswerState } from '../state/answer.state';
 
@@ -36,23 +37,6 @@ export const answerReducer = createReducer(
       : [...state.data, answer],
   })),
   on(AnswerApiActions.saveAnswerFailure, (state, { error }): AnswerState => ({
-    ...state,
-    saving: false,
-    error,
-  })),
-
-  // ── Publish ─────────────────────────────────────────────────────────────────
-  on(AnswerApiActions.publishAnswer, (state): AnswerState => ({
-    ...state,
-    saving: true,
-    error: null,
-  })),
-  on(AnswerApiActions.publishAnswerSuccess, (state, { answer }): AnswerState => ({
-    ...state,
-    saving: false,
-    data: state.data.map(a => (a.id === answer.id ? answer : a)),
-  })),
-  on(AnswerApiActions.publishAnswerFailure, (state, { error }): AnswerState => ({
     ...state,
     saving: false,
     error,
@@ -119,9 +103,9 @@ export const answerReducer = createReducer(
     ...state,
     generating: false,
     currentDetailedAnswer:
-      state.activeAnswerType === 'Detailed' ? content : state.currentDetailedAnswer,
+      state.activeAnswerType === ANSWER_TYPE.DETAILED ? content : state.currentDetailedAnswer,
     currentSimpleAnswer:
-      state.activeAnswerType === 'Simple' ? content : state.currentSimpleAnswer,
+      state.activeAnswerType === ANSWER_TYPE.SIMPLE ? content : state.currentSimpleAnswer,
   })),
   on(AnswerApiActions.updateAnswerContentFailure, (state, { error }): AnswerState => ({
     ...state,

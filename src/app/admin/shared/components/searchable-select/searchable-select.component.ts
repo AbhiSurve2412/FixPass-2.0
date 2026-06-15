@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import { SelectOption } from '../../interfaces/admin-shared.interfaces';
 
+interface DropdownPos { top: string; left: string; width: string; }
+
 @Component({
   selector: 'app-searchable-select',
   standalone: true,
@@ -27,6 +29,7 @@ export class SearchableSelectComponent {
 
   readonly isOpen = signal(false);
   readonly searchTerm = signal('');
+  readonly dropdownPos = signal<DropdownPos | null>(null);
 
   constructor(private readonly el: ElementRef) {}
 
@@ -44,14 +47,27 @@ export class SearchableSelectComponent {
 
   toggle(): void {
     if (this.disabled()) return;
-    this.isOpen.update(v => !v);
-    if (!this.isOpen()) this.searchTerm.set('');
+    const opening = !this.isOpen();
+    if (opening) {
+      const trigger = this.el.nativeElement.querySelector('.ss__trigger') as HTMLElement;
+      const rect = trigger.getBoundingClientRect();
+      this.dropdownPos.set({
+        top: `${rect.bottom + 4}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+      });
+    } else {
+      this.searchTerm.set('');
+      this.dropdownPos.set(null);
+    }
+    this.isOpen.set(opening);
   }
 
   select(opt: SelectOption): void {
     this.valueChange.emit(opt.value.toString());
     this.isOpen.set(false);
     this.searchTerm.set('');
+    this.dropdownPos.set(null);
   }
 
   @HostListener('document:click', ['$event'])
@@ -59,6 +75,17 @@ export class SearchableSelectComponent {
     if (!this.el.nativeElement.contains(e.target as Node)) {
       this.isOpen.set(false);
       this.searchTerm.set('');
+      this.dropdownPos.set(null);
+    }
+  }
+
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  onWindowChange(): void {
+    if (this.isOpen()) {
+      this.isOpen.set(false);
+      this.searchTerm.set('');
+      this.dropdownPos.set(null);
     }
   }
 }

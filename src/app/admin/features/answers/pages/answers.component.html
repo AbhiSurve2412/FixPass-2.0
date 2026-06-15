@@ -101,9 +101,6 @@
       <div class="ap-modal__header">
         <div class="ap-modal__meta">
           <span class="ap-modal__badge ap-modal__badge--type">{{ previewAnswer()!.answerType }}</span>
-          <span class="ap-modal__badge" [class.ap-modal__badge--draft]="previewAnswer()!.status === 'Draft'" [class.ap-modal__badge--published]="previewAnswer()!.status === 'Published'">
-            {{ previewAnswer()!.status }}
-          </span>
           <span class="ap-modal__subject">{{ previewAnswer()!.subjectName }} / {{ previewAnswer()!.unitName }}</span>
         </div>
         <button type="button" class="ap-modal__close" (click)="closePreview()" aria-label="Close preview">

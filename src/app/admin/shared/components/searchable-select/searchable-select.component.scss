@@ -64,12 +64,11 @@
   }
 
   // ── Dropdown ──────────────────────────────────────────────────────────────
+  // position:fixed so it escapes overflow:hidden on modal/scroll containers.
+  // top/left/width are set via inline styles computed from getBoundingClientRect().
   &__dropdown {
-    position: absolute;
-    top: calc(100% + 0.25rem);
-    left: 0;
-    right: 0;
-    z-index: $z-dropdown;
+    position: fixed;
+    z-index: 9999;
     background: var(--color-surface);
     border: 0.0625rem solid var(--color-border);
     border-radius: $radius-md;

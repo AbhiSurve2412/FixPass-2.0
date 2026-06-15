@@ -6,8 +6,8 @@
 
     <!-- Answer type toggle -->
     <div class="ws__type-toggle">
-      <button type="button" class="ws__type-btn" [class.ws__type-btn--active]="activeAnswerType() === 'Detailed'" (click)="setAnswerType('Detailed')">Detailed</button>
-      <button type="button" class="ws__type-btn" [class.ws__type-btn--active]="activeAnswerType() === 'Simple'" (click)="setAnswerType('Simple')">Simple</button>
+      <button type="button" class="ws__type-btn" [class.ws__type-btn--active]="activeAnswerType() === AT.DETAILED" (click)="setAnswerType(AT.DETAILED)">Detailed</button>
+      <button type="button" class="ws__type-btn" [class.ws__type-btn--active]="activeAnswerType() === AT.SIMPLE" (click)="setAnswerType(AT.SIMPLE)">Simple</button>
     </div>
 
     <!-- Instruction textareas -->

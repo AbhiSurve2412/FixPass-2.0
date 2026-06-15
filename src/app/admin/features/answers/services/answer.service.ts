@@ -24,7 +24,6 @@ const MOCK_ANSWERS: Answer[] = [
     unitId: 'unit-001',
     unitName: 'Calculus',
     answerType: 'Detailed',
-    status: 'Published',
     createdAt: '2025-01-10T09:00:00.000Z',
     updatedAt: '2025-01-10T09:00:00.000Z',
     answer: {
@@ -79,7 +78,6 @@ const MOCK_ANSWERS: Answer[] = [
     unitId: 'unit-002',
     unitName: 'Electrostatics & Circuits',
     answerType: 'Detailed',
-    status: 'Published',
     createdAt: '2025-01-11T10:00:00.000Z',
     updatedAt: '2025-01-11T10:00:00.000Z',
     answer: {
@@ -133,7 +131,6 @@ const MOCK_ANSWERS: Answer[] = [
     unitId: 'unit-003',
     unitName: 'Sorting Algorithms',
     answerType: 'Detailed',
-    status: 'Published',
     createdAt: '2025-01-12T08:30:00.000Z',
     updatedAt: '2025-01-12T08:30:00.000Z',
     answer: {
@@ -219,7 +216,6 @@ print(merge_sort([38, 27, 43, 3, 9, 82, 10]))
     unitId: 'unit-004',
     unitName: 'Database Types',
     answerType: 'Simple',
-    status: 'Published',
     createdAt: '2025-01-13T11:00:00.000Z',
     updatedAt: '2025-01-13T11:00:00.000Z',
     answer: {
@@ -287,7 +283,6 @@ ORDER  BY o.order_date DESC;`,
     unitId: 'unit-005',
     unitName: 'Process Management',
     answerType: 'Detailed',
-    status: 'Draft',
     createdAt: '2025-01-14T14:00:00.000Z',
     updatedAt: '2025-01-14T14:00:00.000Z',
     answer: {
@@ -382,17 +377,6 @@ export class AnswerService {
     return of({ ...created }).pipe(delay(200));
   }
 
-  publish(id: string): Observable<Answer> {
-    const answer = this.answers.find(a => a.id === id);
-    if (!answer) return throwError(() => new Error('Answer not found'));
-    const published: Answer = {
-      ...answer,
-      status: 'Published',
-      updatedAt: new Date().toISOString(),
-    };
-    this.answers = this.answers.map(a => (a.id === id ? published : a));
-    return of({ ...published }).pipe(delay(200));
-  }
 
   delete(id: string): Observable<void> {
     this.answers = this.answers.filter(a => a.id !== id);

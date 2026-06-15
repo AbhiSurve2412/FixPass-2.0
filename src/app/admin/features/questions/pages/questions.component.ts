@@ -38,6 +38,7 @@ import { PdfImportWizardComponent } from '../components/pdf-import-wizard/pdf-im
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { SearchBarComponent } from '../../../shared/components/search-bar/search-bar.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { MODAL_MODE, ModalMode } from '../../../shared/interfaces/admin-shared.interfaces';
 
 @Component({
   selector: 'app-questions-page',
@@ -73,7 +74,7 @@ export class QuestionsPageComponent {
   readonly selectedUnitId = signal<string | null>(null);
   readonly searchTerm = signal('');
   readonly showEditor = signal(false);
-  readonly editorMode = signal<'create' | 'edit' | 'view'>('create');
+  readonly editorMode = signal<ModalMode>(MODAL_MODE.CREATE);
   readonly selectedQuestion = signal<Question | null>(null);
   readonly showImportWizard = signal(false);
   readonly showConfirmDelete = signal(false);
@@ -148,19 +149,19 @@ export class QuestionsPageComponent {
 
   openCreate(): void {
     this.selectedQuestion.set(null);
-    this.editorMode.set('create');
+    this.editorMode.set(MODAL_MODE.CREATE);
     this.showEditor.set(true);
   }
 
   onViewQuestion(q: Question): void {
     this.selectedQuestion.set(q);
-    this.editorMode.set('view');
+    this.editorMode.set(MODAL_MODE.VIEW);
     this.showEditor.set(true);
   }
 
   onEditQuestion(q: Question): void {
     this.selectedQuestion.set(q);
-    this.editorMode.set('edit');
+    this.editorMode.set(MODAL_MODE.EDIT);
     this.showEditor.set(true);
   }
 
@@ -176,9 +177,9 @@ export class QuestionsPageComponent {
     const unitName    = this.units().find(u => u.id === form.unitId)?.name ?? form.unitId;
     const enriched: QuestionForm = { ...form, subjectName, unitName };
 
-    if (mode === 'create') {
+    if (mode === MODAL_MODE.CREATE) {
       this.store.dispatch(QuestionApiActions.createQuestion({ form: enriched }));
-    } else if (mode === 'edit') {
+    } else if (mode === MODAL_MODE.EDIT) {
       const existing = this.selectedQuestion();
       if (existing) {
         this.store.dispatch(

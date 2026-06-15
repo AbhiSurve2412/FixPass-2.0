@@ -9,8 +9,8 @@ export type BlockType =
   | 'diagram'
   | 'sqlCode';
 
-export type AnswerType = 'Detailed' | 'Simple';
-export type AnswerStatus = 'Draft' | 'Published';
+export const ANSWER_TYPE = { DETAILED: 'Detailed', SIMPLE: 'Simple' } as const;
+export type AnswerType = typeof ANSWER_TYPE[keyof typeof ANSWER_TYPE];
 
 export interface ListSubpoint {
   text: string;
@@ -76,7 +76,6 @@ export interface Answer {
   unitId: string;
   unitName: string;
   answerType: AnswerType;
-  status: AnswerStatus;
   answer: AnswerContent;
   createdAt: string;
   updatedAt: string;

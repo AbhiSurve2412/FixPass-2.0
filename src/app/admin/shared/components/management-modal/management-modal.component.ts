@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  MODAL_MODE,
   ModalField,
   ModalMode,
   SelectOption,
@@ -51,7 +52,8 @@ export class ManagementModalComponent {
     });
   }
 
-  readonly isReadOnly = computed(() => this.mode() === 'view');
+  readonly MM = MODAL_MODE;
+  readonly isReadOnly = computed(() => this.mode() === MODAL_MODE.VIEW);
 
   readonly isValid = computed(() => {
     const data = this.formData();

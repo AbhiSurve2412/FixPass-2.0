@@ -16,8 +16,10 @@ import {
 import { University, UniversityForm } from '../interfaces/university.interfaces';
 
 import {
+  GRID_ACTION,
   GridActionEvent,
   GridColumn,
+  MODAL_MODE,
   ModalField,
   ModalMode,
 } from '../../../shared/interfaces/admin-shared.interfaces';
@@ -55,7 +57,7 @@ export class UniversitiesPageComponent {
   readonly currentPage     = signal(1);
   readonly pageSize        = signal(10);
   readonly modalVisible    = signal(false);
-  readonly modalMode       = signal<ModalMode>('create');
+  readonly modalMode       = signal<ModalMode>(MODAL_MODE.CREATE);
   readonly selectedId      = signal<string | null>(null);
   readonly confirmVisible  = signal(false);
   readonly deleteTargetId  = signal<string | null>(null);
@@ -104,7 +106,7 @@ export class UniversitiesPageComponent {
 
   readonly modalInitialValues = computed<Record<string, string>>(() => {
     const id = this.selectedId();
-    if (!id || this.modalMode() === 'create') return {} as Record<string, string>;
+    if (!id || this.modalMode() === MODAL_MODE.CREATE) return {} as Record<string, string>;
     const item = this.universities().find(u => u.id === id);
     if (!item) return {} as Record<string, string>;
     return { name: item.name, description: item.description ?? '' };
@@ -112,8 +114,8 @@ export class UniversitiesPageComponent {
 
   readonly modalTitle = computed(() => {
     const mode = this.modalMode();
-    if (mode === 'create') return 'Add University';
-    if (mode === 'edit')   return 'Edit University';
+    if (mode === MODAL_MODE.CREATE) return 'Add University';
+    if (mode === MODAL_MODE.EDIT)   return 'Edit University';
     return 'View University';
   });
 
@@ -134,17 +136,17 @@ export class UniversitiesPageComponent {
 
   openCreate(): void {
     this.selectedId.set(null);
-    this.modalMode.set('create');
+    this.modalMode.set(MODAL_MODE.CREATE);
     this.modalVisible.set(true);
   }
 
   onGridAction(event: GridActionEvent): void {
     this.selectedId.set(event.id);
-    if (event.type === 'view') {
-      this.modalMode.set('view');
+    if (event.type === GRID_ACTION.VIEW) {
+      this.modalMode.set(MODAL_MODE.VIEW);
       this.modalVisible.set(true);
-    } else if (event.type === 'edit') {
-      this.modalMode.set('edit');
+    } else if (event.type === GRID_ACTION.EDIT) {
+      this.modalMode.set(MODAL_MODE.EDIT);
       this.modalVisible.set(true);
     } else {
       const item = this.universities().find(u => u.id === event.id);
@@ -162,9 +164,9 @@ export class UniversitiesPageComponent {
       description: formData['description'] ?? '',
     };
 
-    if (mode === 'create') {
+    if (mode === MODAL_MODE.CREATE) {
       this.store.dispatch(UniversityApiActions.createUniversity({ form }));
-    } else if (mode === 'edit' && id) {
+    } else if (mode === MODAL_MODE.EDIT && id) {
       const existing = this.universities().find(u => u.id === id)!;
       this.store.dispatch(
         UniversityApiActions.updateUniversity({

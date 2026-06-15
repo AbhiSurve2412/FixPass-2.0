@@ -13,10 +13,6 @@ export const AnswerApiActions = createActionGroup({
     'Save Answer Success': props<{ answer: Answer }>(),
     'Save Answer Failure': props<{ error: string }>(),
 
-    'Publish Answer': props<{ id: string }>(),
-    'Publish Answer Success': props<{ answer: Answer }>(),
-    'Publish Answer Failure': props<{ error: string }>(),
-
     'Delete Answer': props<{ id: string }>(),
     'Delete Answer Success': props<{ id: string }>(),
     'Delete Answer Failure': props<{ error: string }>(),

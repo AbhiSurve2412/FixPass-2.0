@@ -39,20 +39,6 @@ export class AnswerEffects {
     ),
   );
 
-  publishAnswer$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AnswerApiActions.publishAnswer),
-      mergeMap(({ id }) =>
-        this.answerService.publish(id).pipe(
-          map(answer => AnswerApiActions.publishAnswerSuccess({ answer })),
-          catchError((err: Error) =>
-            of(AnswerApiActions.publishAnswerFailure({ error: err?.message ?? 'Failed to publish answer' })),
-          ),
-        ),
-      ),
-    ),
-  );
-
   deleteAnswer$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AnswerApiActions.deleteAnswer),

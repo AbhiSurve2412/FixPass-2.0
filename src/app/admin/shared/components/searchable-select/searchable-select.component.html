@@ -10,9 +10,12 @@
     </svg>
   </button>
 
-  <!-- Dropdown panel -->
-  @if (isOpen()) {
-    <div class="ss__dropdown" role="listbox">
+  <!-- Dropdown panel — position:fixed so it escapes overflow:hidden modal containers -->
+  @if (isOpen() && dropdownPos()) {
+    <div class="ss__dropdown" role="listbox"
+         [style.top]="dropdownPos()!.top"
+         [style.left]="dropdownPos()!.left"
+         [style.width]="dropdownPos()!.width">
 
       <!-- Search input -->
       <div class="ss__search-wrap">

@@ -10,7 +10,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { AnswerBlock, AnswerContent, AnswerType } from '../../interfaces/answer.interfaces';
+import { ANSWER_TYPE, AnswerBlock, AnswerContent, AnswerType } from '../../interfaces/answer.interfaces';
 import { Question } from '../../../questions/interfaces/question.interfaces';
 import { AnswerPreviewComponent } from '../answer-preview/answer-preview.component';
 
@@ -40,7 +40,8 @@ export class AnswerWorkspaceComponent {
   readonly regenerate = output<RegenerateEvent>();
   readonly saveAnswer = output<AnswerContent>();
 
-  readonly activeAnswerType = signal<AnswerType>('Detailed');
+  readonly AT = ANSWER_TYPE;
+  readonly activeAnswerType = signal<AnswerType>(ANSWER_TYPE.DETAILED);
   readonly contentInstruction = signal('');
   readonly structureInstruction = signal('');
   readonly currentContent = signal<AnswerContent>({ content: [] });
@@ -52,7 +53,7 @@ export class AnswerWorkspaceComponent {
   constructor() {
     effect(() => {
       const answer =
-        this.activeAnswerType() === 'Detailed' ? this.detailedAnswer() : this.simpleAnswer();
+        this.activeAnswerType() === ANSWER_TYPE.DETAILED ? this.detailedAnswer() : this.simpleAnswer();
       this.currentContent.set(answer ?? { content: [] });
     });
   }
