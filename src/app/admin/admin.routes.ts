@@ -26,6 +26,9 @@ import { QuestionEffects } from './features/questions/store/effects/question.eff
 import { answerReducer } from './features/answers/store/reducers/answer.reducer';
 import { AnswerEffects } from './features/answers/store/effects/answer.effects';
 
+import { paperReducer } from './features/papers/store/reducers/paper.reducer';
+import { PaperEffects } from './features/papers/store/effects/paper.effects';
+
 export const adminRoutes: Routes = [
   {
     path: '',
@@ -45,6 +48,8 @@ export const adminRoutes: Routes = [
       provideEffects(QuestionEffects),
       provideState('answers', answerReducer),
       provideEffects(AnswerEffects),
+      provideState('papers', paperReducer),
+      provideEffects(PaperEffects),
       provideHttpClient(),
     ],
     children: [
@@ -95,6 +100,13 @@ export const adminRoutes: Routes = [
         loadComponent: () =>
           import('./features/answers/pages/answers.component').then(
             m => m.AnswersPageComponent,
+          ),
+      },
+      {
+        path: 'study-material/papers',
+        loadComponent: () =>
+          import('./features/papers/pages/papers.component').then(
+            m => m.PapersPageComponent,
           ),
       },
       {
