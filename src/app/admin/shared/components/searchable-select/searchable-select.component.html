@@ -1,0 +1,60 @@
+<div class="ss" [class.ss--open]="isOpen()" [class.ss--disabled]="disabled()">
+
+  <!-- Trigger button -->
+  <button type="button" class="ss__trigger" [disabled]="disabled()" (click)="toggle()">
+    <span class="ss__value" [class.ss__value--placeholder]="!selectedLabel()">
+      {{ selectedLabel() || placeholder() }}
+    </span>
+    <svg class="ss__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+
+  <!-- Dropdown panel -->
+  @if (isOpen()) {
+    <div class="ss__dropdown" role="listbox">
+
+      <!-- Search input -->
+      <div class="ss__search-wrap">
+        <svg class="ss__search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          class="ss__search"
+          type="text"
+          placeholder="Search…"
+          [value]="searchTerm()"
+          (input)="searchTerm.set($any($event.target).value)"
+          (click)="$event.stopPropagation()"
+          autofocus
+          aria-label="Search options"
+        />
+      </div>
+
+      <!-- Options list -->
+      <ul class="ss__list">
+        @if (!filtered().length) {
+          <li class="ss__no-results">No results found</li>
+        }
+        @for (opt of filtered(); track opt.value) {
+          <li
+            class="ss__option"
+            [class.ss__option--selected]="value() === opt.value.toString()"
+            role="option"
+            [attr.aria-selected]="value() === opt.value.toString()"
+            (click)="select(opt)"
+          >
+            <span class="ss__option-label">{{ opt.label }}</span>
+            @if (value() === opt.value.toString()) {
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+          </li>
+        }
+      </ul>
+
+    </div>
+  }
+
+</div>

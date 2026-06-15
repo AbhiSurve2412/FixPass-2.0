@@ -18,32 +18,34 @@
       <div class="ap__filters">
         <label class="ap__filter">
           <span class="ap__filter-label">Subject</span>
-          <select class="ap__select" [value]="selectedSubjectId() ?? ''" (change)="onSubjectChange($any($event.target).value)">
-            <option value="">Select subject…</option>
-            @for (s of subjects(); track s.id) {
-              <option [value]="s.id">{{ s.name }}</option>
-            }
-          </select>
+          <app-searchable-select
+            [options]="subjectOptions()"
+            [value]="selectedSubjectId() ?? ''"
+            placeholder="Select subject…"
+            (valueChange)="onSubjectChange($event)"
+          ></app-searchable-select>
         </label>
 
         <label class="ap__filter">
           <span class="ap__filter-label">Unit</span>
-          <select class="ap__select" [value]="selectedUnitId() ?? ''" [disabled]="!selectedSubjectId()" (change)="onUnitChange($any($event.target).value)">
-            <option value="">Select unit…</option>
-            @for (u of filteredUnits(); track u.id) {
-              <option [value]="u.id">{{ u.name }}</option>
-            }
-          </select>
+          <app-searchable-select
+            [options]="unitOptions()"
+            [value]="selectedUnitId() ?? ''"
+            placeholder="Select unit…"
+            [disabled]="!selectedSubjectId()"
+            (valueChange)="onUnitChange($event)"
+          ></app-searchable-select>
         </label>
 
         <label class="ap__filter">
           <span class="ap__filter-label">Question</span>
-          <select class="ap__select" [value]="selectedQuestionId() ?? ''" [disabled]="!selectedUnitId()" (change)="onQuestionChange($any($event.target).value)">
-            <option value="">Select question…</option>
-            @for (q of filteredQuestions(); track q.id) {
-              <option [value]="q.id">{{ q.text }}</option>
-            }
-          </select>
+          <app-searchable-select
+            [options]="questionOptions()"
+            [value]="selectedQuestionId() ?? ''"
+            placeholder="Select question…"
+            [disabled]="!selectedUnitId()"
+            (valueChange)="onQuestionChange($event)"
+          ></app-searchable-select>
         </label>
       </div>
 
@@ -120,3 +122,11 @@
     </div>
   </div>
 }
+
+<!-- ══ Delete confirmation ════════════════════════════════════════════════ -->
+<app-confirm-dialog
+  [visible]="!!pendingDeleteAnswer()"
+  [itemName]="pendingDeleteAnswer()?.questionText"
+  (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()"
+></app-confirm-dialog>

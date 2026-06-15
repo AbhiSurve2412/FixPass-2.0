@@ -81,25 +81,6 @@
     letter-spacing: 0.04em;
   }
 
-  &__select {
-    padding: $space-2 $space-3;
-    border: 0.0625rem solid var(--color-border);
-    border-radius: $radius-sm;
-    background-color: var(--color-surface);
-    color: var(--color-text-primary);
-    font-size: $font-size-sm;
-    cursor: pointer;
-    transition: $transition-fast;
-
-    &:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 $space-0-5 var(--color-primary-light);
-    }
-
-    &:disabled { opacity: 0.45; cursor: not-allowed; }
-  }
-
   &__actions {
     display: flex;
     flex-wrap: wrap;

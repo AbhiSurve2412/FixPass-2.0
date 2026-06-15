@@ -13,11 +13,12 @@ import {
   ModalMode,
   SelectOption,
 } from '../../interfaces/admin-shared.interfaces';
+import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-management-modal',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SearchableSelectComponent],
   templateUrl: './management-modal.component.html',
   styleUrl: './management-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

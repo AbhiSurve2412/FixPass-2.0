@@ -23,16 +23,24 @@ import { getQuestions } from '../../questions/store/selectors/question.selectors
 
 import { Question } from '../../questions/interfaces/question.interfaces';
 import { Answer, AnswerContent, AnswerType } from '../interfaces/answer.interfaces';
+import { SelectOption } from '../../../shared/interfaces/admin-shared.interfaces';
 import { AnswerWorkspaceComponent, RegenerateEvent } from '../components/answer-workspace/answer-workspace.component';
 import { AnswerGridComponent } from '../components/answer-grid/answer-grid.component';
 import { AnswerPreviewComponent } from '../components/answer-preview/answer-preview.component';
-import { FormsModule } from '@angular/forms';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { SearchableSelectComponent } from '../../../shared/components/searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-answers-page',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, AnswerWorkspaceComponent, AnswerGridComponent, AnswerPreviewComponent],
+  imports: [
+    AnswerWorkspaceComponent,
+    AnswerGridComponent,
+    AnswerPreviewComponent,
+    ConfirmDialogComponent,
+    SearchableSelectComponent,
+  ],
   templateUrl: './answers.component.html',
   styleUrl: './answers.component.scss',
 })
@@ -67,9 +75,23 @@ export class AnswersPageComponent {
     return id ? (this.questions().find(q => q.id === id) ?? null) : null;
   });
 
+  // Computed SelectOption arrays for searchable selects
+  readonly subjectOptions = computed<SelectOption[]>(() =>
+    this.subjects().map(s => ({ label: s.name, value: s.id }))
+  );
+
+  readonly unitOptions = computed<SelectOption[]>(() =>
+    this.filteredUnits().map(u => ({ label: u.name, value: u.id }))
+  );
+
+  readonly questionOptions = computed<SelectOption[]>(() =>
+    this.filteredQuestions().map(q => ({ label: q.text, value: q.id }))
+  );
+
   readonly showWorkspace = computed(() => this.selectedQuestion() !== null);
   readonly activeTab = signal<'generation' | 'saved'>('generation');
   readonly previewAnswer = signal<Answer | null>(null);
+  readonly pendingDeleteAnswer = signal<Answer | null>(null);
 
   private activeAnswerType: AnswerType = 'Detailed';
 
@@ -115,7 +137,6 @@ export class AnswersPageComponent {
     }
   }
 
-  // Called by workspace "Regenerate Answer" button
   onRegenerate(event: RegenerateEvent): void {
     const q = this.selectedQuestion();
     if (!q) return;
@@ -125,7 +146,6 @@ export class AnswersPageComponent {
       event.structureInstruction.trim().length > 0;
 
     if (hasInstructions && event.currentAnswer.content.length > 0) {
-      // Update existing answer with instructions
       this.store.dispatch(
         AnswerApiActions.updateAnswerContent({
           questionText: q.text,
@@ -135,7 +155,6 @@ export class AnswersPageComponent {
         }),
       );
     } else {
-      // Fresh generate for the active answer type
       if (this.activeAnswerType === 'Detailed') {
         this.store.dispatch(AnswerApiActions.generateDetailedAnswer({ questionText: q.text }));
       } else {
@@ -144,7 +163,6 @@ export class AnswersPageComponent {
     }
   }
 
-  // Called by workspace "Save / Update Answer" button
   onSaveAnswer(content: AnswerContent): void {
     const q = this.selectedQuestion();
     if (!q) return;
@@ -175,7 +193,20 @@ export class AnswersPageComponent {
     this.previewAnswer.set(null);
   }
 
+  // Delete with confirmation
   onDeleteAnswer(a: Answer): void {
-    this.store.dispatch(AnswerApiActions.deleteAnswer({ id: a.id }));
+    this.pendingDeleteAnswer.set(a);
+  }
+
+  onConfirmDelete(): void {
+    const a = this.pendingDeleteAnswer();
+    if (a) {
+      this.store.dispatch(AnswerApiActions.deleteAnswer({ id: a.id }));
+      this.pendingDeleteAnswer.set(null);
+    }
+  }
+
+  onCancelDelete(): void {
+    this.pendingDeleteAnswer.set(null);
   }
 }

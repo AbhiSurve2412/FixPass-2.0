@@ -40,22 +40,13 @@
                 (input)="setValue(field.key, $any($event.target).value)"
               ></textarea>
             } @else if (field.type === 'select') {
-              <select
-                class="modal__input modal__input--select"
-                [id]="field.key"
-                [name]="field.key"
-                [disabled]="isReadOnly()"
+              <app-searchable-select
+                [options]="field.options ?? []"
                 [value]="getValue(field.key)"
-                (change)="setValue(field.key, $any($event.target).value)"
-              >
-                <option value="">Select {{ field.label }}...</option>
-                @for (opt of field.options ?? []; track trackByOption($index, opt)) {
-                  <option
-                    [value]="opt.value"
-                    [selected]="getValue(field.key) === opt.value.toString()"
-                  >{{ opt.label }}</option>
-                }
-              </select>
+                [placeholder]="'Select ' + field.label + '…'"
+                [disabled]="isReadOnly()"
+                (valueChange)="setValue(field.key, $event)"
+              ></app-searchable-select>
             } @else {
               <input
                 class="modal__input"
