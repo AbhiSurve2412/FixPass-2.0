@@ -1,5 +1,11 @@
 import { Routes } from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
 import { HomeComponent } from './home/home.component';
+import { paperReducer } from './admin/features/study-material/papers/store/reducers/paper.reducer';
+import { PaperEffects } from './admin/features/study-material/papers/store/effects/paper.effects';
+import { branchReducer } from './admin/features/branches/store/reducers/branch.reducer';
+import { BranchEffects } from './admin/features/branches/store/effects/branch.effects';
 
 // ─────────────────────────────────────────────────────────────────
 // FixPass Route Configuration
@@ -19,7 +25,19 @@ export const routes: Routes = [
     redirectTo: 'study-material/previous-year-papers',
     pathMatch: 'full',
   },
-  { path: 'study-material/previous-year-papers',       component: HomeComponent }, // TBD
+  {
+    path: 'study-material/previous-year-papers',
+    loadComponent: () =>
+      import('./admin/features/study-material/papers/pages/papers.component').then(
+        m => m.PapersPageComponent,
+      ),
+    providers: [
+      provideState('papers', paperReducer),
+      provideEffects(PaperEffects),
+      provideState('branches', branchReducer),
+      provideEffects(BranchEffects),
+    ],
+  },
   { path: 'study-material/unit-wise-solved-questions', component: HomeComponent }, // TBD
   { path: 'study-material/smart-analysis',             component: HomeComponent }, // TBD
 

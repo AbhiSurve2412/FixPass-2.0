@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { SelectOption } from '../../../../shared/interfaces/admin-shared.interfaces';
+import { SelectOption } from '../../../../../shared/interfaces/admin-shared.interfaces';
 import { PaperState } from '../state/paper.state';
 
 // ── Feature root ──────────────────────────────────────────────────────────────

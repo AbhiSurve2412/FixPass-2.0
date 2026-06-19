@@ -1,0 +1,265 @@
+<div class="pyp">
+
+  <!-- ── Page Header ──────────────────────────────────────────────────────── -->
+  <header class="pyp__header">
+    <!-- decorative blobs -->
+    <div class="pyp__header-blob pyp__header-blob--1" aria-hidden="true"></div>
+    <div class="pyp__header-blob pyp__header-blob--2" aria-hidden="true"></div>
+
+    <div class="pyp__header-body">
+
+      <!-- Left: icon + text -->
+      <div class="pyp__header-left">
+        <div class="pyp__header-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+        </div>
+
+        <div class="pyp__header-text">
+          <div class="pyp__header-meta">
+            <span class="pyp__header-org">
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838l-2.727 1.17 1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zm5.99 7.176A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+              </svg>
+              SPPU — Savitribai Phule Pune University
+            </span>
+          </div>
+          <h1 class="pyp__title">Previous Year Papers</h1>
+          <p class="pyp__subtitle">Browse &amp; download end-sem and in-sem question papers</p>
+        </div>
+      </div>
+
+      <!-- Right: pattern pills -->
+      <div class="pyp__header-patterns">
+        <div class="pyp__pattern-pill pyp__pattern-pill--2019">
+          <span class="pyp__pattern-pill-dot"></span>
+          <span class="pyp__pattern-pill-label">2019 Pattern</span>
+        </div>
+        <div class="pyp__pattern-pill pyp__pattern-pill--2024">
+          <span class="pyp__pattern-pill-dot"></span>
+          <span class="pyp__pattern-pill-label">2024 Pattern</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ── Filter Bar ────────────────────────────────────────────────────────── -->
+  <section class="pyp__filters">
+    <div class="pyp__filter-row">
+
+      <div class="pyp__filter-group">
+        <label class="pyp__filter-label">
+          <svg class="pyp__filter-label-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+              clip-rule="evenodd" />
+          </svg>
+          University
+        </label>
+        <div class="pyp__university-field">
+          <span class="pyp__university-value">SPPU</span>
+          <span class="pyp__university-lock">Savitribai Phule Pune University</span>
+        </div>
+      </div>
+
+      <div class="pyp__filter-group">
+        <label class="pyp__filter-label">Branch</label>
+        <app-searchable-select
+          [options]="branchOptions()"
+          [value]="filters().branchName ?? ''"
+          placeholder="All Branches"
+          (valueChange)="onBranchChange($event)" />
+      </div>
+
+      <div class="pyp__filter-group">
+        <label class="pyp__filter-label">Year</label>
+        <app-searchable-select
+          [options]="academicYearOptions()"
+          [value]="filters().academicYear ?? ''"
+          placeholder="All Years"
+          (valueChange)="onYearChange($event)" />
+      </div>
+
+      <div class="pyp__filter-group">
+        <label class="pyp__filter-label">Pattern</label>
+        <app-searchable-select
+          [options]="patternOptions"
+          [value]="filters().pattern ?? ''"
+          placeholder="All Patterns"
+          (valueChange)="onPatternChange($event)" />
+      </div>
+
+      <div class="pyp__filter-group pyp__filter-group--wide">
+        <label class="pyp__filter-label">Subject</label>
+        <app-searchable-select
+          [options]="subjectOptions()"
+          [value]="filters().subjectName ?? ''"
+          placeholder="All Subjects"
+          (valueChange)="onSubjectChange($event)" />
+      </div>
+
+      <div class="pyp__filter-group pyp__filter-group--action">
+        <label class="pyp__filter-label">&nbsp;</label>
+        <button class="pyp__clear-btn" type="button" (click)="onClearFilters()">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+          Clear
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Results Bar ────────────────────────────────────────────────────────── -->
+  @if (!loading()) {
+    <div class="pyp__results-bar">
+      <span class="pyp__results-count">
+        <strong>{{ filteredPapers().length }}</strong>
+        {{ filteredPapers().length === 1 ? 'paper' : 'papers' }} found
+      </span>
+    </div>
+  }
+
+  <!-- ── Error State ────────────────────────────────────────────────────────── -->
+  @if (error()) {
+    <div class="pyp__error">
+      <svg viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+          clip-rule="evenodd" />
+      </svg>
+      <p>{{ error() }}</p>
+    </div>
+  }
+
+  <!-- ── Content ────────────────────────────────────────────────────────────── -->
+  <main class="pyp__content">
+
+    <!-- Skeleton -->
+    @if (loading()) {
+      <div class="pyp__list">
+        @for (item of skeletonItems; track $index) {
+          <div class="pyp__skeleton-row">
+            <div class="pyp__skeleton-icon"></div>
+            <div class="pyp__skeleton-body">
+              <div class="pyp__skeleton-line"></div>
+              <div class="pyp__skeleton-line pyp__skeleton-line--short"></div>
+            </div>
+            <div class="pyp__skeleton-actions">
+              <div class="pyp__skeleton-btn"></div>
+              <div class="pyp__skeleton-btn"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Paper list -->
+    @if (!loading() && filteredPapers().length > 0) {
+      <div class="pyp__list">
+        @for (paper of filteredPapers(); track paper.id) {
+
+          <div class="pyp__paper"
+            [class.pyp__paper--2019]="paper.pattern === PP.P2019"
+            [class.pyp__paper--2024]="paper.pattern === PP.P2024">
+
+            <!-- Document icon -->
+            <div class="pyp__paper-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </div>
+
+            <!-- Paper info -->
+            <div class="pyp__paper-info">
+              <div class="pyp__paper-top">
+                <h3 class="pyp__paper-name">{{ paper.subjectName }}</h3>
+                <div class="pyp__paper-badges">
+                  <span class="pyp__badge pyp__badge--pattern">{{ paper.pattern }} Pattern</span>
+                  <span class="pyp__badge pyp__badge--sem">Sem {{ paper.semester }}</span>
+                </div>
+              </div>
+              <div class="pyp__paper-meta">
+                <code class="pyp__paper-code">{{ paper.subjectCode }}</code>
+                <span class="pyp__dot"></span>
+                <span class="pyp__paper-meta-item">{{ paper.academicYear }}</span>
+                <span class="pyp__dot"></span>
+                <span class="pyp__paper-meta-item">{{ paper.branchName }}</span>
+                <span class="pyp__dot"></span>
+                <span class="pyp__paper-meta-item pyp__paper-date">
+                  <svg viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M3.5 0a.5.5 0 01.5.5V1h8V.5a.5.5 0 011 0V1h1a2 2 0 012 2v11a2 2 0 01-2 2H2a2 2 0 01-2-2V3a2 2 0 012-2h1V.5a.5.5 0 01.5-.5zM2 2a1 1 0 00-1 1v1h14V3a1 1 0 00-1-1H2zm13 3H1v9a1 1 0 001 1h12a1 1 0 001-1V5z" />
+                  </svg>
+                  {{ paper.examMonth }} {{ paper.examYear }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="pyp__paper-actions">
+              <button
+                class="pyp__action-btn pyp__action-btn--view"
+                type="button"
+                [disabled]="!paper.fileUrl"
+                title="View paper"
+                (click)="paper.fileUrl && openPaper(paper)">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd" />
+                </svg>
+                View
+              </button>
+              <button
+                class="pyp__action-btn pyp__action-btn--download"
+                type="button"
+                [disabled]="!paper.fileUrl"
+                title="Download PDF"
+                (click)="paper.fileUrl && downloadPaper(paper, $event)">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+                Download
+              </button>
+            </div>
+
+          </div>
+
+        }
+      </div>
+    }
+
+    <!-- Empty state -->
+    @if (!loading() && filteredPapers().length === 0 && !error()) {
+      <div class="pyp__empty">
+        <div class="pyp__empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+        </div>
+        <h3 class="pyp__empty-title">No papers found</h3>
+        <p class="pyp__empty-desc">Try adjusting your filters or clear them to browse all available papers.</p>
+        <button class="pyp__clear-btn" type="button" (click)="onClearFilters()">
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+          Clear All Filters
+        </button>
+      </div>
+    }
+
+  </main>
+</div>

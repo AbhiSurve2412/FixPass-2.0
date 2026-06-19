@@ -1,4 +1,4 @@
-import { AcademicYear, Semester } from '../../../shared/interfaces/admin-shared.interfaces';
+import { AcademicYear, Semester } from '../../../../shared/interfaces/admin-shared.interfaces';
 
 export const PAPER_PATTERN = { P2019: '2019', P2024: '2024' } as const;
 export type PaperPattern = typeof PAPER_PATTERN[keyof typeof PAPER_PATTERN];

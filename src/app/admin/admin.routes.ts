@@ -26,8 +26,8 @@ import { QuestionEffects } from './features/questions/store/effects/question.eff
 import { answerReducer } from './features/answers/store/reducers/answer.reducer';
 import { AnswerEffects } from './features/answers/store/effects/answer.effects';
 
-import { paperReducer } from './features/papers/store/reducers/paper.reducer';
-import { PaperEffects } from './features/papers/store/effects/paper.effects';
+import { paperReducer } from './features/study-material/papers/store/reducers/paper.reducer';
+import { PaperEffects } from './features/study-material/papers/store/effects/paper.effects';
 
 export const adminRoutes: Routes = [
   {
@@ -105,7 +105,7 @@ export const adminRoutes: Routes = [
       {
         path: 'study-material/papers',
         loadComponent: () =>
-          import('./features/papers/pages/papers.component').then(
+          import('./features/study-material/papers/pages/papers.component').then(
             m => m.PapersPageComponent,
           ),
       },

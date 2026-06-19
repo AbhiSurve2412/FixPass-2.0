@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { AcademicYear, SelectOption } from '../../../shared/interfaces/admin-shared.interfaces';
+import { AcademicYear, SelectOption } from '../../../../shared/interfaces/admin-shared.interfaces';
 import { PAPER_PATTERN, PaperPattern, PreviousYearPaper } from '../interfaces/paper.interfaces';
 import { PaperApiActions } from '../store/actions/paper.actions';
 import {
@@ -12,10 +12,10 @@ import {
   getPapersLoading,
 } from '../store/selectors/paper.selectors';
 
-import { BranchApiActions } from '../../branches/store/actions/branch.actions';
-import { getBranches } from '../../branches/store/selectors/branch.selectors';
+import { BranchApiActions } from '../../../branches/store/actions/branch.actions';
+import { getBranches } from '../../../branches/store/selectors/branch.selectors';
 
-import { SearchableSelectComponent } from '../../../shared/components/searchable-select/searchable-select.component';
+import { SearchableSelectComponent } from '../../../../shared/components/searchable-select/searchable-select.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -41,6 +41,7 @@ export class PapersPageComponent {
   );
 
   readonly PAPER_PATTERN = PAPER_PATTERN;
+  readonly PP = PAPER_PATTERN;
   readonly ACADEMIC_YEARS: AcademicYear[] = ['FE', 'SE', 'TE', 'BE'];
 
   readonly academicYearOptions = computed<SelectOption[]>(() =>

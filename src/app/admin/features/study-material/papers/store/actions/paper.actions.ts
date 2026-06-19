@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { AcademicYear } from '../../../../shared/interfaces/admin-shared.interfaces';
+import { AcademicYear } from '../../../../../shared/interfaces/admin-shared.interfaces';
 import { PaperPattern, PreviousYearPaper } from '../../interfaces/paper.interfaces';
 
 export const PaperApiActions = createActionGroup({
