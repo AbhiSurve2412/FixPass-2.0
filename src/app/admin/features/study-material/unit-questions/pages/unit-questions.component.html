@@ -1,0 +1,457 @@
+<div class="uq">
+
+  <!-- ══════════════════════════════════════════════════ TOP BAR -->
+  <header class="uq__topbar">
+    <span class="uq__topbar-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+      </svg>
+      Unit Wise Solved Questions
+    </span>
+
+    <span class="uq__pill">SPPU</span>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════ LAYOUT -->
+  <div class="uq__layout">
+
+    <!-- ────────────────────────────────── SIDEBAR -->
+    <aside class="uq__sidebar" [class.uq__sidebar--collapsed]="sidebarCollapsed()">
+
+      <!-- Sidebar header: always visible, not scrollable -->
+      <div class="uq__sb-head">
+        @if (!sidebarCollapsed()) {
+          <span class="uq__sb-head-label">Subjects</span>
+        }
+        <button class="uq__sb-collapse-btn"
+                (click)="toggleSidebar()"
+                [title]="sidebarCollapsed() ? 'Expand panel' : 'Collapse panel'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               [style.transform]="sidebarCollapsed() ? 'rotate(180deg)' : 'none'"
+               style="transition: transform 0.22s ease">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="uq__sb-inner">
+
+        @for (group of subjectsByYear(); track group.year) {
+          <div class="uq__sb-group">
+
+            <div class="uq__sb-year-row">
+              <span class="uq__sb-year-tag uq__sb-year-tag--{{ group.year }}">{{ group.year }}</span>
+              @if (!sidebarCollapsed()) {
+                <span class="uq__sb-year-label">{{ group.label }}</span>
+              }
+            </div>
+
+            @for (subject of group.subjects; track subject.id) {
+              <div class="uq__sb-item-wrap">
+
+                <button
+                  class="uq__sb-item"
+                  [class.uq__sb-item--active]="selectedSubject()?.id === subject.id"
+                  (click)="selectSubject(subject)"
+                  [title]="sidebarCollapsed() ? subject.name : ''">
+                  <span class="uq__sb-code uq__sb-code--{{ subject.year }}">{{ subject.code }}</span>
+                  @if (!sidebarCollapsed()) {
+                    <span class="uq__sb-name">{{ subject.name }}</span>
+                    <button
+                      class="uq__sb-info-btn"
+                      [class.uq__sb-info-btn--on]="infoSubjectId() === subject.id"
+                      (click)="toggleSubjectInfo(subject.id, $event)"
+                      title="Subject details">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                      </svg>
+                    </button>
+                  }
+                </button>
+
+                @if (!sidebarCollapsed() && infoSubjectId() === subject.id) {
+                  <div class="uq__sb-info-panel">
+                    <div class="uq__sb-info-row">
+                      <span class="uq__sb-info-lbl">Code</span>
+                      <span class="uq__sb-info-val">{{ subject.code }}</span>
+                    </div>
+                    <div class="uq__sb-info-row">
+                      <span class="uq__sb-info-lbl">Year</span>
+                      <span class="uq__sb-info-val">{{ YEAR_LABELS[subject.year] }}</span>
+                    </div>
+                    <div class="uq__sb-info-row">
+                      <span class="uq__sb-info-lbl">Semester</span>
+                      <span class="uq__sb-info-val">{{ subject.semester }}</span>
+                    </div>
+                    @if (subject.description) {
+                      <p class="uq__sb-info-desc">{{ subject.description }}</p>
+                    }
+                  </div>
+                }
+
+              </div>
+            }
+          </div>
+        }
+
+        @if (subjectsByYear().length === 0 && !sidebarCollapsed()) {
+          <div class="uq__sb-empty">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+            </svg>
+            <p>No subjects yet.</p>
+          </div>
+        }
+
+      </div>
+    </aside>
+
+    <!-- ────────────────────────────────── CONTENT -->
+    <main class="uq__content">
+
+      @if (!selectedSubject()) {
+
+        <!-- Welcome state -->
+        <div class="uq__welcome">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+          </svg>
+          <h2 class="uq__welcome-title">Select a Subject</h2>
+          <p class="uq__welcome-sub">Choose a subject from the left panel to browse unit-wise questions and answers.</p>
+        </div>
+
+      } @else {
+
+        <!-- Unit tabs -->
+        <div class="uq__unit-tabs-wrap">
+          <div class="uq__unit-tabs" role="tablist" aria-label="Units">
+            @for (unit of filteredUnits(); track unit.id; let i = $index) {
+              <div class="uq__utab-group">
+                <button
+                  role="tab"
+                  class="uq__utab"
+                  [class.uq__utab--active]="selectedUnit()?.id === unit.id"
+                  [attr.aria-selected]="selectedUnit()?.id === unit.id"
+                  (click)="selectUnit(unit)">
+                  <span class="uq__utab-num">U{{ i + 1 }}</span>
+                  <span class="uq__utab-name">{{ unit.name }}</span>
+                </button>
+                <button
+                  class="uq__utab-info"
+                  [class.uq__utab-info--on]="infoUnitId() === unit.id"
+                  (click)="toggleUnitInfo(unit.id, $event)"
+                  title="Unit details">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                </button>
+              </div>
+            }
+
+            @if (filteredUnits().length === 0) {
+              <span class="uq__utabs-empty">No units for this subject.</span>
+            }
+          </div>
+        </div>
+
+        <!-- Unit info strip -->
+        @if (infoUnitId(); as uid) {
+          @if (getUnitById(uid); as u) {
+            <div class="uq__unit-info-strip">
+              <strong class="uq__unit-info-name">{{ u.name }}</strong>
+              @if (u.difficulty) {
+                <span class="uq__diff uq__diff--{{ u.difficulty.toLowerCase() }}">{{ u.difficulty }}</span>
+              }
+              <span class="uq__unit-info-qc">{{ getQCount(u.id) }} questions</span>
+              @if (u.description) {
+                <span class="uq__unit-info-sep" aria-hidden="true">·</span>
+                <span class="uq__unit-info-desc">{{ u.description }}</span>
+              }
+            </div>
+          }
+        }
+
+        @if (selectedUnit()) {
+
+          <!-- Filter row -->
+          <div class="uq__filter-row">
+            <button
+              class="uq__fchip"
+              [class.uq__fchip--on]="filterImportant()"
+              (click)="filterImportant.set(!filterImportant())">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              Important
+            </button>
+            @for (t of QUESTION_TYPES; track t.value) {
+              <button
+                class="uq__type-pill"
+                [class.uq__type-pill--active]="filterType() === t.value"
+                (click)="filterType.set(filterType() === t.value ? '' : t.value)">
+                {{ t.label }}
+              </button>
+            }
+            <span class="uq__filter-count">{{ filteredQuestions().length }}&nbsp;Q</span>
+          </div>
+
+          <!-- Questions -->
+          <div class="uq__qlist-wrap">
+            <div class="uq__qlist">
+
+              @if (loading()) {
+                @for (n of [1, 2, 3]; track n) {
+                  <div class="uq__qskeleton">
+                    <div class="uq__qsk-left">
+                      <div class="uq__qsk-line uq__qsk-line--short"></div>
+                      <div class="uq__qsk-line"></div>
+                    </div>
+                    <div class="uq__qsk-right"></div>
+                  </div>
+                }
+              }
+
+              @for (q of filteredQuestions(); track q.id; let i = $index) {
+                <div class="uq__qcard uq__qcard--{{ q.difficulty.toLowerCase() }}"
+                     [class.uq__qcard--open]="expandedId() === q.id">
+
+                  <!-- Q1) Question text … Marks -->
+                  <div class="uq__qrow" (click)="toggleQuestion(q.id)">
+                    <span class="uq__qnum">Q{{ i + 1 }})</span>
+                    <span class="uq__qtext">{{ q.text }}</span>
+                    <span class="uq__qmarks">{{ q.marks }}&nbsp;Marks</span>
+                  </div>
+
+                  <!-- Action buttons on the question card -->
+                  <div class="uq__qcard-actions">
+                    <button
+                      class="uq__act-btn"
+                      [class.uq__act-btn--active]="expandedId() === q.id && getTab(q.id) === 'detailed'"
+                      (click)="setTab(q.id, 'detailed', $event)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                      </svg>
+                      Full Answer
+                    </button>
+                    <button
+                      class="uq__act-btn"
+                      [class.uq__act-btn--active]="expandedId() === q.id && getTab(q.id) === 'simple'"
+                      (click)="setTab(q.id, 'simple', $event)">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+                        <line x1="8" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
+                        <line x1="3" y1="18" x2="3.01" y2="18"/>
+                      </svg>
+                      Simple Answer
+                    </button>
+                    @if (q.videoUrl) {
+                      <button class="uq__act-btn uq__act-btn--yt" (click)="openVideo(q.videoUrl, $event)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+                        </svg>
+                        Watch on YouTube
+                      </button>
+                    }
+                  </div>
+
+                  <!-- Expanded answer panel — no tabs, content driven by button selection -->
+                  @if (expandedId() === q.id) {
+                    <div class="uq__panel">
+
+                      @if (q.askedIn.length > 0) {
+                        <div class="uq__pyq-sessions">
+                          @for (ask of q.askedIn; track ask.year + ask.season) {
+                            <span class="uq__pyq-session">{{ ask.year }} {{ ask.season }} · {{ ask.paperCode }}</span>
+                          }
+                        </div>
+                      }
+
+                      <!-- Simple answer -->
+                      @if (getTab(q.id) === 'simple') {
+                        <div class="uq__answer-body">
+                          @if (q.simpleAnswer) {
+                            <p class="uq__ans-plain">{{ q.simpleAnswer }}</p>
+                          } @else if (getRichAnswer(q.id, 'Simple'); as sa) {
+                            <div class="uq__blocks">
+                              @for (block of blocksOf(sa); track $index) {
+                                @switch (block.type) {
+                                  @case ('header')    { <h3 class="uq__bk-h">{{ cast(block).data }}</h3> }
+                                  @case ('subHeader') { <h4 class="uq__bk-sh">{{ cast(block).data }}</h4> }
+                                  @case ('text')      { <p class="uq__bk-p">{{ cast(block).data }}</p> }
+                                  @case ('content')   { <p class="uq__bk-p">{{ cast(block).data }}</p> }
+                                  @case ('Ulist') {
+                                    <ul class="uq__bk-list">
+                                      @for (item of cast(block).dataObject.items; track $index) {
+                                        <li>{{ item.text }}</li>
+                                      }
+                                    </ul>
+                                  }
+                                  @case ('Olist') {
+                                    <ol class="uq__bk-list uq__bk-list--ol">
+                                      @for (item of cast(block).dataObject.items; track $index) {
+                                        <li>{{ item.text }}</li>
+                                      }
+                                    </ol>
+                                  }
+                                }
+                              }
+                            </div>
+                          } @else {
+                            <p class="uq__ans-empty">No simple answer added yet.</p>
+                          }
+                        </div>
+                      }
+
+                      <!-- Full / detailed answer -->
+                      @if (getTab(q.id) === 'detailed') {
+                        <div class="uq__answer-body">
+                          @if (getRichAnswer(q.id, 'Detailed'); as da) {
+                            <div class="uq__blocks">
+                              @for (block of blocksOf(da); track $index) {
+                                @switch (block.type) {
+                                  @case ('header')    { <h3 class="uq__bk-h">{{ cast(block).data }}</h3> }
+                                  @case ('subHeader') { <h4 class="uq__bk-sh">{{ cast(block).data }}</h4> }
+                                  @case ('text')      { <p class="uq__bk-p">{{ cast(block).data }}</p> }
+                                  @case ('content')   { <p class="uq__bk-p">{{ cast(block).data }}</p> }
+                                  @case ('Ulist') {
+                                    <ul class="uq__bk-list">
+                                      @for (item of cast(block).dataObject.items; track $index) {
+                                        <li>
+                                          {{ item.text }}
+                                          @if (cast(item).subpointsObject?.subpoints?.length) {
+                                            <ul>
+                                              @for (sp of cast(item).subpointsObject.subpoints; track $index) {
+                                                <li>{{ sp.text }}</li>
+                                              }
+                                            </ul>
+                                          }
+                                        </li>
+                                      }
+                                    </ul>
+                                  }
+                                  @case ('Olist') {
+                                    <ol class="uq__bk-list uq__bk-list--ol">
+                                      @for (item of cast(block).dataObject.items; track $index) {
+                                        <li>{{ item.text }}</li>
+                                      }
+                                    </ol>
+                                  }
+                                  @case ('table') {
+                                    <div class="uq__bk-table-wrap">
+                                      <table class="uq__bk-table">
+                                        <thead>
+                                          <tr>
+                                            @for (h of cast(block).dataObject.headers; track h) {
+                                              <th>{{ h }}</th>
+                                            }
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          @for (row of cast(block).dataObject.rows; track $index) {
+                                            <tr>
+                                              @for (h of cast(block).dataObject.headers; track h) {
+                                                <td>{{ row[h] }}</td>
+                                              }
+                                            </tr>
+                                          }
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  }
+                                  @case ('sqlCode') {
+                                    <pre class="uq__bk-code"><code>{{ cast(block).data }}</code></pre>
+                                  }
+                                  @case ('diagram') {
+                                    <figure class="uq__bk-diagram">
+                                      <img [src]="cast(block).data.url" [alt]="cast(block).data.description" />
+                                      @if (cast(block).data.description) {
+                                        <figcaption>{{ cast(block).data.description }}</figcaption>
+                                      }
+                                    </figure>
+                                  }
+                                }
+                              }
+                            </div>
+                          } @else if (q.detailedAnswer) {
+                            <p class="uq__ans-plain">{{ q.detailedAnswer }}</p>
+                          } @else {
+                            <p class="uq__ans-empty">No detailed answer added yet.</p>
+                          }
+                        </div>
+                      }
+
+                    </div>
+                  }
+
+                </div>
+              }
+
+              @if (!loading() && filteredQuestions().length === 0) {
+                <div class="uq__empty-state">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <p>No questions match the current filters.</p>
+                  <button class="uq__clear-btn" (click)="clearFilters()">Clear filters</button>
+                </div>
+              }
+
+            </div>
+          </div>
+
+        } @else if (filteredUnits().length > 0) {
+          <div class="uq__no-unit">
+            <p>Select a unit above to view questions.</p>
+          </div>
+        }
+
+      }
+
+    </main>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ VIDEO MODAL -->
+  @if (activeVideoId()) {
+    <div class="uq__video-overlay"
+         (click)="closeVideo()"
+         (keydown.escape)="closeVideo()"
+         tabindex="-1"
+         role="dialog"
+         aria-modal="true"
+         aria-label="YouTube video player">
+
+      <div class="uq__video-modal" (click)="$event.stopPropagation()">
+
+        <button class="uq__video-close" (click)="closeVideo()" title="Close video">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+
+        <div class="uq__video-wrap">
+          <iframe
+            [src]="safeVideoUrl()"
+            frameborder="0"
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowfullscreen
+            title="YouTube video">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

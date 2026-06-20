@@ -11,11 +11,12 @@
   width: 100%;
   background-color: var(--color-bg);
 
-  // Admin occupies a fixed viewport-height minus the navbar so the page
-  // never scrolls — only the grid body scrolls internally.
-  &--admin {
+  // Admin and study-material routes occupy exactly the viewport below the
+  // navbar — no outer scroll; inner components manage their own overflow.
+  &--admin,
+  &--study {
     flex: none;
-    height: calc(100vh - #{$space-14}); // $space-14 = 3.5rem = navbar height
+    height: calc(100dvh - #{$space-14}); // $space-14 = 3.5rem = navbar height
     overflow: hidden;
     display: flex;
     flex-direction: column;

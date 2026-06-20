@@ -57,13 +57,13 @@
   flex-shrink: 0;
 
   .footer__logo-bg     { fill: var(--color-primary); }
-  .footer__logo-letter { fill: #ffffff; }
+  .footer__logo-letter { fill: var(--color-text-inverse); }
 }
 
 .footer__wordmark {
   font-size: $font-size-lg;
   font-weight: $font-weight-bold;
-  color: #ffffff;
+  color: var(--color-text-inverse);
   letter-spacing: -0.025em;
 }
 
@@ -104,7 +104,7 @@
   width: fit-content;
 
   &:hover {
-    color: #ffffff;
+    color: var(--color-text-inverse);
   }
 }
 

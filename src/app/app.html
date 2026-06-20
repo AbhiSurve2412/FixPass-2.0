@@ -1,9 +1,11 @@
 <app-navbar />
 
-<main class="app-main" [class.app-main--admin]="isAdminRoute()">
+<main class="app-main"
+      [class.app-main--admin]="isAdminRoute()"
+      [class.app-main--study]="isStudyMaterialRoute()">
   <router-outlet />
 </main>
 
-@if (!isAdminRoute()) {
+@if (!isAdminRoute() && !isStudyMaterialRoute()) {
   <app-footer />
 }

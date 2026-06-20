@@ -13,14 +13,17 @@ import { filter } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected readonly isAdminRoute = signal(false);
+  protected readonly isAdminRoute         = signal(false);
+  protected readonly isStudyMaterialRoute = signal(false);
 
   constructor() {
     const router = inject(Router);
     router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(e => {
-        this.isAdminRoute.set((e as NavigationEnd).urlAfterRedirects.startsWith('/admin'));
+        const url = (e as NavigationEnd).urlAfterRedirects;
+        this.isAdminRoute.set(url.startsWith('/admin'));
+        this.isStudyMaterialRoute.set(url.startsWith('/study-material'));
       });
   }
 }

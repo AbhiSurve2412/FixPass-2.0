@@ -128,14 +128,14 @@
     &--primary {
       background: var(--color-primary);
       border-color: var(--color-primary);
-      color: #fff;
+      color: var(--color-text-inverse);
       &:hover:not(:disabled) { background: var(--color-primary-hover); }
     }
 
     &--success {
       background: var(--color-success);
       border-color: var(--color-success);
-      color: #fff;
+      color: var(--color-text-inverse);
       &:hover:not(:disabled) { filter: brightness(0.94); }
     }
 
@@ -150,7 +150,7 @@
     width: 0.875rem;
     height: 0.875rem;
     border: 0.125rem solid rgba(255,255,255,0.35);
-    border-top-color: #fff;
+    border-top-color: var(--color-text-inverse);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
     flex-shrink: 0;

@@ -6,6 +6,8 @@ import { paperReducer } from './admin/features/study-material/papers/store/reduc
 import { PaperEffects } from './admin/features/study-material/papers/store/effects/paper.effects';
 import { branchReducer } from './admin/features/branches/store/reducers/branch.reducer';
 import { BranchEffects } from './admin/features/branches/store/effects/branch.effects';
+import { unitQuestionsReducer } from './admin/features/study-material/unit-questions/store/reducers/unit-questions.reducer';
+import { UnitQuestionsEffects } from './admin/features/study-material/unit-questions/store/effects/unit-questions.effects';
 
 // ─────────────────────────────────────────────────────────────────
 // FixPass Route Configuration
@@ -38,7 +40,17 @@ export const routes: Routes = [
       provideEffects(BranchEffects),
     ],
   },
-  { path: 'study-material/unit-wise-solved-questions', component: HomeComponent }, // TBD
+  {
+    path: 'study-material/unit-wise-solved-questions',
+    loadComponent: () =>
+      import('./admin/features/study-material/unit-questions/pages/unit-questions.component').then(
+        m => m.UnitQuestionsPageComponent,
+      ),
+    providers: [
+      provideState('unitQuestions', unitQuestionsReducer),
+      provideEffects(UnitQuestionsEffects),
+    ],
+  },
   { path: 'study-material/smart-analysis',             component: HomeComponent }, // TBD
 
   // ── Live Routes (pages TBD) ───────────────────────────────────

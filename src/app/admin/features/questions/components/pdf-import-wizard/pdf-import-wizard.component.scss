@@ -12,10 +12,10 @@ $space-2-5: 0.625rem;
 }
 @keyframes orb-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3); }
-  50%       { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+  50%       { box-shadow: 0 0 0 0.75rem rgba(37, 99, 235, 0); }
 }
 @keyframes proc-step-in {
-  from { opacity: 0; transform: translateX(-6px); }
+  from { opacity: 0; transform: translateX(-0.375rem); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
@@ -558,7 +558,7 @@ $space-2-5: 0.625rem;
     border: $space-px solid var(--color-border);
     padding: $space-1 $space-2-5;
     border-radius: $radius-full;
-    max-width: 200px;
+    max-width: 12.5rem;
     @include text-truncate;
   }
 
@@ -574,7 +574,7 @@ $space-2-5: 0.625rem;
 
   // ── Sidenav ────────────────────────────────────────────────────────────────
   &__sidenav {
-    width: 220px;
+    width: 13.75rem;
     flex-shrink: 0;
     border-right: $space-px solid var(--color-border);
     display: flex;
@@ -643,8 +643,8 @@ $space-2-5: 0.625rem;
   }
 
   &__navitem-dot {
-    width: 7px;
-    height: 7px;
+    width: 0.4375rem;
+    height: 0.4375rem;
     border-radius: $radius-full;
     background-color: var(--color-border-strong);
     flex-shrink: 0;
@@ -770,7 +770,7 @@ $space-2-5: 0.625rem;
     border: $space-px solid var(--color-border);
     border-radius: $radius-xl;
     flex: 1;
-    min-width: 90px;
+    min-width: 5.625rem;
 
     &--accent { border-top: 2px solid var(--color-primary); }
     &--warn   { border-top: 2px solid var(--color-warning); }
@@ -858,7 +858,7 @@ $space-2-5: 0.625rem;
     @include input-base;
     font-size: $font-size-xs;
     padding: $space-1-5 $space-3;
-    min-width: 150px;
+    min-width: 9.375rem;
     cursor: pointer;
   }
 
@@ -931,10 +931,10 @@ $space-2-5: 0.625rem;
     flex-shrink: 0;
 
     &--mcq          { background: $color-primary; color: white; }
-    &--long-answer  { background: #dbeafe; color: #1e40af; }
-    &--short-note   { background: #d1fae5; color: #065f46; }
-    &--numerical    { background: #fed7aa; color: #92400e; }
-    &--definition   { background: #e0f2fe; color: #0c4a6e; }
+    &--long-answer  { background: $color-primary-light;  color: $color-primary-active; }
+    &--short-note   { background: $color-success-light;  color: $color-success-hover;  }
+    &--numerical    { background: $color-warning-light;  color: $color-warning-hover;  }
+    &--definition   { background: $color-info-light;     color: $color-info;           }
   }
 
   &__qcard-marks {
@@ -998,7 +998,7 @@ $space-2-5: 0.625rem;
     flex-direction: column;
     gap: $space-1;
 
-    &--sm { width: 72px; }
+    &--sm { width: 4.5rem; }
   }
 
   &__qcard-mlabel {

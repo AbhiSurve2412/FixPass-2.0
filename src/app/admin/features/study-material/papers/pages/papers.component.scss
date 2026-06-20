@@ -1,5 +1,35 @@
 @use 'styles/variables' as *;
 
+// ── Feature palette ───────────────────────────────────────────────────────────
+$pyp-grad:              linear-gradient(135deg, #1e3a8a 0%, $color-primary-active 40%, #4338ca 100%);
+
+// Pattern pill colours (shown on dark gradient header)
+$pyp-green-text:        #6ee7b7;            // emerald-300 on dark bg
+$pyp-green-dot:         $color-success;     // #10b981
+$pyp-violet-text:       #c4b5fd;            // violet-300 on dark bg
+$pyp-violet-dot:        #a78bfa;            // violet-400
+$pyp-violet:            #7c3aed;            // violet-600
+$pyp-violet-light:      #f5f3ff;            // violet-50
+$pyp-violet-mid:        #ede9fe;            // violet-100
+$pyp-violet-900:        #4c1d95;
+$pyp-violet-border:     #c4b5fd;            // violet-300
+
+// Semantic badge colours (2019 pattern — emerald green)
+$pyp-badge-green-text:  #065f46;
+$pyp-badge-green-border: #6ee7b7;
+
+// Action button palette
+$pyp-btn-view-bg:           $color-info-light;      // #eff6ff
+$pyp-btn-view-border:       #bfdbfe;                // blue-200
+$pyp-btn-view-text:         $color-primary-active;  // #1e40af
+$pyp-btn-view-hover-bg:     $color-primary-light;   // #dbeafe
+$pyp-btn-view-hover-border: #93c5fd;                // blue-300
+$pyp-btn-dl-bg:             #f0fdf4;                // green-50
+$pyp-btn-dl-border:         #bbf7d0;                // green-200
+$pyp-btn-dl-text:           #166534;                // green-800
+$pyp-btn-dl-hover-bg:       #dcfce7;                // green-100
+$pyp-btn-dl-hover-border:   #86efac;                // green-300
+
 // ── Host ───────────────────────────────────────────────────────────────────────
 :host {
   display: flex;
@@ -25,7 +55,7 @@
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #4338ca 100%);
+    background: $pyp-grad;
     padding: $space-6 $space-6;
     border-bottom: none;
   }
@@ -79,8 +109,8 @@
     border-radius: $radius-lg;
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #fff;
-    backdrop-filter: blur(4px);
+    color: var(--color-text-inverse);
+    backdrop-filter: blur(0.25rem);
 
     svg { width: 1.5rem; height: 1.5rem; }
   }
@@ -115,7 +145,7 @@
     margin: 0;
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
-    color: #fff;
+    color: var(--color-text-inverse);
     line-height: $line-height-tight;
     letter-spacing: -0.01em;
   }
@@ -145,18 +175,18 @@
     font-size: $font-size-xs;
     font-weight: $font-weight-semibold;
     border: 1px solid transparent;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(0.25rem);
 
     &--2019 {
-      background: rgba(16, 185, 129, 0.18);
-      border-color: rgba(16, 185, 129, 0.4);
-      color: #6ee7b7;
+      background: rgba($pyp-green-dot, 0.18);
+      border-color: rgba($pyp-green-dot, 0.4);
+      color: $pyp-green-text;
     }
 
     &--2024 {
-      background: rgba(167, 139, 250, 0.18);
-      border-color: rgba(167, 139, 250, 0.4);
-      color: #c4b5fd;
+      background: rgba($pyp-violet-dot, 0.18);
+      border-color: rgba($pyp-violet-dot, 0.4);
+      color: $pyp-violet-text;
     }
   }
 
@@ -166,8 +196,8 @@
     border-radius: $radius-full;
     flex-shrink: 0;
 
-    .pyp__pattern-pill--2019 & { background: #10b981; }
-    .pyp__pattern-pill--2024 & { background: #a78bfa; }
+    .pyp__pattern-pill--2019 & { background: $pyp-green-dot; }
+    .pyp__pattern-pill--2024 & { background: $pyp-violet-dot; }
   }
 
   &__pattern-pill-label {
@@ -381,26 +411,26 @@
 
       .pyp__badge--pattern {
         background: $color-success-light;
-        color: #065f46;
-        border-color: #6ee7b7;
+        color: $pyp-badge-green-text;
+        border-color: $pyp-badge-green-border;
       }
     }
 
     // 2024 pattern — violet
     &--2024 {
-      border-left-color: #7c3aed;
+      border-left-color: $pyp-violet;
 
-      &:hover { border-left-color: #7c3aed; }
+      &:hover { border-left-color: $pyp-violet; }
 
       .pyp__paper-icon {
-        background: #f5f3ff;
-        color: #7c3aed;
+        background: $pyp-violet-light;
+        color: $pyp-violet;
       }
 
       .pyp__badge--pattern {
-        background: #ede9fe;
-        color: #4c1d95;
-        border-color: #c4b5fd;
+        background: $pyp-violet-mid;
+        color: $pyp-violet-900;
+        border-color: $pyp-violet-border;
       }
     }
   }
@@ -547,19 +577,19 @@
     }
 
     &--view {
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: #1e40af;
+      background: $pyp-btn-view-bg;
+      border-color: $pyp-btn-view-border;
+      color: $pyp-btn-view-text;
 
-      &:hover:not(:disabled) { background: #dbeafe; border-color: #93c5fd; }
+      &:hover:not(:disabled) { background: $pyp-btn-view-hover-bg; border-color: $pyp-btn-view-hover-border; }
     }
 
     &--download {
-      background: #f0fdf4;
-      border-color: #bbf7d0;
-      color: #166534;
+      background: $pyp-btn-dl-bg;
+      border-color: $pyp-btn-dl-border;
+      color: $pyp-btn-dl-text;
 
-      &:hover:not(:disabled) { background: #dcfce7; border-color: #86efac; }
+      &:hover:not(:disabled) { background: $pyp-btn-dl-hover-bg; border-color: $pyp-btn-dl-hover-border; }
     }
   }
 
@@ -580,7 +610,7 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: $radius-md;
-    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background: linear-gradient(90deg, $color-border 25%, $color-surface-2 50%, $color-border 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -595,7 +625,7 @@
   &__skeleton-line {
     height: 0.875rem;
     border-radius: $radius-sm;
-    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background: linear-gradient(90deg, $color-border 25%, $color-surface-2 50%, $color-border 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
 
@@ -612,7 +642,7 @@
     width: 5rem;
     height: 1.75rem;
     border-radius: $radius-sm;
-    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background: linear-gradient(90deg, $color-border 25%, $color-surface-2 50%, $color-border 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }

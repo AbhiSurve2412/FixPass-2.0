@@ -104,7 +104,7 @@
     &--primary {
       background: var(--color-primary);
       border-color: var(--color-primary);
-      color: #fff;
+      color: var(--color-text-inverse);
 
       &:hover:not(:disabled) { background: var(--color-primary-hover); }
     }
@@ -205,21 +205,21 @@
     border: 0.0625rem solid var(--color-border);
 
     &--type {
-      background: #eff6ff;
-      color: #2563eb;
-      border-color: #bfdbfe;
+      background: $color-info-light;
+      color: $color-primary;
+      border-color: $color-primary-light;
     }
 
     &--published {
-      background: #f0fdf4;
-      color: #16a34a;
-      border-color: #bbf7d0;
+      background: $color-success-light;
+      color: $color-success-hover;
+      border-color: $color-success-light;
     }
 
     &--draft {
-      background: #fffbeb;
-      color: #d97706;
-      border-color: #fde68a;
+      background: $color-warning-light;
+      color: $color-warning-hover;
+      border-color: $color-warning-light;
     }
   }
 
