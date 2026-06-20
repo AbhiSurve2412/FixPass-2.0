@@ -74,6 +74,7 @@
                         @for (child of item.children; track child.label) {
                           <a class="mega-item"
                              [routerLink]="child.route"
+                             routerLinkActive="mega-item--active"
                              (click)="closeDesktopMenu()">
 
                             <span class="mega-item__icon" aria-hidden="true">
@@ -177,6 +178,7 @@
                               @if (child.childStatus === 'active') {
                                 <a class="admin-item"
                                    [routerLink]="child.route"
+                                   routerLinkActive="admin-item--active"
                                    (click)="closeDesktopMenu()">
                                   <span class="admin-item__icon" aria-hidden="true">
                                     <svg width="16" height="16" viewBox="0 0 24 24"
@@ -194,6 +196,7 @@
                                     @for (sub of child.subItems; track sub.label) {
                                       <a class="admin-subitem"
                                          [routerLink]="sub.route"
+                                         routerLinkActive="admin-subitem--active"
                                          (click)="closeDesktopMenu()">
                                         {{ sub.label }}
                                       </a>
@@ -324,6 +327,7 @@
                     @for (child of item.children; track child.label) {
                       <a class="mob-child"
                          [routerLink]="child.route"
+                         routerLinkActive="mob-child--active"
                          (click)="closeMobileMenu()">
                         <svg class="mob-child__icon"
                              width="16" height="16"
@@ -367,6 +371,7 @@
                         @if (!child.childStatus) {
                           <a class="mob-child"
                              [routerLink]="child.route"
+                             routerLinkActive="mob-child--active"
                              (click)="closeMobileMenu()">
                             <svg class="mob-child__icon"
                                  width="16" height="16" viewBox="0 0 24 24"
