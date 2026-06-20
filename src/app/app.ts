@@ -15,6 +15,7 @@ import { filter } from 'rxjs';
 export class App {
   protected readonly isAdminRoute         = signal(false);
   protected readonly isStudyMaterialRoute = signal(false);
+  protected readonly isAuthRoute          = signal(false);
 
   constructor() {
     const router = inject(Router);
@@ -24,6 +25,7 @@ export class App {
         const url = (e as NavigationEnd).urlAfterRedirects;
         this.isAdminRoute.set(url.startsWith('/admin'));
         this.isStudyMaterialRoute.set(url.startsWith('/study-material'));
+        this.isAuthRoute.set(url === '/login' || url === '/signup' || url.startsWith('/forgot-password'));
       });
   }
 }

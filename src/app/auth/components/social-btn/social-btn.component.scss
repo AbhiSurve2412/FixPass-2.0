@@ -1,0 +1,91 @@
+@use 'styles/variables' as *;
+
+$btn-h:       2.625rem;   // 42px — matches form input height
+$icon-wrap-w: 1.5rem;     // 24px fixed slot keeps label optically centred
+
+.social-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: $btn-h;
+  padding: 0 $space-3;
+  gap: 0;
+  border: 1.5px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-surface;
+  color: $color-text-primary;
+  font-family: $font-family-base;
+  cursor: pointer;
+  transition: $transition-fast;
+  overflow: hidden;
+
+  &:hover:not(:disabled) {
+    background: $color-surface-2;
+    border-color: $color-border-strong;
+    box-shadow: $shadow-sm;
+  }
+
+  &:active:not(:disabled) {
+    background: $color-surface-3;
+    transform: translateY($space-px);
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  // Icon container — fixed width so the label is always centred
+  &__icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: $icon-wrap-w;
+
+    svg {
+      display: block;
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
+  // Label fills remaining space and centres itself
+  &__label {
+    flex: 1;
+    text-align: center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  // Mirrors icon-wrap width so label stays centred even without it
+  &__spacer {
+    flex-shrink: 0;
+    width: $icon-wrap-w;
+  }
+
+  // Spinner replaces icon in loading state
+  &__spinner {
+    display: block;
+    width: $space-4;
+    height: $space-4;
+    border: $space-0-5 solid $color-border-strong;
+    border-top-color: $color-primary;
+    border-radius: $radius-full;
+    animation: sb-spin 0.65s linear infinite;
+  }
+}
+
+@keyframes sb-spin {
+  to { transform: rotate(360deg); }
+}

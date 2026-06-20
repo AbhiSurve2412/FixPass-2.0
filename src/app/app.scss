@@ -21,4 +21,9 @@
     display: flex;
     flex-direction: column;
   }
+
+  // Auth routes (login / signup) own the full viewport with no navbar offset.
+  &--auth {
+    padding-top: 0;
+  }
 }

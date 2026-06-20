@@ -1,0 +1,302 @@
+<div class="auth-page">
+  <div class="auth-bg" aria-hidden="true">
+    <div class="auth-bg__blob auth-bg__blob--a"></div>
+    <div class="auth-bg__blob auth-bg__blob--b"></div>
+    <div class="auth-bg__dots"></div>
+  </div>
+
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <a class="auth-logo" routerLink="/" aria-label="Go to FixPass home">
+      <span class="auth-logo__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="9" fill="white" fill-opacity=".15"/>
+          <path d="M11 20h18M20 11l9 9-9 9" stroke="white" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      FixPass
+    </a>
+
+    <!-- Progress -->
+    <div class="auth-progress" aria-label="Step {{ step() }} of 2">
+      <span class="auth-progress__step"
+            [class.auth-progress__step--active]="step() === 1"
+            [class.auth-progress__step--done]="step() > 1">
+        <span class="auth-progress__dot"></span>
+        <span class="auth-progress__label">Account</span>
+      </span>
+      <span class="auth-progress__line"></span>
+      <span class="auth-progress__step"
+            [class.auth-progress__step--active]="step() === 2">
+        <span class="auth-progress__dot"></span>
+        <span class="auth-progress__label">Academic</span>
+      </span>
+    </div>
+
+    <!-- Step heading -->
+    <div class="auth-card__head">
+      @if (step() === 1) {
+        <h1 class="auth-card__title">Create your account</h1>
+        <p class="auth-card__hint">
+          Have one?&ensp;<a class="auth-link" routerLink="/login">Sign in</a>
+        </p>
+      } @else {
+        <h1 class="auth-card__title">Academic details</h1>
+        <p class="auth-card__hint">Your content is personalised to your branch and year.</p>
+      }
+    </div>
+
+    <form [formGroup]="form" novalidate>
+
+      <!-- ══ STEP 1 ══ -->
+      @if (step() === 1) {
+
+        <!-- Social -->
+        <div class="auth-socials">
+          <app-social-btn provider="google"
+            [loading]="oauthLoading() === 'google'"
+            (clicked)="signupWith($event)" />
+          <app-social-btn provider="github"
+            [loading]="oauthLoading() === 'github'"
+            (clicked)="signupWith($event)" />
+        </div>
+
+        <div class="auth-or"><span>or</span></div>
+
+        @if (store.error()) {
+          <div class="auth-err" role="alert">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+            </svg>
+            {{ store.error() }}
+          </div>
+        }
+
+        <div class="step-fields">
+
+          <!-- Name -->
+          <div class="fld" [class.fld--bad]="name.invalid && name.touched">
+            <label class="fld__lbl" for="su-name">Full name</label>
+            <input id="su-name" class="fld__inp" type="text"
+                   formControlName="name" placeholder="Abhijit Surve"
+                   autocomplete="name" />
+            @if (name.invalid && name.touched) {
+              <span class="fld__err" role="alert">
+                @if (name.hasError('required')) { Full name is required. }
+                @else { Enter your full name. }
+              </span>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="fld" [class.fld--bad]="email.invalid && email.touched">
+            <label class="fld__lbl" for="su-email">Email</label>
+            <input id="su-email" class="fld__inp" type="email"
+                   formControlName="email" placeholder="you@example.com"
+                   autocomplete="email" />
+            @if (email.invalid && email.touched) {
+              <span class="fld__err" role="alert">
+                @if (email.hasError('required')) { Email is required. }
+                @else { Enter a valid email address. }
+              </span>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="fld" [class.fld--bad]="password.invalid && password.touched">
+            <label class="fld__lbl" for="su-pw">Password</label>
+            <div class="fld__wrap">
+              <input id="su-pw" class="fld__inp fld__inp--pad-r"
+                     [type]="showPassword() ? 'text' : 'password'"
+                     formControlName="password" placeholder="Min. 8 characters"
+                     autocomplete="new-password" />
+              <button type="button" class="fld__eye"
+                      (click)="showPassword.set(!showPassword())"
+                      [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+                @if (showPassword()) {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                } @else {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                }
+              </button>
+            </div>
+            <app-password-strength [password]="passwordValue" />
+            @if (password.hasError('passwordStrength') && password.touched) {
+              <span class="fld__err" role="alert">Use uppercase, lowercase, and a number.</span>
+            }
+          </div>
+
+          <!-- Confirm password -->
+          <div class="fld"
+               [class.fld--bad]="(form.hasError('passwordMismatch') && confirmPassword.touched)
+                                 || (confirmPassword.invalid && confirmPassword.touched)">
+            <label class="fld__lbl" for="su-cpw">Confirm password</label>
+            <div class="fld__wrap">
+              <input id="su-cpw" class="fld__inp fld__inp--pad-r"
+                     [type]="showConfirmPassword() ? 'text' : 'password'"
+                     formControlName="confirmPassword" placeholder="Repeat your password"
+                     autocomplete="new-password" />
+              <button type="button" class="fld__eye"
+                      (click)="showConfirmPassword.set(!showConfirmPassword())"
+                      [attr.aria-label]="showConfirmPassword() ? 'Hide' : 'Show'">
+                @if (showConfirmPassword()) {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                } @else {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (form.hasError('passwordMismatch') && confirmPassword.touched) {
+              <span class="fld__err" role="alert">Passwords do not match.</span>
+            } @else if (confirmPassword.hasError('required') && confirmPassword.touched) {
+              <span class="fld__err" role="alert">Confirm your password.</span>
+            }
+          </div>
+
+        </div>
+
+        <button type="button" class="auth-submit" (click)="goNext()">
+          Continue
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+      }
+
+      <!-- ══ STEP 2 ══ -->
+      @if (step() === 2) {
+
+        @if (store.error()) {
+          <div class="auth-err" role="alert">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+            </svg>
+            {{ store.error() }}
+          </div>
+        }
+
+        <div class="step-fields">
+
+          <!-- University + Year row -->
+          <div class="fld-row">
+
+            <div class="fld">
+              <label class="fld__lbl" for="su-uni">University</label>
+              <input id="su-uni" class="fld__inp fld__inp--muted"
+                     type="text" formControlName="university"
+                     readonly aria-readonly="true" />
+            </div>
+
+            <div class="fld" [class.fld--bad]="year.invalid && year.touched">
+              <label class="fld__lbl" for="su-year">Year</label>
+              <div class="fld__sel-wrap">
+                <select id="su-year" class="fld__sel" formControlName="year">
+                  <option value="" disabled>Select</option>
+                  @for (y of years; track y) {
+                    <option [value]="y">{{ y }}</option>
+                  }
+                </select>
+                <svg class="fld__sel-arrow" width="11" height="11" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              </div>
+              @if (year.invalid && year.touched) {
+                <span class="fld__err" role="alert">Select your year.</span>
+              }
+            </div>
+
+          </div>
+
+          <!-- College -->
+          <div class="fld" [class.fld--bad]="college.invalid && college.touched">
+            <label class="fld__lbl" for="su-college">College</label>
+            <input id="su-college" class="fld__inp" type="text"
+                   formControlName="college" placeholder="COEP Technological University"
+                   autocomplete="organization" />
+            @if (college.invalid && college.touched) {
+              <span class="fld__err" role="alert">
+                @if (college.hasError('required')) { College name is required. }
+                @else { Enter your college name. }
+              </span>
+            }
+          </div>
+
+          <!-- Branch -->
+          <div class="fld" [class.fld--bad]="branch.invalid && branch.touched">
+            <label class="fld__lbl" for="su-branch">Branch</label>
+            <div class="fld__sel-wrap">
+              <select id="su-branch" class="fld__sel" formControlName="branch">
+                <option value="" disabled>Select your branch</option>
+                @for (b of branches; track b) {
+                  <option [value]="b">{{ b }}</option>
+                }
+              </select>
+              <svg class="fld__sel-arrow" width="11" height="11" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
+            @if (branch.invalid && branch.touched) {
+              <span class="fld__err" role="alert">Select your branch.</span>
+            }
+          </div>
+
+        </div>
+
+        <p class="auth-terms">
+          By creating an account you agree to the
+          <a class="auth-link" href="#">Terms</a> and
+          <a class="auth-link" href="#">Privacy Policy</a>.
+        </p>
+
+        <div class="auth-actions">
+          <button type="button" class="auth-back" (click)="goBack()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+          </button>
+          <button type="button" class="auth-submit auth-submit--flex"
+                  [disabled]="store.isLoading()"
+                  (click)="submit()">
+            @if (store.isLoading()) {
+              <span class="auth-submit__spin" aria-hidden="true"></span>
+              Creating…
+            } @else {
+              Create account
+            }
+          </button>
+        </div>
+
+      }
+
+    </form>
+
+  </div>
+</div>

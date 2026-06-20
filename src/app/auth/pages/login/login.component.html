@@ -1,0 +1,122 @@
+<div class="auth-page">
+  <div class="auth-bg" aria-hidden="true">
+    <div class="auth-bg__blob auth-bg__blob--a"></div>
+    <div class="auth-bg__blob auth-bg__blob--b"></div>
+    <div class="auth-bg__dots"></div>
+  </div>
+
+  <div class="auth-card">
+
+    <!-- Logo -->
+    <a class="auth-logo" routerLink="/" aria-label="Go to FixPass home">
+      <span class="auth-logo__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="9" fill="white" fill-opacity=".15"/>
+          <path d="M11 20h18M20 11l9 9-9 9" stroke="white" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      FixPass
+    </a>
+
+    <!-- Header -->
+    <h1 class="auth-card__title">Welcome back</h1>
+    <p class="auth-card__hint">
+      No account?&ensp;<a class="auth-link" routerLink="/signup">Sign up</a>
+    </p>
+
+    <!-- Social -->
+    <div class="auth-socials">
+      <app-social-btn provider="google"
+        [loading]="oauthLoading() === 'google'"
+        (clicked)="loginWith($event)" />
+      <app-social-btn provider="github"
+        [loading]="oauthLoading() === 'github'"
+        (clicked)="loginWith($event)" />
+    </div>
+
+    <div class="auth-or"><span>or</span></div>
+
+    <!-- Error -->
+    @if (store.error()) {
+      <div class="auth-err" role="alert">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+        </svg>
+        {{ store.error() }}
+      </div>
+    }
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+      <div class="fld" [class.fld--bad]="email.invalid && email.touched">
+        <label class="fld__lbl" for="login-email">Email</label>
+        <input id="login-email" class="fld__inp" type="email"
+               formControlName="email" placeholder="you@example.com"
+               autocomplete="email" />
+        @if (email.invalid && email.touched) {
+          <span class="fld__err" role="alert">
+            @if (email.hasError('required')) { Email is required. }
+            @else { Enter a valid email address. }
+          </span>
+        }
+      </div>
+
+      <div class="fld" [class.fld--bad]="password.invalid && password.touched">
+        <div class="fld__top">
+          <label class="fld__lbl" for="login-pw">Password</label>
+          <a class="auth-link auth-link--sm" routerLink="/forgot-password">Forgot?</a>
+        </div>
+        <div class="fld__wrap">
+          <input id="login-pw" class="fld__inp fld__inp--pad-r"
+                 [type]="showPassword() ? 'text' : 'password'"
+                 formControlName="password" placeholder="••••••••"
+                 autocomplete="current-password" />
+          <button type="button" class="fld__eye"
+                  (click)="showPassword.set(!showPassword())"
+                  [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+            @if (showPassword()) {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            } @else {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            }
+          </button>
+        </div>
+        @if (password.invalid && password.touched) {
+          <span class="fld__err" role="alert">
+            @if (password.hasError('required')) { Password is required. }
+            @else { Minimum 8 characters. }
+          </span>
+        }
+      </div>
+
+      <!-- Remember me -->
+      <label class="auth-check">
+        <input class="auth-check__inp" type="checkbox" formControlName="rememberMe" />
+        <span class="auth-check__box" aria-hidden="true"></span>
+        <span class="auth-check__txt">Stay signed in for 30 days</span>
+      </label>
+
+      <button type="submit" class="auth-submit" [disabled]="store.isLoading()">
+        @if (store.isLoading()) {
+          <span class="auth-submit__spin" aria-hidden="true"></span>
+          Signing in…
+        } @else {
+          Sign in
+        }
+      </button>
+
+    </form>
+
+  </div>
+</div>

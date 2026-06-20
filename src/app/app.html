@@ -1,11 +1,14 @@
-<app-navbar />
+@if (!isAuthRoute()) {
+  <app-navbar />
+}
 
 <main class="app-main"
       [class.app-main--admin]="isAdminRoute()"
-      [class.app-main--study]="isStudyMaterialRoute()">
+      [class.app-main--study]="isStudyMaterialRoute()"
+      [class.app-main--auth]="isAuthRoute()">
   <router-outlet />
 </main>
 
-@if (!isAdminRoute() && !isStudyMaterialRoute()) {
+@if (!isAdminRoute() && !isStudyMaterialRoute() && !isAuthRoute()) {
   <app-footer />
 }

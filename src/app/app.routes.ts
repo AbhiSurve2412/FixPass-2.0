@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { HomeComponent } from './home/home.component';
+import { guestGuard } from './auth/guards/guest.guard';
 import { paperReducer } from './admin/features/study-material/papers/store/reducers/paper.reducer';
 import { PaperEffects } from './admin/features/study-material/papers/store/effects/paper.effects';
 import { branchReducer } from './admin/features/branches/store/reducers/branch.reducer';
@@ -53,10 +54,21 @@ export const routes: Routes = [
   },
   { path: 'study-material/smart-analysis',             component: HomeComponent }, // TBD
 
-  // ── Live Routes (pages TBD) ───────────────────────────────────
+  // ── Live Routes ──────────────────────────────────────────────
   { path: 'pricing', component: HomeComponent }, // TBD
-  { path: 'login',   component: HomeComponent }, // TBD
-  { path: 'signup',  component: HomeComponent }, // TBD
+  {
+    path: 'login',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./auth/pages/login/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'signup',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./auth/pages/signup/signup.component').then(m => m.SignupComponent),
+  },
+  { path: 'forgot-password', redirectTo: 'login', pathMatch: 'full' },
 
   // ── Admin (Phase 1 — Active) ──────────────────────────────────
   {
