@@ -20,6 +20,22 @@ export const BRANCHES = [
   'Civil Engineering',
   'Electrical Engineering',
 ] as const;
+export const COLLEGES = [
+  'COEP Technological University',
+  'Pune Institute of Computer Technology (PICT)',
+  'Vishwakarma Institute of Technology (VIT)',
+  'Symbiosis Institute of Technology (SIT)',
+  'MIT College of Engineering',
+  'Cummins College of Engineering for Women',
+  'Army Institute of Technology (AIT)',
+  'Bharati Vidyapeeth College of Engineering',
+  'Indira College of Engineering and Management',
+  'NBN Sinhgad School of Engineering',
+  'Sinhgad College of Engineering',
+  'Zeal College of Engineering and Research',
+  'RMD Sinhgad School of Engineering',
+  'Savitribai Phule Pune University',
+] as const;
 
 @Component({
   selector: 'app-signup',
@@ -44,6 +60,7 @@ export class SignupComponent {
 
   protected readonly years    = YEARS;
   protected readonly branches = BRANCHES;
+  protected readonly colleges = COLLEGES;
 
   protected readonly form = this.fb.group(
     {
@@ -55,7 +72,7 @@ export class SignupComponent {
       // Step 2
       university: [{ value: 'SPPU', disabled: true }],
       year:       ['', Validators.required],
-      college:    ['', [Validators.required, Validators.minLength(3)]],
+      college:    ['', Validators.required],
       branch:     ['', Validators.required],
     },
     { validators: confirmPasswordValidator },

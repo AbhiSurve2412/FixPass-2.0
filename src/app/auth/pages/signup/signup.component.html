@@ -234,14 +234,21 @@
           <!-- College -->
           <div class="fld" [class.fld--bad]="college.invalid && college.touched">
             <label class="fld__lbl" for="su-college">College</label>
-            <input id="su-college" class="fld__inp" type="text"
-                   formControlName="college" placeholder="COEP Technological University"
-                   autocomplete="organization" />
+            <div class="fld__sel-wrap">
+              <select id="su-college" class="fld__sel" formControlName="college">
+                <option value="" disabled>Select your college</option>
+                @for (c of colleges; track c) {
+                  <option [value]="c">{{ c }}</option>
+                }
+              </select>
+              <svg class="fld__sel-arrow" width="11" height="11" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
             @if (college.invalid && college.touched) {
-              <span class="fld__err" role="alert">
-                @if (college.hasError('required')) { College name is required. }
-                @else { Enter your college name. }
-              </span>
+              <span class="fld__err" role="alert">Select your college.</span>
             }
           </div>
 
